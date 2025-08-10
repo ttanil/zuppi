@@ -30,6 +30,20 @@
 @import url('https://fonts.googleapis.com/css2?family=Varela+Round&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Gruppo&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Kanit:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Sora:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;700&display=swap');
+
 
 .font-montserrat { font-family: 'Montserrat', sans-serif; }
 .font-pacifico { font-family: 'Pacifico', cursive; }
@@ -63,3 +77,15 @@
 .font-varelaround { font-family: 'Varela Round', sans-serif; }
 .font-gruppo { font-family: 'Gruppo', cursive; }
 .font-kanit { font-family: 'Kanit', sans-serif; }
+.font-outfit { font-family: 'Outfit', sans-serif; }
+.font-urbanist { font-family: 'Urbanist', sans-serif; }
+.font-lexend { font-family: 'Lexend', sans-serif; }
+.font-sora { font-family: 'Sora', sans-serif; }
+.font-jost { font-family: 'Jost', sans-serif; }
+.font-bebas { font-family: 'Bebas Neue', cursive; }
+.font-nunitosans { font-family: 'Nunito Sans', sans-serif; }
+.font-lora { font-family: 'Lora', serif; }
+.font-dmserif { font-family: 'DM Serif Display', serif; }
+.font-cormorantgaramond { font-family: 'Cormorant Garamond', serif; }
+.font-cormorant { font-family: 'Cormorant', serif; }
+.font-mplusrounded { font-family: 'M PLUS Rounded 1c', sans-serif; }
