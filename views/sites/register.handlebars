@@ -1,0 +1,671 @@
+<!DOCTYPE html>  
+<html lang="tr">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />  
+  <title>Art Nail - Kayıt Ol</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="css/index.css">
+  <script src="https://cdn.tailwindcss.com"></script>  
+  <style>  
+    body {background-color: #09090b;}  
+  </style>  
+</head>  
+<body class="min-h-screen flex items-center justify-center bg-black">
+
+  <div id="loader" style="display:none;">
+    <div class="loader-bg"></div>
+    <div class="loader-card">
+      <div class="spinner-border text-danger" style="width:2.5rem; height:2.5rem;" role="status"></div>
+      <span class="loader-msg">Yükleniyor...</span>
+    </div>
+  </div>
+
+  <!-- KAYIT KARTI -->  
+  <div class="w-full max-w-md mx-auto px-4 py-10 flex flex-col items-center justify-center">  
+    <div class="bg-zinc-900/90 rounded-2xl shadow-2xl px-8 py-10 w-full flex flex-col gap-6">  
+      <!-- LOGO ve Başlık -->  
+      <a href="/" class="flex flex-col items-center mb-2 select-none focus:outline-none group">
+        <span class="font-extrabold text-white text-3xl flex items-center">
+            ART
+            <span class="inline-block w-7 h-7 ml-2 mr-2 bg-red-600 rounded-full animate-pulse"></span>
+            NAIL
+        </span>
+        <span class="text-xs text-gray-400 tracking-widest mt-2 group-hover:text-yellow-400 transition">
+            EN İYİLERİN SANATI
+        </span>
+      </a>  
+      <h2 class="text-white font-black text-2xl text-center mt-2 mb-4">Kayıt Ol</h2>  
+      <p class="text-gray-400 text-center text-sm mb-3">  
+        Zaten hesabın var mı?  
+        <a href="/login" class="text-red-400 hover:text-yellow-400 font-bold underline transition">Giriş Yap</a>  
+      </p>  
+      <!-- Form -->  
+      <form id="registerForm" class="flex flex-col gap-4" autocomplete="off">
+      <div>
+        <label for="fullname" class="text-sm text-gray-200 font-semibold mb-1 block">Ad Soyad</label>
+        <input type="text" id="fullname" name="fullname" required
+          class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"
+          placeholder="Adınız ve Soyadınız" autocomplete="name" maxlength="40" pattern="^[A-Za-zçÇğĞıİöÖşŞüÜ\s]+$">
+      </div>
+      <div>
+        <label for="email" class="text-sm text-gray-200 font-semibold mb-1 block">E-posta</label>
+        <input type="email" id="email" name="email" required
+          class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"
+          placeholder="e-posta adresiniz" autocomplete="username" maxlength="60">
+      </div>
+      <div class="relative">
+        <label for="password" class="text-sm text-gray-200 font-semibold mb-1 block">Şifre</label>
+        <input type="password" id="password" name="password" required minlength="6" maxlength="32"
+          class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition pr-10"
+          placeholder="şifreniz" autocomplete="new-password">
+        <!-- Göz butonu -->
+        <button type="button" id="togglePassword"
+          class="absolute right-3 top-9 transform -translate-y-1/2 text-gray-400 hover:text-yellow-400 transition focus:outline-none hidden">
+          <!-- Göz Açık -->
+          <svg id="eyeOpen1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
+          </svg>
+          <!-- Göz Kapalı -->
+          <svg id="eyeClosed1" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 012.948-4.568M6.7 6.7A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.969 9.969 0 01-4.043 5.306M3 3l18 18M9.88 9.88a3 3 0 104.24 4.24"/>
+          </svg>
+        </button>
+      </div>
+      <div class="relative">
+        <label for="password2" class="text-sm text-gray-200 font-semibold mb-1 block">Şifre Tekrar</label>
+        <input type="password" id="password2" name="password2" required minlength="6" maxlength="32"
+          class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition pr-10"
+          placeholder="şifrenizi tekrar yazın" autocomplete="new-password">
+        <!-- Göz butonu -->
+        <button type="button" id="togglePassword2"
+          class="absolute right-3 top-9 transform -translate-y-1/2 text-gray-400 hover:text-yellow-400 transition focus:outline-none hidden">
+          <!-- Göz Açık -->
+          <svg id="eyeOpen2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
+          </svg>
+          <!-- Göz Kapalı -->
+          <svg id="eyeClosed2" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+              d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 012.948-4.568M6.7 6.7A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.969 9.969 0 01-4.043 5.306M3 3l18 18M9.88 9.88a3 3 0 104.24 4.24"/>
+          </svg>
+        </button>
+      </div>
+      <div>
+        <label for="birth_year" class="text-sm text-gray-200 font-semibold mb-1 block">Doğum Yılı</label>
+        <input type="number" id="birth_year" name="birth_year"
+          class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"
+          placeholder="Örn: 1997" min="1900" max="2100" maxlength="4">
+      </div>
+      <div>
+        <label for="city" class="text-sm text-gray-200 font-semibold mb-1 block">Şehir</label>
+        <input type="text" id="city" name="city"
+          class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"
+          placeholder="Şehir" maxlength="30" pattern="^[A-Za-zçÇğĞıİöÖşŞüÜ\s\-]+$">
+      </div>
+        <!-- Onay Kutusu -->
+        <div class="flex items-center gap-2 mb-2 mt-1">
+          <input type="checkbox" id="kurallar" name="kurallar" required class="accent-red-600">
+          <label for="kurallar" class="text-xs text-gray-400 select-none cursor-pointer">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#conditionModal" class="underline hover:text-yellow-400">Kullanım Koşullarını</a> ve
+            <a href="#" data-bs-toggle="modal" data-bs-target="#privacyModal" class="underline hover:text-yellow-400">Gizlilik Politikası</a>nı okudum, onaylıyorum.
+          </label>
+        </div>
+        <!-- Üyelik Tipi Butonları -->
+        <div class="mb-3">
+        <div class="flex gap-2 justify-center">
+          <button type="button" id="monthBtn"
+            class="flex-1 bg-gray-700 hover:bg-red-500 text-white font-semibold px-2 py-3 rounded-lg shadow transition flex flex-col items-center focus:outline-none focus:ring-2 focus:ring-red-400">
+            <span>Aylık Üyelik</span>
+            <span class="mt-1 text-lg font-extrabold text-yellow-400">499 TL</span>
+          </button>
+          <button type="button" id="yearBtn"
+            class="flex-1 bg-gray-700 hover:bg-yellow-500 text-white font-semibold px-2 py-3 rounded-lg shadow transition flex flex-col items-center focus:outline-none focus:ring-2 focus:ring-yellow-400">
+            <span>Yıllık Üyelik</span>
+            <span class="mt-1 text-lg font-extrabold text-yellow-400">4.900 TL</span>
+          </button>
+        </div>
+      </div>
+        <button type="submit"
+          class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-3 mt-2 transition focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          Kayıt Ol
+        </button>
+        <div id="feedback" style="color:#fff;" class="text-xs text-center mt-2"></div>
+      </form>
+
+      <!-- veya bölümü 
+      <div class="flex items-center gap-4 my-2">
+        <span class="border-b border-zinc-700 flex-1"></span>
+        <span class="text-gray-500 text-xs font-bold">veya</span>
+        <span class="border-b border-zinc-700 flex-1"></span>
+      </div>-->
+      <!-- Google ile Kayıt Ol butonu 
+      <button id="googleSignInBtn" class="flex gap-2 items-center bg-white text-black rounded-xl py-3 px-2 font-bold shadow hover:bg-gray-100 transition w-full">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="h-5 w-5">
+        Google ile Kayıt Ol
+      </button>
+    </div>-->
+  </div>
+
+  <!-- ArtNail Kullanım Koşulları MODAL İÇERİĞİ -->
+    <div class="modal fade" id="conditionModal" tabindex="-1" aria-labelledby="conditionModalLabel" aria-hidden="true">  
+        <div class="modal-dialog custom-modal-position">  
+            <div class="modal-content">  
+                <!-- Modal Başlık -->  
+                <div class="modal-header">  
+                    <h5 class="modal-title" id="conditionModalLabel" style="font-family: 'Verdana', sans-serif; color: #333;">Kullanım Koşulları — ArtNail</h5>
+                </div>  
+                <!-- Modal İçerik -->  
+                <div class="modal-body" style="font-family: 'Arial', sans-serif; color: #555; max-height: 400px; overflow-y: auto;">
+                  <p>
+                    1. Genel Bilgilendirme<br>
+                    ArtNail web ve mobil platformunu kullanmaya başladığınızda aşağıdaki kullanım koşullarını kabul etmiş olursunuz.
+                    Lütfen üyelik ve hizmetlerimizi kullanmadan önce bu metni dikkatlice okuyunuz.
+                  </p>
+                  <p>
+                    2. Hizmet Tanımı<br>
+                    ArtNail, kullanıcılarına güzellik ve tırnak sanatı alanında çevrim içi randevu alma, hizmet keşfetme, uzmanlarla iletişim kurma ve çeşitli faydalı içeriklere erişim imkânı sağlar. Sunulan tüm içerik ve hizmetler bilgilendirme amaçlı olup kullanıcı dostu bir deneyim sağlamayı hedefler.
+                  </p>
+                  <p>
+                    3. Üyelik ve Kullanıcı Yükümlülükleri<br>
+                    Platforma üye olurken verdiğiniz tüm bilgilerin doğru, eksiksiz ve güncel olması kullanıcı sorumluluğundadır.
+                    Hesabınızın güvenliği ve şifrenizin korunması tamamen sizin sorumluluğunuzdadır. Hesabınız üzerinden yapılan tüm işlemlerin takibi size aittir.
+                  </p>
+                  <p>
+                    4. Fikri Mülkiyet Hakları<br>
+                    ArtNail uygulamasında yer alan tüm marka, tasarım, görsel içerik, metin ve yazılım unsurları ArtNail’e aittir ve telif yasalarıyla korunmaktadır. İzinsiz kopyalanamaz, çoğaltılamaz veya başka amaçlarla kullanılamaz.
+                  </p>
+                  <p>
+                    5. Gizlilik ve Veri Koruma<br>
+                    Kullanıcı bilgileriniz ve verileriniz güncel mevzuat ve KVKK'ya uygun olarak korunur; üçüncü kişilerle sebepsiz yere paylaşılmaz. Verilerinizin gizliliği ve güvenliği ArtNail için önceliklidir.
+                  </p>
+                  <p>
+                    6. Hizmette Değişiklikler ve Sorumluluk<br>
+                    ArtNail, hizmette veya içerikte değişiklik yapma hakkını saklı tutar. Sunulan bilgiler ve rezervasyonlar kullanıcıya kolaylık sağlamak içindir; resmi bağlayıcılığı bulunmaz. Teknik sorunlar veya hizmet aksaklıklarından ArtNail sorumlu tutulamaz.
+                  </p>
+                  <p>
+                    7. Uygulanacak Hukuk ve Yetkili Mahkeme<br>
+                    ArtNail kullanım koşulları Türkiye Cumhuriyeti kanunlarına tabidir. Doğabilecek uyuşmazlıklarda İstanbul Mahkemeleri ve İcra Daireleri yetkilidir.
+                  </p>
+                  <p>
+                    8. İletişim<br>
+                    Her türlü soru, öneri ve sorunlarınız için bize <b>iletisim@artnail.com.tr</b> adresinden ulaşabilirsiniz.
+                  </p>
+                </div> 
+                <!-- Modal Alt Kısım -->  
+                <div class="modal-footer">  
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>  
+                </div>  
+            </div>  
+        </div>  
+    </div>
+    <!-- Modal KVKK -->  
+    <div class="modal fade" id="privacyModal" tabindex="-1" aria-labelledby="privacyModalLabel" aria-hidden="true">  
+        <div class="modal-dialog custom-modal-position">  
+            <div class="modal-content">  
+                <!-- Modal Başlık -->  
+                <div class="modal-header">  
+                    <h5 class="modal-title" id="privacyModalLabel" style="font-family: 'Verdana', sans-serif; color: #333;">Gizlilik Politikası</h5>
+                </div>  
+                <!-- Modal İçerik -->  
+                <div class="modal-body" style="font-family: 'Arial', sans-serif; color: #555; max-height: 400px; overflow-y: auto;">
+                  <p>
+                    1. Toplanan Kişisel Veriler<br>
+                    Üyelik, randevu ve ödeme işlemleri sırasında bize ilettiğiniz aşağıdaki veriler işlenir:
+                  </p>
+                  <ul>
+                    <li>Ad, soyad</li>
+                    <li>Telefon numarası</li>
+                    <li>E-posta adresi</li>
+                    <li>Varsa fatura ve teslimat adresi</li>
+                    <li>IP adresi ve işlem kayıtları</li>
+                    <li>Ödeme işlemleriyle ilgili bilgiler (tarih, tutar, işlem durumu vb.)</li>
+                  </ul>
+                  <p>
+                    2. Kişisel Verilerin Kullanım Amaçları<br>
+                    Verileriniz size kaliteli hizmet sunmak, randevunuzu yönetmek, üyelik işlemlerini tamamlamak, ödeme işlemlerini güvenli şekilde gerçekleştirmek ve yasal yükümlülükleri yerine getirmek için işlenmektedir.
+                  </p>
+                  <p>
+                    3. Verilerin Aktarımı<br>
+                    Kişisel verileriniz yalnızca mevzuat izin verdiği ölçüde, ödeme sağlayıcıları, yasal makamlar ve teknik destek şirketleriyle paylaşılabilir. Hiçbir kişisel veriniz üçüncü şahıslara ticari amaçla satılmaz.
+                  </p>
+                  <p>
+                    4. Saklama Süresi<br>
+                    Bilgileriniz ilgili mevzuatta belirtilen veya işin gerektirdiği yasal süreler boyunca güvenli şekilde saklanır. Ödeme bilgileriniz yalnızca işlem sırasında şifreli olarak işlenir ve ArtNail tarafından depolanmaz.
+                  </p>
+                  <p>
+                    5. Kişisel Verilerin Korunması<br>
+                    Tüm verileriniz güvenlik standartlarına uygun şekilde saklanır. Yetkisiz erişim, veri kaybı veya kötüye kullanımı önlemek için teknik ve idari önlemler alınır.
+                  </p>
+                  <p>
+                    6. KVKK Kapsamındaki Haklarınız<br>
+                    6698 sayılı KVKK’nın 11. maddesi uyarınca aşağıdaki haklara sahipsiniz:
+                  </p>
+                  <ul>
+                    <li>Kişisel verilerinizin işlenip işlenmediğini öğrenme</li>
+                    <li>Eksik veya yanlış işlenmiş verilerin düzeltilmesini isteme</li>
+                    <li>Kişisel verilerinizin silinmesini/yok edilmesini isteme</li>
+                    <li>Aktarıldığı üçüncü kişileri bilme</li>
+                    <li>Mevzuata aykırı işleme nedeniyle zarara uğrarsanız zararın giderilmesini talep etme</li>
+                  </ul>
+                  <p>
+                    7. İletişim<br>
+                    Kişisel verilerinizin kullanımıyla ilgili tüm sorularınız için <b>kvkk@artnail.com.tr</b> üzerinden bizimle iletişime geçebilirsiniz.
+                  </p>
+                </div>  
+                <!-- Modal Alt Kısım -->  
+                <div class="modal-footer">  
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Kapat</button>  
+                </div>  
+            </div>  
+        </div>  
+    </div>
+
+    <!-- Ek Bilgi Modalı (gerekiyorsa ekleyin) -->
+    <div class="modal fade" id="extraInfoModal" tabindex="-1" aria-labelledby="extraInfoModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+          <div class="modal-content" style="background-color:#222;">
+              <div class="modal-header">
+                  <h5 class="modal-title" id="extraInfoModalLabel" style="color:#fff;">Hesabını Tamamla</h5>
+                  <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+              </div>
+              <div class="modal-body">
+                  <form id="extraInfoForm">
+                      <div class="mb-2">
+                          <label class="form-label text-white">Ad Soyad</label>
+                          <input type="text" class="form-control" id="g_fullname" name="fullname" required>
+                      </div>
+                      <div class="mb-2">
+                          <label class="form-label text-white">E-posta</label>
+                          <input type="email" class="form-control" id="g_email" name="email" required readonly>
+                      </div>
+                      <div class="mb-2">
+                          <label class="form-label text-white">Doğum Yılı</label>
+                          <input type="number" class="form-control" id="g_birth_year" name="birth_year" placeholder="Örn: 1997" min="1900" max="2100" required>
+                      </div>
+                      <div class="mb-2">
+                          <label class="form-label text-white">Şehir</label>
+                          <input type="text" class="form-control" id="g_city" name="city" placeholder="Şehir" required>
+                      </div>
+                      <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" id="g_kurallar" name="kurallar" required>
+                        <label class="form-check-label text-white" for="g_kurallar">
+                          Kullanım Koşulları ve Gizlilik Politikasını okudum, onaylıyorum.
+                        </label>
+                      </div>
+                      <div id="g_feedback" class="text-danger text-center mb-2"></div>
+                      <button type="submit" class="btn btn-danger w-100">Kaydımı Tamamla</button>
+                  </form>
+              </div>
+          </div>
+      </div>
+    </div>
+
+    <!-- Cihaz İsmi Modalı -->
+    <div id="deviceNameModal" class="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center hidden">
+      <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8 w-full max-w-sm flex flex-col items-center gap-4 relative">
+        <button id="closeDeviceNameModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg focus:outline-none">&times;</button>
+        <div class="font-bold text-lg mb-2 flex flex-col items-center">
+          <span class="text-2xl">Cihaz İsmi</span>
+          <span class="text-xs text-gray-400 mt-2">Giriş yaptığınız bu cihaza bir isim verin</span>
+        </div>
+        <input
+          id="deviceNameInput"
+          type="text"
+          maxlength="32"
+          class="bg-zinc-800 border border-zinc-600 rounded-lg py-2 px-3 w-full mt-2 mb-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-red-500"
+          placeholder="Örn: Fatma'nın iPhone'u, Ev PC"
+          autocomplete="off"
+          required
+        />
+        <div id="deviceNameError" class="text-red-400 text-xs mb-1"></div>
+        <button id="saveDeviceNameBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-2 mt-2 transition focus:outline-none">
+          Kaydet ve Devam Et
+        </button>
+      </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    <script src="https://openfpcdn.io/fingerprintjs/v4.1.1/fp.umd.min.js"></script>
+    <script>
+      let LAST_GOOGLE_ID_TOKEN = null;
+      let fullname = null;
+      let email = null;
+      let password = null;
+      let password2 = null;
+      let birth_year = null;
+      let city = null;
+      let data = {};
+
+      // Şifreyi göster/gizle (Şifre)
+      document.getElementById('togglePassword').addEventListener('click', function () {
+        const passInput = document.getElementById('password');
+        const eyeOpen = document.getElementById('eyeOpen1');
+        const eyeClosed = document.getElementById('eyeClosed1');
+        if (passInput.type === "password") {
+          passInput.type = "text";
+          eyeOpen.classList.add("hidden");
+          eyeClosed.classList.remove("hidden");
+        } else {
+          passInput.type = "password";
+          eyeOpen.classList.remove("hidden");
+          eyeClosed.classList.add("hidden");
+        }
+      });
+      // Şifreyi göster/gizle (Şifre Tekrar)
+      document.getElementById('togglePassword2').addEventListener('click', function () {
+        const passInput = document.getElementById('password2');
+        const eyeOpen = document.getElementById('eyeOpen2');
+        const eyeClosed = document.getElementById('eyeClosed2');
+        if (passInput.type === "password") {
+          passInput.type = "text";
+          eyeOpen.classList.add("hidden");
+          eyeClosed.classList.remove("hidden");
+        } else {
+          passInput.type = "password";
+          eyeOpen.classList.remove("hidden");
+          eyeClosed.classList.add("hidden");
+        }
+      });
+
+      async function getDeviceInfo() {
+        return new Promise((resolve) => {
+          const info = {
+            os: navigator.platform || null,
+            browser: (() => {
+              const ua = navigator.userAgent;
+              if (/Chrome/.test(ua)) return 'Chrome';
+              if (/Firefox/.test(ua)) return 'Firefox';
+              if (/Safari/.test(ua) && !/Chrome/.test(ua)) return 'Safari';
+              if (/Edg/.test(ua)) return 'Edge';
+              return 'Unknown';
+            })(),
+            browser_version: navigator.appVersion || null,
+            device_type: /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+            model: null,
+            user_agent: navigator.userAgent,
+            timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            language: navigator.language,
+            screen_resolution: window.screen.width + 'x' + window.screen.height,
+            color_depth: window.screen.colorDepth,
+            touch_support: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+            is_incognito: null,
+            geo_location: null // Şimdilik null, birazdan ekleyeceğiz.
+          };
+  /*
+          // Geo konum ekle
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+              pos => {
+                info.geo_location = {
+                  latitude: pos.coords.latitude,
+                  longitude: pos.coords.longitude,
+                  accuracy: pos.coords.accuracy
+                };
+                resolve(info);
+              },
+              () => resolve(info), // izin verilmezse veya hata olursa null kalsın
+              { timeout: 6000 }
+            );
+          } else {
+          */
+            resolve(info);
+          //}
+
+        });
+      }
+
+      // Butonlar & seçim logic'i
+      let selectedMembershipType = null;
+
+      const monthBtn = document.getElementById('monthBtn');
+      const yearBtn = document.getElementById('yearBtn');
+
+      monthBtn.addEventListener('click', () => {
+        selectedMembershipType = 'aylik';
+        monthBtn.classList.add('bg-red-600');
+        yearBtn.classList.remove('bg-yellow-500', 'bg-red-600');
+        monthBtn.classList.remove('bg-gray-700');
+        yearBtn.classList.add('bg-gray-700');
+      });
+
+      yearBtn.addEventListener('click', () => {
+        selectedMembershipType = 'yillik';
+        yearBtn.classList.add('bg-yellow-500');
+        monthBtn.classList.remove('bg-red-600', 'bg-yellow-500');
+        yearBtn.classList.remove('bg-gray-700');
+        monthBtn.classList.add('bg-gray-700');
+      });
+
+      // Güvenli Fingerprint + cihaz bilgisi döner
+      async function getFingerprintAndDeviceInfo() {
+        const device_info = await getDeviceInfo();
+        let fingerprint = null;
+        // Script yüklendi mi kontrolü
+        if (window.FingerprintJS && window.FingerprintJS.load) {
+          try {
+            const fp = await window.FingerprintJS.load();
+            const result = await fp.get();
+            fingerprint = result.visitorId;
+          } catch(err) {
+            // Sessizce geç, fingerprint olmadan devam
+            fingerprint = null;
+          }
+        }
+        return { device_info, fingerprint };
+      }
+
+      function openDeviceNameModal() {
+        document.getElementById('deviceNameModal').classList.remove('hidden');
+      }
+      function closeDeviceNameModal() {
+        document.getElementById('deviceNameModal').classList.add('hidden');
+      }
+      document.getElementById('closeDeviceNameModal').onclick = closeDeviceNameModal;
+
+      // Kaydet butonunu en başta ata:
+      document.getElementById('saveDeviceNameBtn').onclick = async function() {
+        const input = document.getElementById('deviceNameInput');
+        const errorDiv = document.getElementById('deviceNameError');
+        const val = input.value.trim();
+
+        // Basit validasyon
+        if (!val) {
+          errorDiv.innerText = 'Lütfen bir cihaz ismi giriniz.';
+          input.focus();
+          return;
+        }
+        if (val.length > 32) {
+          errorDiv.innerText = 'Cihaz ismi en fazla 32 karakter olabilir.';
+          input.focus();
+          return;
+        }
+        errorDiv.innerText = '';
+        closeDeviceNameModal();
+
+        const deviceName = val;
+
+        const payload = {
+          status:"device-name",
+          deviceName,
+          ...data
+        };
+
+        const res = await fetch('/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (res.ok) {
+          // yönlendir
+          window.location.href = '/user';
+        } else {
+          // hata mesajı göster
+          const data = await res.json();
+          feedback.textContent = data.error || 'Giriş hatası!';
+          feedback.className = 'error';
+          return;
+        }
+      };
+
+      // Kayıt formu submit
+      const regForm = document.getElementById('registerForm');
+      regForm.addEventListener('submit', async function(e) {
+        e.preventDefault();
+
+        const feedback = document.getElementById('feedback');
+        feedback.textContent = '';
+        feedback.style.color = '#fff';
+
+        // --- Gelişmiş Kontrol Başlangıç ---
+        fullname = document.getElementById('fullname').value.trim();
+        email = document.getElementById('email').value.trim();
+        password = document.getElementById('password').value;
+        password2 = document.getElementById('password2').value;
+        birth_year = document.getElementById('birth_year').value;
+        city = document.getElementById('city').value.trim();
+
+        // 1) Ad Soyad - Boş ve format kontrolü
+        if (!fullname) {
+          feedback.textContent = 'Lütfen ad ve soyad giriniz.';
+          feedback.className = 'error';
+          return;
+        }
+        if (fullname.length > 40 || !/^[A-Za-zçÇğĞıİöÖşŞüÜ\s]+$/.test(fullname)) {
+          feedback.textContent = 'Ad Soyad 40 karakteri aşamaz ve sadece harf/barındırabilir.';
+          feedback.className = 'error';
+          return;
+        }
+
+        // 2) Email - Boş ve uzunluk kontrolü
+        if (!email) {
+          feedback.textContent = 'Lütfen e-posta adresinizi giriniz.';
+          feedback.className = 'error';
+          return;
+        }
+        if (email.length > 60) {
+          feedback.textContent = 'E-posta en fazla 60 karakter olmalı.';
+          feedback.className = 'error';
+          return;
+        }
+
+        // 3) Şifre - Boş, uzunluk ve eşleşme kontrolü
+        if (!password) {
+          feedback.textContent = 'Lütfen şifre giriniz.';
+          feedback.className = 'error';
+          return;
+        }
+        if (password.length < 6 || password.length > 32) {
+          feedback.textContent = 'Şifre 6-32 karakter arasında olmalıdır.';
+          feedback.className = 'error';
+          return;
+        }
+        if (!password2) {
+          feedback.textContent = 'Şifre tekrar kısmını doldurun.';
+          feedback.className = 'error';
+          return;
+        }
+        if (password !== password2) {
+          feedback.textContent = 'Şifreler aynı olmalıdır.';
+          feedback.className = 'error';
+          return;
+        }
+
+        // 4) Doğum yılı - Boşluk, geçerli yıl ve rakam kontrolü
+        if (!birth_year) {
+          feedback.textContent = 'Lütfen doğum yılınızı giriniz.';
+          feedback.className = 'error';
+          return;
+        }
+        if (!/^\d{4}$/.test(birth_year) || birth_year < 1900 || birth_year > 2100) {
+          feedback.textContent = 'Doğum yılı 1900-2100 arasında, 4 haneli bir sayı olmalı.';
+          feedback.className = 'error';
+          return;
+        }
+
+        // 5) Şehir - Boş ve format kontrolü
+        if (!city) {
+          feedback.textContent = 'Lütfen şehir giriniz.';
+          feedback.className = 'error';
+          return;
+        }
+        if (city.length > 30 || !/^[A-Za-zçÇğĞıİöÖşŞüÜ\s\-]+$/.test(city)) {
+          feedback.textContent = 'Şehir adı en fazla 30 karakter, sadece harf, boşluk ve tire içerebilir.';
+          feedback.className = 'error';
+          return;
+        }
+
+        // 6) Üyelik tipi zorunlu!
+        if (!selectedMembershipType) {
+          feedback.textContent = 'Lütfen bir üyelik tipi seçiniz.';
+          feedback.className = 'error';
+          return;
+        }
+
+        try {
+          const formData = new FormData(this);
+          showLoader();
+          for (let [key, value] of formData.entries()) data[key] = value;
+
+          data.membershipType = selectedMembershipType;
+
+          const {device_info, fingerprint} = await getFingerprintAndDeviceInfo();
+          data.device_info = device_info;
+          data.fingerprint = fingerprint;
+
+          const res = await fetch('/register', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({data,status:"new-user"})
+          });
+          const json = await res.json();
+
+          if(res.ok) {
+            feedback.textContent = 'Kayıt başarılı! Giriş yapmak için devam ediniz.';
+            feedback.className = 'message';
+            feedback.style.color = '#fff';
+          
+            openDeviceNameModal();
+
+          } else {
+            feedback.textContent = json.message || 'Kayıt sırasında hata oluştu.';
+            feedback.className = 'error';
+            feedback.style.color = '#fff';
+          }
+        } catch (err) {
+          feedback.textContent = 'Bir hata oluştu, lütfen tekrar deneyin.';
+          feedback.className = 'error';
+          feedback.style.color = '#fff';
+          this.reset();
+          // Seçiciyi sıfırla
+          selectedMembershipType = null;
+          monthBtn.classList.remove('bg-red-600');
+          yearBtn.classList.remove('bg-yellow-500');
+          monthBtn.classList.add('bg-gray-700');
+          yearBtn.classList.add('bg-gray-700');
+        } finally {
+          hideLoader(); // loader her durumda (hata veya başarıda) saklanacak
+        }
+      });
+      
+
+
+      function showLoader() {
+        document.getElementById('loader').style.display = 'flex';
+      }
+      function hideLoader() {
+        document.getElementById('loader').style.display = 'none';
+      }
+
+  </script>
+
+</body>
+</html>
