@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>KVKK & Gizlilik Politikası | Art Nail</title>
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <meta name="description" content="Art Nail - KVKK ve Gizlilik Politikası">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { min-height: 100vh; }
+    .lottie-animation{
+        margin-left: -14px;
+        margin-right: -14px;
+    }
+    .inline-block{
+        margin-left: -21px;
+    }
+    @media (max-width: 900px) {
+      .policycol {
+        margin-top: 2rem !important;
+        padding-left: 1rem !important;
+        padding-right: 1rem !important;
+      }
+    }
+  </style>
+</head>
+<body class="bg-black min-h-screen flex flex-col">
+
+  <!-- NAVBAR -->
+  <nav class="w-full bg-zinc-900 border-b border-zinc-800 px-4 sm:px-8 py-3 flex items-center justify-between">
+    <!-- LOGO + Slogan -->
+    <div class="flex items-center gap-3">
+      <span class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none">
+        <span class="mr-1">ART</span>
+        <span id="logo-lottie" class="w-12 h-14 lottie-animation"></span>
+        <span>NAİL</span>
+      </span>
+      <span class="ml-2 text-[10px] sm:text-xs text-gray-400 tracking-widest hidden sm:block select-none">EN İYİLERİN SANATI</span>
+    </div>
+    <!-- Menü -->
+    <div class="flex gap-3 items-center">
+      {{#ifEquals role "user"}}  
+          <a href="/home" class="text-xs sm:text-sm font-medium text-gray-300 hover:text-yellow-400 transition">Ana Sayfa</a>
+      {{else}}  
+          <a href="/" class="text-xs sm:text-sm font-medium text-gray-300 hover:text-yellow-400 transition">Ana Sayfa</a>
+      {{/ifEquals}} 
+      
+    </div>
+  </nav>
+
+  <!-- ANA İÇERİK -->
+  <main class="flex flex-1 flex-col items-center justify-center pt-8 pb-6 bg-black">
+    <div class="policycol max-w-lg w-full bg-black bg-opacity-80 p-6 rounded-xl shadow-lg border border-zinc-800">
+      <h2 class="text-lg font-semibold mb-7 tracking-tight">KVKK &amp; Gizlilik Politikası</h2>
+      <section class="space-y-7 text-sm leading-relaxed text-white/90">
+        <div>
+          <h3 class="font-semibold mb-2">Kişisel Verilerin Korunması</h3>
+          <p>
+            Art Nail’e paylaştığınız tüm bilgileriniz, 6698 sayılı KVKK kapsamında güvenle saklanır.<br>
+            Verileriniz sadece platform hizmetimizi sunmak ve yasal sorumluluklarımızı yerine getirmek için kullanılır.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Toplanan Bilgiler</h3>
+            <ul class="pl-4 list-disc">
+              <li>İletişim bilgileriniz (e-posta, telefon)</li>
+              <li>Profil bilgileriniz (ad, doğum yılı, şehir)</li>
+              <li>Oturum/cihaz güvenlik verileri</li>
+              <li>Kullanım ve tercih bilgileri</li>
+              <li>Abonelik &amp; ödeme geçmişiniz</li>
+            </ul>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Verilerin Saklanması &amp; Silinmesi</h3>
+          <p>
+            Bilgileriniz, gerekli olduğu sürece ve yasal zorunluluklar kapsamında saklanır.<br>
+            <span class="text-yellow-400">destek@artnail.com</span> adresine yazarak istediğinizde silinmesini talep edebilirsiniz.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Veri Paylaşımı</h3>
+          <p>
+            Verileriniz sadece hizmetin verilmesi ve yasal gerekçeler dışında 
+            asla <span class="text-yellow-400 font-semibold">veri, asla amacı dışında</span> kullanılmaz.
+          </p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Çerezler</h3>
+          <p>Sitenin çalışması ve güvenliği için çerezler kullanılır. Dilerseniz tarayıcı ayarlarından kontrol sağlayabilirsiniz.</p>
+        </div>
+        <div>
+          <h3 class="font-semibold mb-2">Haklarınız</h3>
+          <p>
+            Her zaman verilerinize ulaşma, düzeltme, silinmesini isteme ve işlemeye itiraz hakkınız var.<br>
+            Bize <span class="text-yellow-400 underline font-semibold">destek@artnail.com</span> üzerinden ulaşabilirsiniz.
+          </p>
+        </div>
+        <div>
+          <small class="text-xs text-zinc-400">Son güncelleme: Ağustos 2025</small>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- FOOTER -->
+  <footer class="w-full bg-zinc-900 border-t border-zinc-800 py-4 text-gray-400 flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 text-xs">
+    <div class="mb-1 sm:mb-0">&copy; 2025 Art Nail</div>
+    <div class="mb-1 sm:mb-0">KVKK &amp; Gizlilik</div>
+    <div>E-posta: <span class="text-yellow-400 font-semibold">destek@artnail.com</span></div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.0/lottie.min.js"></script>
+  <script>
+    
+      lottie.loadAnimation({
+          container: document.getElementById('logo-lottie'),
+          renderer: 'svg',
+          loop: true,
+          autoplay: true,
+          path: 'img/nails.json'
+      });
+
+    
+  </script>
+</body>
+</html>

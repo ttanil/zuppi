@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Art Nail - Kullanıcı Paneli</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { overflow-x: hidden;}
+    .profile-gradient {
+      background: linear-gradient(120deg, #f472b6 0%, #c026d3 100%);
+    }
+  </style>
+</head>
+<body class="bg-black text-white">
+
+<!-- Profil & Genel Panel (Desktop) -->
+<div class="max-w-5xl w-full mx-auto px-2 py-6 flex flex-col md:flex-row gap-7">
+  <!-- SOL BLOK: Kullanıcı ve kısa özet -->
+  <div class="flex flex-col gap-4 w-full md:w-1/3">
+    <!-- Profil kartı -->
+    <div class="bg-zinc-900 rounded-2xl p-7 flex flex-col items-center shadow-xl">
+      <div class="w-24 h-24 rounded-full border-4 border-pink-600 mb-2 shadow-lg overflow-hidden flex items-center justify-center">
+        <img src="https://i.pravatar.cc/120?img=49" class="w-full h-full object-cover" alt="Profil Foto">
+      </div>
+      <div class="font-extrabold text-xl mb-1 text-white">Ayşe Güzel</div>
+      <div class="text-xs text-gray-300 mb-2">ayse.guzel@email.com</div>
+      <div class="text-xs text-gray-400 mb-1">Ankara, 1993</div>
+      <div class="flex gap-2 my-1">
+        <span class="bg-yellow-500 text-black text-xs px-3 py-1 font-bold rounded-full">Yıllık Abone</span>
+        <span class="bg-pink-600 text-white text-xs px-3 py-1 font-bold rounded-full">Gold Level</span>
+      </div>
+      <button class="mt-4 px-4 py-2 bg-zinc-800 border border-pink-500 rounded-md text-pink-400 font-semibold hover:bg-pink-700 hover:text-white transition">Profili Düzenle</button>
+    </div>
+    <!-- Cüzdan ve Cihaz kutuları -->
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Cüzdan -->
+      <div class="bg-zinc-900 rounded-xl p-4 flex flex-col text-center items-center shadow-md">
+        <div class="text-xs text-gray-400">Cüzdan Bakiyesi</div>
+        <div class="text-lg font-bold text-green-400 mb-2">630₺</div>
+        <button class="text-xs px-3 py-1 rounded bg-pink-600 text-white hover:bg-pink-700 transition">Bakiye Yükle</button>
+      </div>
+      <!-- Aktif Cihazlar -->
+      <div class="bg-zinc-900 rounded-xl p-4 shadow-md">
+        <div class="text-xs text-gray-400 mb-2 text-center">Aktif Cihazlar <span class="text-[10px] text-gray-500">(2/2)</span></div>
+        <ul class="text-xs text-gray-300 flex flex-col gap-1">
+          <li>Ayşe-iPhone12 <button class="text-red-400 hover:underline">Sil</button></li>
+          <li>MacbookAir <button class="text-red-400 hover:underline">Sil</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bg-zinc-900 rounded-xl mt-2">
+      <a href="#" class="block text-center w-full py-2 text-xs text-gray-300 hover:underline hover:text-yellow-300">Hesap Ayarları & Gizlilik</a>
+    </div>
+
+    <div class="flex items-center justify-center gap-4 mb-5 mt-3">
+        <button id="maviSwitch" class="bg-blue-600 text-white font-bold px-7 py-3 rounded-lg shadow-lg text-md hover:bg-blue-700 transition duration-150 theme-btn">Mavi Tema</button>
+        <button id="pembeSwitch" class="bg-pink-600 text-white font-bold px-7 py-3 rounded-lg shadow-lg text-md hover:bg-pink-700 transition duration-150 theme-btn">Pembe Tema</button>
+    </div>
+  </div>
+
+
+  <!-- SAĞ BLOK: Eğitimler, siparişler ve topluluk -->
+  <div class="flex-1 flex flex-col gap-6">
+    <!-- EĞİTİM GEÇMİŞİ -->
+    <div class="bg-zinc-900 rounded-2xl p-6 shadow-md">
+      <div class="flex items-center justify-between">
+        <span class="text-white font-semibold text-lg">Eğitimlerim</span>
+        <a href="#" class="text-xs text-pink-400 hover:text-yellow-400 hover:underline transition">Tümünü Gör</a>
+      </div>
+      <div class="flex gap-4 mt-3 overflow-x-auto pb-2">
+        <!-- Eğitim kartları -->
+        <div class="min-w-[120px] flex flex-col items-center">
+          <img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=200&q=60" class="rounded-xl w-24 h-20 object-cover" />
+          <span class="mt-1 text-xs text-gray-100 font-bold">Manikür 1</span>
+          <span class="block w-full mt-1 h-1 bg-gray-700 rounded relative">
+            <span class="block h-1 bg-yellow-400 rounded-l" style="width:80%"></span>
+          </span>
+          <span class="text-[11px] text-gray-400 mt-1 mb-2">Tamamlandı %80</span>
+        </div>
+        <div class="min-w-[120px] flex flex-col items-center">
+          <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=200&q=60" class="rounded-xl w-24 h-20 object-cover" />
+          <span class="mt-1 text-xs text-gray-100 font-bold">Salon Hijyeni</span>
+          <span class="block w-full mt-1 h-1 bg-gray-700 rounded relative">
+            <span class="block h-1 bg-yellow-400 rounded-l" style="width:60%"></span>
+          </span>
+          <span class="text-[11px] text-gray-400 mt-1 mb-2">Tamamlandı %60</span>
+        </div>
+        <div class="min-w-[120px] flex flex-col items-center">
+          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=200&q=60" class="rounded-xl w-24 h-20 object-cover" />
+          <span class="mt-1 text-xs text-gray-100 font-bold">Modern Nailart</span>
+          <span class="block w-full mt-1 h-1 bg-gray-700 rounded relative">
+            <span class="block h-1 bg-yellow-400 rounded-l" style="width:40%"></span>
+          </span>
+          <span class="text-[11px] text-gray-400 mt-1 mb-2">Tamamlandı %40</span>
+        </div>
+      </div>
+      <!-- Level, Progress -->
+      <div class="flex items-center gap-2 mt-4 mb-2">
+        <span class="text-yellow-400 text-lg font-bold">Gold</span>
+        <span class="flex-1">
+          <span class="block w-full h-2.5 bg-gray-800 rounded">
+            <span class="block h-2.5 bg-yellow-400 rounded-l" style="width:74%"></span>
+          </span>
+        </span>
+        <span class="text-xs text-gray-300 ml-2">14/20 Eğitim</span>
+      </div>
+    </div>
+    
+    <!-- ABONELİK & FATURA -->
+    <div class="bg-zinc-900 rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-stretch gap-4 shadow-md">
+      <div class="flex-1">
+        <div class="text-white font-semibold mb-1">Abonelik Paketiniz:</div>
+        <div class="text-pink-400 font-bold text-lg mb-1">Yıllık (Gold)</div>
+        <div class="text-xs text-gray-400 mb-2">Geçerli: 08/2024 - 08/2025</div>
+        <button class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xs px-4 py-2 rounded-lg transition">Aboneliği Yenile</button>
+      </div>
+      <div>
+        <div class="text-xs text-gray-400 mb-2">Son Faturalarınız:</div>
+        <ul>
+          <li class="text-xs mb-1"><span class="text-green-400">✓</span> #202406 - 1299₺ - <a href="#" class="text-blue-300 hover:underline">PDF</a></li>
+          <li class="text-xs mb-1"><span class="text-green-400">✓</span> #202305 - 499₺ - <a href="#" class="text-blue-300 hover:underline">PDF</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- SİPARİŞ ÖZETİ -->
+    <div class="bg-zinc-900 rounded-2xl p-6 shadow-md">
+      <span class="text-white font-semibold text-lg">Son Satın Almalar</span>
+      <div class="flex gap-3 mt-3 overflow-x-auto">
+        <div class="bg-zinc-800 rounded-lg p-3 min-w-[160px] flex flex-col items-center text-center shadow">
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=140&q=60" class="w-14 h-14 rounded-xl object-cover mb-2"/>
+          <span class="text-xs font-bold text-white">Pembe Jel Oje</span>
+          <span class="text-xs text-gray-400 mt-1">4 Haz 2024</span>
+          <span class="text-xs text-green-400 font-medium">✓ Teslim Edildi</span>
+        </div>
+        <div class="bg-zinc-800 rounded-lg p-3 min-w-[160px] flex flex-col items-center text-center shadow">
+          <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=140&q=60" class="w-14 h-14 rounded-xl object-cover mb-2"/>
+          <span class="text-xs font-bold text-white">Freze Seti</span>
+          <span class="text-xs text-gray-400 mt-1">23 May 2024</span>
+          <span class="text-xs text-gray-300">Kargoda</span>
+        </div>
+      </div>
+      <a href="#" class="block mt-2 text-xs text-pink-400 hover:text-yellow-400 hover:underline">Tüm Siparişlerim</a>
+    </div>
+
+    <!-- TOPLULUK VE KISA BAĞLANTILAR -->
+    <div class="bg-zinc-900 rounded-2xl p-6 shadow-md flex flex-wrap gap-3">
+      <a href="#" class="bg-green-500 hover:bg-green-600 transition text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold text-xs mr-3"><svg width="18" height="18" fill="currentColor" class="inline"><path d="M10.02 12.318a4.565 4.565 0 002.706-1.317l.273-.283c.38-.395.395-1.024.034-1.414a.998.998 0 00-1.41-.032l-.306.304c-.567.563-1.342.877-2.158.857a3.326 3.326 0 01-2.33-.985 3.316 3.316 0 01-.985-2.33c-.02-.816.294-1.591.857-2.158l.304-.306a.997.997 0 00-.032-1.41.997.997 0 00-1.414.034l-.283.273a4.572 4.572 0 00-1.317 2.706c-.315 1.926.233 3.97 1.576 5.313 1.343 1.344 3.387 1.892 5.313 1.576z"/></svg> WhatsApp Grubu</a>
+      <a href="#" class="bg-blue-500 hover:bg-blue-600 transition text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold text-xs"><svg width="18" height="18" fill="currentColor" class="inline"><path d="M17.472 4.845l-2.58 12.176c-.196.872-.717 1.087-1.452.675l-4.012-2.954-1.936 1.865c-.215.215-.394.395-.809.395l.29-4.123 7.513-6.809c.326-.29-.072-.453-.504-.163L4.487 10.352l-3.977-1.15c-.864-.264-.879-.864.18-1.276l15.316-5.898c.707-.261 1.324.172 1.096 1.117z"/></svg> Telegram Grubu</a>
+      <a href="#" class="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold text-xs"><svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="inline"><path d="M12 14c3.314 0 6-1.343 6-3V7l-6-3-6 3v4c0 1.657 2.686 3 6 3zm0 0v6" /></svg> Eğitmen Başvurusu</a>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-zinc-900 text-center py-4 text-xs text-gray-400 mt-12">
+  © 2025 Art Nail | <a href="#" class="hover:underline text-pink-400">KVKK & Gizlilik</a>
+</footer>
+
+<script>
+    function pinkToBlue(on = true) {
+    // 1. Normal pembeleri değiştir (tema seçici butonlar hariç!)
+    const classPairs = [
+        ['bg-pink-600', 'bg-blue-600'],
+        ['bg-pink-700', 'bg-blue-700'],
+        ['text-pink-400', 'text-blue-400'],
+        ['border-pink-500', 'border-blue-500'],
+        ['border-pink-600', 'border-blue-600'],
+        ['bg-pink-400', 'bg-blue-400'],
+        ['hover:bg-pink-700', 'hover:bg-blue-700'],
+        ['text-pink-600', 'text-blue-600'],
+    ];
+    classPairs.forEach(([pink, blue]) => {
+        document.querySelectorAll(`.${on ? pink : blue}:not(.theme-btn)`).forEach(el => {
+        el.classList.remove(on ? pink : blue);
+        el.classList.add(on ? blue : pink);
+        });
+    });
+    // 2. "img-frame" çerçevelerinde border-pink-600 <-> border-blue-600 dönüşümü:
+    document.querySelectorAll('.img-frame').forEach(el => {
+        if (on) {
+        el.classList.remove('border-pink-600');
+        el.classList.add('border-blue-600');
+        } else {
+        el.classList.remove('border-blue-600');
+        el.classList.add('border-pink-600');
+        }
+    });
+    }
+
+    document.getElementById("maviSwitch").onclick = function() {
+        pinkToBlue(true);
+    };
+    document.getElementById("pembeSwitch").onclick = function() {
+        pinkToBlue(false);
+    };
+</script>
+
+</body>
+</html>

@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Art Nail - Giriş Yap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {background-color: #09090b;}
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-black">
+  <!-- GİRİŞ/KAYIT KARTI -->
+  <div class="w-full max-w-md mx-auto px-4 py-10 flex flex-col items-center justify-center">
+    <div class="bg-zinc-900/90 rounded-2xl shadow-2xl px-8 py-10 w-full flex flex-col gap-6">
+      <!-- LOGO ve Başlık -->
+      <a href="/" class="flex flex-col items-center mb-2 select-none focus:outline-none group">
+        <span class="font-extrabold text-white text-3xl flex items-center">
+            ART
+            <span class="inline-block w-7 h-7 ml-2 mr-2 bg-red-600 rounded-full animate-pulse"></span>
+            NAIL
+        </span>
+        <span class="text-xs text-gray-400 tracking-widest mt-2 group-hover:text-yellow-400 transition">
+            EN İYİLERİN SANATI
+        </span>
+      </a>
+      <h2 class="text-white font-black text-2xl text-center mt-2 mb-4">Giriş Yap</h2>
+      <p class="text-gray-400 text-center text-sm mb-3">
+        Hesabınız yok mu?
+        <a href="/register" class="text-red-400 hover:text-yellow-400 font-bold underline transition">Kayıt Olun</a>
+      </p>
+      <!-- Form -->
+      <form action="/login" method="post" class="flex flex-col gap-4">
+        <div>
+          <label for="email" class="text-sm text-gray-200 font-semibold mb-1 block">E-posta</label>
+          <input type="email" id="email" name="email" required
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"
+            placeholder="e-posta adresiniz" autocomplete="username">
+        </div>
+        <div class="relative">
+          <label for="password" class="text-sm text-gray-200 font-semibold mb-1 block">Şifre</label>
+          <input type="password" id="password" name="password" required
+                class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition pr-10"
+                placeholder="şifreniz" autocomplete="current-password">
+          <!-- Göz butonu -->
+          <button type="button" id="togglePassword"
+                  class="absolute right-3 top-9 transform -translate-y-1/2 text-gray-400 hover:text-yellow-400 transition focus:outline-none hidden">
+            <!-- Göz Açık (başta görünür)-->
+            <svg id="eyeOpen" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.478 0-8.268-2.943-9.542-7z" />
+            </svg>
+            <!-- Göz Kapalı (başta gizli)-->
+            <svg id="eyeClosed" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                  d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.97 9.97 0 012.948-4.568M6.7 6.7A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.542 7a9.969 9.969 0 01-4.043 5.306M3 3l18 18M9.88 9.88a3 3 0 104.24 4.24"/>
+            </svg>
+          </button>
+        </div>
+        <!-- Örnek Hata Mesajı (isteğe bağlı, JS ile ekle): -->
+        <!-- <div class="text-red-400 text-xs text-center">E-posta veya şifre hatalı!</div> -->
+        <button type="submit"
+          class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-3 mt-2 transition focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          Giriş Yap
+        </button>
+      </form>
+      <!-- veya bölümü 
+      <div class="flex items-center gap-4 my-2">
+        <span class="border-b border-zinc-700 flex-1"></span>
+        <span class="text-gray-500 text-xs font-bold">veya</span>
+        <span class="border-b border-zinc-700 flex-1"></span>
+      </div>
+      <button class="flex gap-2 items-center bg-white text-black rounded-xl py-3 px-2 font-bold shadow hover:bg-gray-100 transition">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="h-5 w-5">
+        Google ile Giriş Yap
+    </button> -->
+      <!-- Şifre hatırlatma -->
+      <div class="flex flex-row justify-center mt-3">
+        <a href="/forgot-password" class="text-xs text-gray-400 hover:text-yellow-400 transition underline">Şifremi unuttum</a>
+      </div>
+      <div id="feedback" style="color:#fff;" class="text-xs text-center mt-2"></div>
+    </div>
+  </div>
+
+  <!-- Cihaz İsmi Modalı -->
+<div id="deviceNameModal" class="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8 w-full max-w-sm flex flex-col items-center gap-4 relative">
+    <button id="closeDeviceNameModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg focus:outline-none">&times;</button>
+    <div class="font-bold text-lg mb-2 flex flex-col items-center">
+      <span class="text-2xl">Cihaz İsmi</span>
+      <span class="text-xs text-gray-400 mt-2">Giriş yaptığınız bu cihaza bir isim verin</span>
+    </div>
+    <input
+      id="deviceNameInput"
+      type="text"
+      maxlength="32"
+      class="bg-zinc-800 border border-zinc-600 rounded-lg py-2 px-3 w-full mt-2 mb-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-red-500"
+      placeholder="Örn: Fatma'nın iPhone'u, Ev PC"
+      autocomplete="off"
+      required
+    />
+    <div id="deviceNameError" class="text-red-400 text-xs mb-1"></div>
+    <button id="saveDeviceNameBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-2 mt-2 transition focus:outline-none">
+      Kaydet ve Devam Et
+    </button>
+  </div>
+</div>
+
+<!-- Cihaz Tanımsız Modalı -->
+<div id="newDeviceApprovalModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-6 w-full max-w-sm flex flex-col items-center gap-6">
+    <span class="font-bold text-xl">Yeni cihaz algılandı!</span>
+    <p class="text-center text-gray-300">
+      Bu cihaz şu anda hesabınızda kayıtlı değil.<br/>
+      <span class="text-yellow-400 font-bold">Devam etmek için e-posta onayı gerekmektedir.</span><br>
+      Onay işlemini başlatmak ister misiniz?
+    </p>
+    <div class="flex gap-4 w-full">
+      <button id="approveNewDeviceBtn"
+        class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg py-2 transition focus:outline-none">
+        Evet, Devam Et
+      </button>
+      <button id="denyNewDeviceBtn"
+        class="flex-1 bg-zinc-700 hover:bg-zinc-600 text-gray-200 border border-zinc-500 rounded-lg py-2 transition focus:outline-none">
+        Hayır
+      </button>
+    </div>
+    <div id="deviceApprovalFeedback" class="text-xs text-yellow-400 text-center"></div>
+  </div>
+</div>
+
+<!-- Bilgi Modalı -->
+<div id="infoModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-6 w-full max-w-sm flex flex-col items-center gap-6">
+    <span class="font-bold text-lg" id="infoModalTitle">Bilgi</span>
+    <div class="text-center text-gray-200" id="infoModalText"></div>
+    <button id="closeInfoModalBtn" class="bg-red-600 hover:bg-red-700 text-white px-6 py-2 rounded-xl font-bold mt-2 transition focus:outline-none">
+      Kapat
+    </button>
+  </div>
+</div>
+
+
+  <script src="https://openfpcdn.io/fingerprintjs/v4.1.1/fp.umd.min.js"></script>
+  <script>
+    const feedback = document.getElementById('feedback');
+
+    let device_info, fingerprint;
+    let email = null;
+
+    // Şifre göz/gizle özelliği
+    document.getElementById('togglePassword').addEventListener('click', function () {
+      const passInput = document.getElementById('password');
+      const eyeOpen = document.getElementById('eyeOpen');
+      const eyeClosed = document.getElementById('eyeClosed');
+      if (passInput.type === "password") {
+        passInput.type = "text";
+        eyeOpen.classList.add("hidden");
+        eyeClosed.classList.remove("hidden");
+      } else {
+        passInput.type = "password";
+        eyeOpen.classList.remove("hidden");
+        eyeClosed.classList.add("hidden");
+      }
+    });
+
+    async function getDeviceInfo() {
+      return new Promise((resolve) => {
+        const info = {
+          os: navigator.platform || null,
+          browser: (() => {
+            const ua = navigator.userAgent;
+            if (/Chrome/.test(ua)) return 'Chrome';
+            if (/Firefox/.test(ua)) return 'Firefox';
+            if (/Safari/.test(ua) && !/Chrome/.test(ua)) return 'Safari';
+            if (/Edg/.test(ua)) return 'Edge';
+            return 'Unknown';
+          })(),
+          browser_version: navigator.appVersion || null,
+          device_type: /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+          model: null,
+          user_agent: navigator.userAgent,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          language: navigator.language,
+          screen_resolution: window.screen.width + 'x' + window.screen.height,
+          color_depth: window.screen.colorDepth,
+          touch_support: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+          is_incognito: null,
+          geo_location: null // Şimdilik null, birazdan ekleyeceğiz.
+        };
+        resolve(info);
+      });
+    }
+    // Güvenli Fingerprint + cihaz bilgisi döner
+    async function getFingerprintAndDeviceInfo() {
+      const device_info = await getDeviceInfo();
+      let fingerprint = null;
+
+      if (window.FingerprintJS) {
+        try {
+          await new Promise((resolve, reject) => {
+            const fp = window.FingerprintJS();
+            fp.get(result => {
+              fingerprint = result.visitorId;
+              resolve();
+            }, reject);
+          });
+        } catch(err) {
+          fingerprint = null;
+        }
+      }
+      return { device_info, fingerprint };
+    }
+    
+    function openDeviceNameModal() {
+      document.getElementById('deviceNameModal').classList.remove('hidden');
+    }
+    function closeDeviceNameModal() {
+      document.getElementById('deviceNameModal').classList.add('hidden');
+    }
+    document.getElementById('closeDeviceNameModal').onclick = closeDeviceNameModal;
+
+    // Kaydet butonunu en başta ata:
+    document.getElementById('saveDeviceNameBtn').onclick = async function() {
+      const input = document.getElementById('deviceNameInput');
+      const errorDiv = document.getElementById('deviceNameError');
+      const val = input.value.trim();
+
+      // Basit validasyon
+      if (!val) {
+        errorDiv.innerText = 'Lütfen bir cihaz ismi giriniz.';
+        input.focus();
+        return;
+      }
+      if (val.length > 32) {
+        errorDiv.innerText = 'Cihaz ismi en fazla 32 karakter olabilir.';
+        input.focus();
+        return;
+      }
+      errorDiv.innerText = '';
+      closeDeviceNameModal();
+
+      device_info.deviceName = val;
+
+      const payload = {
+        status:"device-name",
+        email,
+        device_info,
+        fingerprint
+      };
+
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        // yönlendir
+        window.location.href = '/user';
+      } else {
+        // hata mesajı göster
+        const data = await res.json();
+        feedback.textContent = data.error || 'Giriş hatası!';
+        feedback.className = 'error';
+        return;
+      }
+    };
+
+    // Bilgi modal aç/kapat fonksiyonları
+    function openInfoModal(title, text) {
+      document.getElementById('infoModalTitle').textContent = title || "Bilgi";
+      document.getElementById('infoModalText').textContent = text || "";
+      document.getElementById('infoModal').classList.remove('hidden');
+
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+    }
+    function closeInfoModal() {
+      document.getElementById('infoModal').classList.add('hidden');
+    }
+    document.getElementById('closeInfoModalBtn').onclick = function() {
+      closeInfoModal();
+    };
+
+    // --------- Tanımsız Cihaz Modalı Fonksiyonları ---------
+    function openNewDeviceApprovalModal() {
+      document.getElementById('newDeviceApprovalModal').classList.remove('hidden');
+      document.getElementById('deviceApprovalFeedback').textContent = '';
+    }
+    function closeNewDeviceApprovalModal() {
+      document.getElementById('newDeviceApprovalModal').classList.add('hidden');
+    }
+    document.getElementById('denyNewDeviceBtn').onclick = function() {
+      closeNewDeviceApprovalModal();
+      feedback.textContent = 'Yeni cihazla giriş isteği iptal edildi.';
+      feedback.className = 'text-yellow-400 text-xs text-center';
+
+      document.getElementById('email').value = '';
+      document.getElementById('password').value = '';
+    };
+
+    document.getElementById('approveNewDeviceBtn').onclick = async function() {
+      // Onay maili sürecini başlat
+      closeNewDeviceApprovalModal();
+
+      openInfoModal("Bekleyin", "Onay e-postası gönderiliyor, lütfen kontrol ediniz...");
+
+      const { device_info: geoDeviceInfo, fingerprint: freshFingerprint } = await getFingerprintAndDeviceInfoWithGeo();
+      const payload = {
+        status: "device-approval-request",
+        email,
+        device_info: geoDeviceInfo,
+        fingerprint: freshFingerprint
+      };
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        document.getElementById('infoModalTitle').textContent = "E-posta Gönderildi";
+        document.getElementById('infoModalText').textContent =
+          "E-posta adresinize onay bağlantısı gönderildi. Lütfen e-postanızı kontrol edin.";
+      } else {
+        const data = await res.json();
+        document.getElementById('infoModalTitle').textContent = "Hata";
+        document.getElementById('infoModalText').textContent =
+          data.error || 'Bir hata oluştu, lütfen tekrar deneyin.';
+      }
+    };
+
+    document.querySelector('form').addEventListener('submit', async function(e){
+      e.preventDefault();
+      feedback.textContent = '';
+
+      email = document.getElementById('email').value.trim();
+      const password = document.getElementById('password').value;
+
+      ({ device_info, fingerprint } = await getFingerprintAndDeviceInfo());
+
+      const payload = {
+        status:"device",
+        email,
+        password,
+        device_info,
+        fingerprint
+      };
+
+      const res = await fetch('/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload)
+      });
+      if (res.ok) {
+        // yönlendir
+        window.location.href = '/user';
+      } else {
+        // hata mesajı göster
+        const data = await res.json();
+        feedback.textContent = data.error || 'Giriş hatası!';
+        feedback.className = 'error';
+        if(data.error === "Yeni cihazla giriş yapılıyor!"){
+          openDeviceNameModal();
+        } else if(data.error === "Tanımlı olmayan cihazla giriş yapılıyor!") {
+          openNewDeviceApprovalModal();
+        }
+        return;
+      }
+    });
+
+    async function getFingerprintAndDeviceInfoWithGeo() {
+      const device_info = await getDeviceInfoWithGeo();
+      let fingerprint = null;
+      if (window.FingerprintJS) {
+        try {
+          await new Promise((resolve, reject) => {
+            const fp = window.FingerprintJS();
+            fp.get(result => {
+              fingerprint = result.visitorId;
+              resolve();
+            }, reject);
+          });
+        } catch(err) {
+          fingerprint = null;
+        }
+      }
+      return { device_info, fingerprint };
+    }
+
+    async function getDeviceInfoWithGeo() {
+      return new Promise((resolve) => {
+        const info = {
+          os: navigator.platform || null,
+          browser: (() => {
+            const ua = navigator.userAgent;
+            if (/Chrome/.test(ua)) return 'Chrome';
+            if (/Firefox/.test(ua)) return 'Firefox';
+            if (/Safari/.test(ua) && !/Chrome/.test(ua)) return 'Safari';
+            if (/Edg/.test(ua)) return 'Edge';
+            return 'Unknown';
+          })(),
+          browser_version: navigator.appVersion || null,
+          device_type: /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) ? 'mobile' : 'desktop',
+          model: null,
+          user_agent: navigator.userAgent,
+          timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+          language: navigator.language,
+          screen_resolution: window.screen.width + 'x' + window.screen.height,
+          color_depth: window.screen.colorDepth,
+          touch_support: 'ontouchstart' in window || navigator.maxTouchPoints > 0,
+          is_incognito: null,
+          geo_location: null
+        };
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(
+            pos => {
+              info.geo_location = {
+                latitude: pos.coords.latitude,
+                longitude: pos.coords.longitude,
+                accuracy: pos.coords.accuracy
+              };
+              resolve(info);
+            },
+            () => resolve(info), // Kullanıcı izin vermezse veya hata alırsa null
+            { timeout: 6000 }
+          );
+        } else {
+          resolve(info);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

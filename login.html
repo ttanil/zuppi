@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Art Nail - Giriş Yap</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {background-color: #09090b;}
+  </style>
+</head>
+<body class="min-h-screen flex items-center justify-center bg-black">
+  <!-- GİRİŞ/KAYIT KARTI -->
+  <div class="w-full max-w-md mx-auto px-4 py-10 flex flex-col items-center justify-center">
+    <div class="bg-zinc-900/90 rounded-2xl shadow-2xl px-8 py-10 w-full flex flex-col gap-6">
+      <!-- LOGO ve Başlık -->
+      <div class="flex flex-col items-center mb-2">
+        <span class="font-extrabold text-white text-3xl flex items-center select-none">
+          ART
+          <span class="inline-block w-8 h-7 ml-2 mr-2 bg-red-600 rounded-full animate-pulse"></span>
+          NAIL
+        </span>
+        <span class="text-xs text-gray-400 tracking-widest mt-2 select-none">EN İYİLERİN SANATI</span>
+      </div>
+      <h2 class="text-white font-black text-2xl text-center mt-2 mb-4">Giriş Yap</h2>
+      <p class="text-gray-400 text-center text-sm mb-3">
+        Hesabınız yok mu?
+        <a href="/register" class="text-red-400 hover:text-yellow-400 font-bold underline transition">Kayıt Olun</a>
+      </p>
+      <!-- Form -->
+      <form action="/login" method="post" class="flex flex-col gap-4">
+        <div>
+          <label for="email" class="text-sm text-gray-200 font-semibold mb-1 block">E-posta</label>
+          <input type="email" id="email" name="email" required
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"
+            placeholder="e-posta adresiniz" autocomplete="username">
+        </div>
+        <div>
+          <label for="password" class="text-sm text-gray-200 font-semibold mb-1 block">Şifre</label>
+          <input type="password" id="password" name="password" required
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"
+            placeholder="şifreniz" autocomplete="current-password">
+        </div>
+        <!-- Örnek Hata Mesajı (isteğe bağlı, JS ile ekle): -->
+        <!-- <div class="text-red-400 text-xs text-center">E-posta veya şifre hatalı!</div> -->
+        <button type="submit"
+          class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-3 mt-2 transition focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          Giriş Yap
+        </button>
+      </form>
+      <!-- veya bölümü -->
+      <div class="flex items-center gap-4 my-2">
+        <span class="border-b border-zinc-700 flex-1"></span>
+        <span class="text-gray-500 text-xs font-bold">veya</span>
+        <span class="border-b border-zinc-700 flex-1"></span>
+      </div>
+      <button class="flex gap-2 items-center bg-white text-black rounded-xl py-3 px-2 font-bold shadow hover:bg-gray-100 transition">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="h-5 w-5">
+        Google ile Giriş Yap
+    </button>
+      <!-- Şifre hatırlatma -->
+      <div class="flex flex-row justify-center mt-3">
+        <a href="/forgot-password" class="text-xs text-gray-400 hover:text-yellow-400 transition underline">Şifremi unuttum</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

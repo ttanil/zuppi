@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Art Nail - Responsive Demo</title>
+  <link rel="icon" href="https://api.iconify.design/fluent-emoji:palette.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    @keyframes slideTrack {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    .carousel-outer {
+      overflow: hidden;
+      width: 100%;
+      /* Scrollbar gizlendi */
+    }
+    .carousel-track {
+      display: flex;
+      width: max-content;
+      animation: slideTrack 28s linear infinite;
+    }
+  </style>
+</head>
+<body class="bg-black text-white min-h-screen">
+
+  <!-- NAVBAR -->
+  <nav class="w-full bg-zinc-900 border-b border-zinc-800 px-2 sm:px-6 py-3 flex flex-wrap items-center justify-between gap-y-2">
+    <!-- LOGO + Slogan -->
+    <div class="flex items-center gap-3 min-w-[125px]">
+      <span class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none">
+        <span class="mr-1">ART</span>
+        <span class="inline-block bg-red-600 w-2 h-2 sm:w-2.5 sm:h-2.5 rounded mr-1"></span>
+        <span>NAİL</span>
+      </span>
+      <span class="ml-2 text-[10px] sm:text-xs text-gray-400 tracking-widest hidden sm:block select-none">EN İYİLERİN SANATI</span>
+    </div>
+
+    <!-- Arama Kutusu -->
+    <div class="w-full order-2 sm:order-1 sm:w-auto flex justify-center sm:justify-center mt-2 sm:mt-0">
+      <div class="relative w-full max-w-xs">
+        <input
+          type="text"
+          placeholder="Bugün ne öğrenmek istiyorsun?"
+          class="w-full bg-zinc-800 rounded-full py-2 pl-4 pr-10 text-sm text-gray-200 placeholder-gray-400 border border-zinc-700 focus:outline-none focus:border-red-700 transition"
+        />
+        <svg class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none"
+          fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <circle cx="11" cy="11" r="7"/>
+          <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Menü ve Auth -->
+    <div class="flex gap-1 sm:gap-3 items-center order-3">
+      <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition hidden md:inline">Abonelik Paketleri</a>
+      <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition hidden md:inline">Kişisel Testler</a>
+      <a href="#" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Giriş Yap</a>
+      <a href="#" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Kayıt Ol</a>
+    </div>
+  </nav>
+
+  <!-- BAŞLIK -->
+  <div class="w-full text-center">
+    <h1 class="text-lg sm:text-2xl md:text-3xl font-bold mt-6 sm:mt-7 mb-5 tracking-wide text-white">
+      Nail Art Alanından En İyilerin Eğitimleri Burada!
+    </h1>
+  </div>
+
+   
+    <!-- Birinci Satır Carousel -->
+<section class="carousel-outer">
+  <div class="carousel-track">
+    <!-- İlk Set -->
+    <div class="flex gap-5">
+      <!-- İndirim Kartı -->
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden flex items-center shadow-lg">
+        <div class="absolute top-3 left-3 z-10 bg-yellow-300 text-black font-bold text-xs px-3 py-1 rounded">Üyelere Özel</div>
+        <div class="flex-1 flex flex-col justify-center items-center py-2 pl-2">
+          <div class="text-red-600 text-3xl sm:text-4xl font-bold leading-none mb-0">%25</div>
+          <div class="text-xs text-gray-200 font-normal -mt-1">İNDİRİM</div>
+        </div>
+      </div>
+      <!-- Görsel Kartları -->
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 1</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 2</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 3</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1471357674240-e1a485acb3e1?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 4</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 5</div>
+      </div>
+    </div>
+    <!-- Kopya Set -->
+    <div class="flex gap-5">
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden flex items-center shadow-lg">
+        <div class="absolute top-3 left-3 z-10 bg-yellow-300 text-black font-bold text-xs px-3 py-1 rounded">Üyelere Özel</div>
+        <div class="flex-1 flex flex-col justify-center items-center py-2 pl-2">
+          <div class="text-red-600 text-3xl sm:text-4xl font-bold leading-none mb-0">%25</div>
+          <div class="text-xs text-gray-200 font-normal -mt-1">İNDİRİM</div>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1551218808-94e220e084d2?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 1</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 2</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1503602642458-232111445657?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 3</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1471357674240-e1a485acb3e1?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 4</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Ürün İsmi 5</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- İkinci Satır Carousel -->
+<section class="carousel-outer mt-3 ms-5">
+  <div class="carousel-track">
+    <div class="flex gap-5">
+      <!-- İndirim Kartı -->
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden flex items-center shadow-lg">
+        <div class="absolute top-3 left-3 z-10 bg-yellow-300 text-black font-bold text-xs px-3 py-1 rounded">Özel Teklif</div>
+        <div class="flex-1 flex flex-col justify-center items-center py-2 pl-2">
+          <div class="text-red-600 text-3xl sm:text-4xl font-bold leading-none mb-0">%30</div>
+          <div class="text-xs text-gray-200 font-normal -mt-1">İNDİRİM</div>
+        </div>
+      </div>
+      <!-- Görsel Kartları -->
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 1</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 2</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1557296387-5358ad7997bb?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 3</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1519699047748-8d912f41d18d?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 4</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1544717305-2786049cbec6?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 5</div>
+      </div>
+    </div>
+    <!-- Kopya Set -->
+    <div class="flex gap-5">
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden flex items-center shadow-lg">
+        <div class="absolute top-3 left-3 z-10 bg-yellow-300 text-black font-bold text-xs px-3 py-1 rounded">Özel Teklif</div>
+        <div class="flex-1 flex flex-col justify-center items-center py-2 pl-2">
+          <div class="text-red-600 text-3xl sm:text-4xl font-bold leading-none mb-0">%30</div>
+          <div class="text-xs text-gray-200 font-normal -mt-1">İNDİRİM</div>
+        </div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 1</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1508214751196-bcfd4ca60f91?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 2</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1557296387-5358ad7997bb?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 3</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1519699047748-8d912f41d18d?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 4</div>
+      </div>
+      <div class="flex-shrink-0 w-64 sm:w-72 relative bg-zinc-900 rounded-2xl h-[130px] overflow-hidden shadow-lg">
+        <img src="https://images.unsplash.com/photo-1544717305-2786049cbec6?auto=format&fit=crop&w=600&q=80"
+          alt="Ürün görseli" class="w-full h-full object-cover" />
+        <div class="absolute bottom-3 left-3 text-white text-xs">Yeni Ürün 5</div>
+      </div>
+    </div>
+  </div>
+</section>  
+  
+  <!-- Alt Tanıtım & App Butonları -->
+    <section class="flex flex-col items-center mb-10 mt-1">
+      <div class="text-center text-base sm:text-xl md:text-2xl font-semibold mb-6">Seni Bekleyen Eşsiz Deneyime Hemen Başla!</div>
+      <div class="bg-gradient-to-br from-zinc-900/90 via-gray-900/80 to-red-900/70 rounded-2xl p-5 sm:p-8 flex flex-col md:flex-row gap-4 sm:gap-6 items-center max-w-3xl w-full shadow-lg">
+        <div class="flex-1 flex flex-col items-center">
+          <img src="https://images.unsplash.com/photo-1559027615-2c1c9b961003?auto=format&fit=crop&w=400&q=80"
+            class="rounded-xl mb-3 sm:mb-4 shadow-md w-[180px] sm:w-64 h-[90px] sm:h-[120px] object-cover" alt="Tanıtım videosu">
+          <span class="block text-base sm:text-lg font-bold text-red-400">Özel Kalitede İçerikler</span>
+          <span class="block mt-1 text-gray-300 text-xs sm:text-sm text-center max-w-xs">Tüm eğitimlerimizde IMDB kalitesinde çekim, eğitmenlerle interaktif soru-cevap ve pratik modüller bulunur.</span>
+        </div>
+        <div class="flex-1 flex flex-col gap-3 w-full">
+          <div class="bg-zinc-800 rounded-xl py-4 px-3 sm:py-6 sm:px-4 shadow text-center">
+            <span class="text-white text-sm sm:text-base font-semibold">Canlı Derslere Katıl</span>
+            <div class="text-gray-400 text-xs mt-1">Her hafta yeni yayın</div>
+          </div>
+          <div class="bg-zinc-800 rounded-xl py-4 px-3 sm:py-6 sm:px-4 shadow text-center">
+            <span class="text-white text-sm sm:text-base font-semibold">Topluluk ve Soru-Cevap</span>
+            <div class="text-gray-400 text-xs mt-1">Aktif üyeler ve uzman eğitmenler ile iletişim</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- App Store / Play Store Butonları -->
+    <section class="flex flex-col items-center gap-3 mb-8 mt-3">
+      <div class="flex gap-3">
+        <a href="#" class="bg-zinc-900 px-4 py-3 rounded-xl border border-zinc-700 flex items-center gap-2 shadow hover:scale-105 transition text-xs sm:text-base">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/6/67/App_Store_%28iOS%29.svg" alt="App Store" class="h-5"/>
+          <span>App Store</span>
+        </a>
+        <a href="#" class="bg-zinc-900 px-4 py-3 rounded-xl border border-zinc-700 flex items-center gap-2 shadow hover:scale-105 transition text-xs sm:text-base">
+          <img src="https://upload.wikimedia.org/wikipedia/commons/7/78/Google_Play_Store_badge_EN.svg" alt="Google Play" class="h-5"/>
+          <span>Google Play</span>
+        </a>
+      </div>
+      <span class="text-xs text-zinc-600 mt-2">© 2025 Art Nail</span>
+    </section>
+  </main>
+</body>
+</html>

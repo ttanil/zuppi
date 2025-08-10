@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+  <title>Art Nail - Kullanıcı Paneli</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body { overflow-x: hidden;}
+    .profile-gradient {
+      background: linear-gradient(120deg, #f472b6 0%, #c026d3 100%);
+    }
+  </style>
+</head>
+<body class="bg-black text-white">
+
+  <div id="loader" style="display:none;">
+    <div class="loader-bg"></div>
+    <div class="loader-card">
+      <div class="spinner-border text-danger" style="width:2.5rem; height:2.5rem;" role="status"></div>
+      <span class="loader-msg">Yükleniyor...</span>
+    </div>
+  </div>
+
+<!-- Profil & Genel Panel (Desktop) -->
+<div class="max-w-5xl w-full mx-auto px-2 py-6 flex flex-col md:flex-row gap-7">
+  <!-- SOL BLOK: Kullanıcı ve kısa özet -->
+  <div class="flex flex-col gap-4 w-full md:w-1/3">
+    <!-- Profil kartı -->
+    <div class="bg-zinc-900 rounded-2xl p-7 flex flex-col items-center shadow-xl">
+      <div class="w-24 h-24 rounded-full border-4 border-pink-600 mb-2 shadow-lg overflow-hidden flex items-center justify-center">
+        <img src="https://i.pravatar.cc/120?img=49" class="w-full h-full object-cover" alt="Profil Foto">
+      </div>
+      <div class="font-extrabold text-xl mb-1 text-white">Ayşe Güzel</div>
+      <div class="text-xs text-gray-300 mb-2">ayse.guzel@email.com</div>
+      <div class="text-xs text-gray-400 mb-1">Ankara, 1993</div>
+      <div class="flex gap-2 my-1">
+        <span class="bg-yellow-500 text-black text-xs px-3 py-1 font-bold rounded-full">Yıllık Abone</span>
+        <span class="bg-pink-600 text-white text-xs px-3 py-1 font-bold rounded-full">Gold Level</span>
+      </div>
+      <button id="openProfileEditModal" class="mt-4 px-4 py-2 bg-zinc-800 border border-pink-500 rounded-md text-pink-400 font-semibold hover:bg-pink-700 hover:text-white transition">
+        <a href="#" id="openProfileEditModal" class="flex items-center gap-2 text-gray-300 hover:text-pink-400 hover:underline transition">
+          Profili Düzenle
+        </a>
+      </button>
+    </div>
+    <!-- Cüzdan ve Cihaz kutuları -->
+    <div class="grid grid-cols-2 gap-4">
+      <!-- Cüzdan -->
+      <div class="bg-zinc-900 rounded-xl p-4 flex flex-col text-center items-center shadow-md">
+        <div class="text-xs text-gray-400">Cüzdan Bakiyesi</div>
+        <div class="text-lg font-bold text-green-400 mb-2">630₺</div>
+        <button class="text-xs px-3 py-1 rounded bg-pink-600 text-white hover:bg-pink-700 transition">Bakiye Yükle</button>
+      </div>
+      <!-- Aktif Cihazlar -->
+      <div class="bg-zinc-900 rounded-xl p-4 shadow-md">
+        <div class="text-xs text-gray-400 mb-2 text-center">Aktif Cihazlar <span id="device-count" class="text-[10px] text-gray-500">(2/2)</span></div>
+        <ul id="device-list" class="text-xs text-gray-300 flex flex-col gap-1">
+          <li>Ayşe-iPhone12 <button class="text-red-400 hover:underline">Sil</button></li>
+          <li>MacbookAir <button class="text-red-400 hover:underline">Sil</button></li>
+        </ul>
+      </div>
+    </div>
+    <div class="bg-zinc-900 rounded-xl mt-2">
+      <a href="#" id="openSettingsPrivacyBtn" class="block text-center w-full py-2 text-xs text-gray-300 hover:underline hover:text-yellow-300">
+        Hesap Ayarları & Gizlilik
+      </a>
+    </div>
+
+    <div class="flex items-center justify-center gap-4 mb-5 mt-3">
+        <button id="maviSwitch" class="bg-blue-600 text-white font-bold px-7 py-3 rounded-lg shadow-lg text-md hover:bg-blue-700 transition duration-150 theme-btn">Mavi Tema</button>
+        <button id="pembeSwitch" class="bg-pink-600 text-white font-bold px-7 py-3 rounded-lg shadow-lg text-md hover:bg-pink-700 transition duration-150 theme-btn">Pembe Tema</button>
+    </div>
+
+    <!-- Home Sayfa Butonu -->
+    <div class="flex items-center justify-center mb-3">
+        <a href="/home" class="bg-zinc-700 hover:bg-zinc-900 transition text-white font-bold px-7 py-3 rounded-lg shadow text-md">
+            <svg class="inline mr-1 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10.5L12 4l9 6.5V19a2 2 0 01-2 2h-4a2 2 0 01-2-2v-5h-2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-8.5z"></path></svg>
+            Ana Sayfaya Dön
+        </a>
+    </div>
+  </div>
+
+
+  <!-- SAĞ BLOK: Eğitimler, siparişler ve topluluk -->
+  <div class="flex-1 flex flex-col gap-6">
+    <!-- EĞİTİM GEÇMİŞİ -->
+    <div class="bg-zinc-900 rounded-2xl p-6 shadow-md">
+      <div class="flex items-center justify-between">
+        <span class="text-white font-semibold text-lg">Eğitimlerim</span>
+        <a href="#" class="text-xs text-pink-400 hover:text-yellow-400 hover:underline transition">Tümünü Gör</a>
+      </div>
+      <div class="flex gap-4 mt-3 overflow-x-auto pb-2">
+        <!-- Eğitim kartları -->
+        <div class="min-w-[120px] flex flex-col items-center">
+          <img src="https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?auto=format&fit=crop&w=200&q=60" class="rounded-xl w-24 h-20 object-cover" />
+          <span class="mt-1 text-xs text-gray-100 font-bold">Manikür 1</span>
+          <span class="block w-full mt-1 h-1 bg-gray-700 rounded relative">
+            <span class="block h-1 bg-yellow-400 rounded-l" style="width:80%"></span>
+          </span>
+          <span class="text-[11px] text-gray-400 mt-1 mb-2">Tamamlandı %80</span>
+        </div>
+        <div class="min-w-[120px] flex flex-col items-center">
+          <img src="https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=200&q=60" class="rounded-xl w-24 h-20 object-cover" />
+          <span class="mt-1 text-xs text-gray-100 font-bold">Salon Hijyeni</span>
+          <span class="block w-full mt-1 h-1 bg-gray-700 rounded relative">
+            <span class="block h-1 bg-yellow-400 rounded-l" style="width:60%"></span>
+          </span>
+          <span class="text-[11px] text-gray-400 mt-1 mb-2">Tamamlandı %60</span>
+        </div>
+        <div class="min-w-[120px] flex flex-col items-center">
+          <img src="https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?auto=format&fit=crop&w=200&q=60" class="rounded-xl w-24 h-20 object-cover" />
+          <span class="mt-1 text-xs text-gray-100 font-bold">Modern Nailart</span>
+          <span class="block w-full mt-1 h-1 bg-gray-700 rounded relative">
+            <span class="block h-1 bg-yellow-400 rounded-l" style="width:40%"></span>
+          </span>
+          <span class="text-[11px] text-gray-400 mt-1 mb-2">Tamamlandı %40</span>
+        </div>
+      </div>
+      <!-- Level, Progress -->
+      <div class="flex items-center gap-2 mt-4 mb-2">
+        <span class="text-yellow-400 text-lg font-bold">Gold</span>
+        <span class="flex-1">
+          <span class="block w-full h-2.5 bg-gray-800 rounded">
+            <span class="block h-2.5 bg-yellow-400 rounded-l" style="width:74%"></span>
+          </span>
+        </span>
+        <span class="text-xs text-gray-300 ml-2">14/20 Eğitim</span>
+      </div>
+    </div>
+    
+    <!-- ABONELİK & FATURA -->
+    <div class="bg-zinc-900 rounded-2xl p-6 flex flex-col md:flex-row items-center md:items-stretch gap-4 shadow-md">
+      <div class="flex-1">
+        <div class="text-white font-semibold mb-1">Abonelik Paketiniz:</div>
+        <div class="text-pink-400 font-bold text-lg mb-1">Yıllık (Gold)</div>
+        <div class="text-xs text-gray-400 mb-2">Geçerli: 08/2024 - 08/2025</div>
+        <button class="bg-yellow-400 hover:bg-yellow-500 text-black font-bold text-xs px-4 py-2 rounded-lg transition">Aboneliği Yenile</button>
+      </div>
+      <div>
+        <div class="text-xs text-gray-400 mb-2">Son Faturalarınız:</div>
+        <ul>
+          <li class="text-xs mb-1"><span class="text-green-400">✓</span> #202406 - 1299₺ - <a href="#" class="text-blue-300 hover:underline">PDF</a></li>
+          <li class="text-xs mb-1"><span class="text-green-400">✓</span> #202305 - 499₺ - <a href="#" class="text-blue-300 hover:underline">PDF</a></li>
+        </ul>
+      </div>
+    </div>
+    
+    <!-- SİPARİŞ ÖZETİ -->
+    <div class="bg-zinc-900 rounded-2xl p-6 shadow-md">
+      <span class="text-white font-semibold text-lg">Son Satın Almalar</span>
+      <div class="flex gap-3 mt-3 overflow-x-auto">
+        <div class="bg-zinc-800 rounded-lg p-3 min-w-[160px] flex flex-col items-center text-center shadow">
+          <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=140&q=60" class="w-14 h-14 rounded-xl object-cover mb-2"/>
+          <span class="text-xs font-bold text-white">Pembe Jel Oje</span>
+          <span class="text-xs text-gray-400 mt-1">4 Haz 2024</span>
+          <span class="text-xs text-green-400 font-medium">✓ Teslim Edildi</span>
+        </div>
+        <div class="bg-zinc-800 rounded-lg p-3 min-w-[160px] flex flex-col items-center text-center shadow">
+          <img src="https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=140&q=60" class="w-14 h-14 rounded-xl object-cover mb-2"/>
+          <span class="text-xs font-bold text-white">Freze Seti</span>
+          <span class="text-xs text-gray-400 mt-1">23 May 2024</span>
+          <span class="text-xs text-gray-300">Kargoda</span>
+        </div>
+      </div>
+      <a href="#" class="block mt-2 text-xs text-pink-400 hover:text-yellow-400 hover:underline">Tüm Siparişlerim</a>
+    </div>
+
+    <!-- TOPLULUK VE KISA BAĞLANTILAR -->
+    <div class="bg-zinc-900 rounded-2xl p-6 shadow-md flex flex-wrap gap-3">
+      <a href="#" class="bg-green-500 hover:bg-green-600 transition text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold text-xs mr-3">
+        <svg width="18" height="18" fill="currentColor" class="inline">
+          <path d="M10.02 12.318a4.565 4.565 0 002.706-1.317l.273-.283c.38-.395.395-1.024.034-1.414a.998.998 0 00-1.41-.032l-.306.304c-.567.563-1.342.877-2.158.857a3.326 3.326 0 01-2.33-.985 3.316 3.316 0 01-.985-2.33c-.02-.816.294-1.591.857-2.158l.304-.306a.997.997 0 00-.032-1.41.997.997 0 00-1.414.034l-.283.273a4.572 4.572 0 00-1.317 2.706c-.315 1.926.233 3.97 1.576 5.313 1.343 1.344 3.387 1.892 5.313 1.576z"/>
+        </svg> WhatsApp Grubu
+      </a>
+      <a href="#" class="bg-blue-500 hover:bg-blue-600 transition text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold text-xs">
+        <svg width="18" height="18" fill="currentColor" class="inline"><path d="M17.472 4.845l-2.58 12.176c-.196.872-.717 1.087-1.452.675l-4.012-2.954-1.936 1.865c-.215.215-.394.395-.809.395l.29-4.123 7.513-6.809c.326-.29-.072-.453-.504-.163L4.487 10.352l-3.977-1.15c-.864-.264-.879-.864.18-1.276l15.316-5.898c.707-.261 1.324.172 1.096 1.117z"/>
+        </svg> Telegram Grubu
+      </a>
+      <a href="#" class="bg-yellow-400 hover:bg-yellow-500 text-black px-4 py-2 rounded-lg flex items-center gap-2 font-bold text-xs">
+        <svg width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" class="inline">
+          <path d="M12 14c3.314 0 6-1.343 6-3V7l-6-3-6 3v4c0 1.657 2.686 3 6 3zm0 0v6" />
+        </svg> Eğitmen Başvurusu
+      </a>
+    </div>
+  </div>
+</div>
+
+
+<!-- Hesap Ayarları & Gizlilik Modalı TEK KERE BURADA OLSUN -->
+<div id="settingsPrivacyModal" class="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 rounded-2xl shadow-2xl p-7 w-full max-w-md flex flex-col gap-4 relative">
+    <button id="closeSettingsPrivacyModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg focus:outline-none">&times;</button>
+    <div class="font-bold text-xl text-pink-400 mb-3 text-center">Hesap Ayarları & Gizlilik</div>
+
+    <ul id="settingsMenuList" class="flex flex-col gap-3 text-sm">
+      <li>
+        <a href="/account/profile" class="flex items-center gap-2 text-gray-300 hover:text-pink-400 hover:underline transition">
+          <!-- svg profil ikonu -->
+          <svg class="w-4 h-4 text-pink-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"></circle>
+            <path d="M6 20v-2a4 4 0 014-4h0a4 4 0 014 4v2" />
+          </svg>
+          Profili Düzenle
+        </a>
+      </li>
+      <li>
+        <button id="changePasswordMenuBtn" class="flex items-center gap-2 text-gray-300 hover:text-pink-400 hover:underline w-full text-left">
+          <!-- svg kilit ikonu -->
+          <svg class="w-4 h-4 text-pink-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect width="18" height="11" x="3" y="11" rx="2"></rect>
+            <path d="M7 11V7a5 5 0 0110 0v4"/>
+          </svg>
+          Şifreyi Değiştir
+        </button>
+      </li>
+      <li>
+        <button id="privacyPrefsMenuBtn" class="flex items-center gap-2 text-gray-300 hover:text-pink-400 hover:underline w-full text-left">
+          <!-- svg gizlilik ikonu (kalkan) -->
+          <svg class="w-4 h-4 text-pink-300" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M12 2a8 8 0 0 1 8 8v5a2 2 0 0 1-2 2h-3v2a2 2 0 1 1-4 0v-2H6a2 2 0 0 1-2-2v-5a8 8 0 0 1 8-8z"/>
+          </svg>
+          Gizlilik Tercihleri
+        </button>
+      </li>
+      <li>
+        <a href="/account/delete" class="flex items-center gap-2 text-gray-400 hover:text-red-400 hover:underline transition">
+          <!-- svg çöp kutusu ikonu -->
+          <svg class="w-4 h-4 text-red-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path d="M19 7L5 7M18 7V19a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V7m5 0V3m0 0h4a2 2 0 0 1 2 2M10 3H6a2 2 0 0 0-2 2v2" />
+          </svg>
+          Hesabı Sil
+        </a>
+      </li>
+      <li>
+        <a href="/policy" class="flex items-center gap-2 text-gray-400 hover:text-yellow-300 hover:underline transition">
+          <!-- svg doküman ikonu -->
+          <svg class="w-4 h-4 text-yellow-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <rect x="6" y="4" width="12" height="16" rx="2" />
+            <path d="M9 8h6M9 12h6M9 16h2" />
+          </svg>
+          KVKK & Gizlilik Politikası
+        </a>
+      </li>
+    </ul>
+
+    <!-- ŞİFRE FORMU GİZLİ -->
+    <div id="changePasswordFormWrapper" class="hidden flex-col gap-4">
+      <button class="backToMenuBtn text-xs text-gray-400 hover:text-pink-400 mb-2">&larr; Men&uuml;ye D&ouml;n</button>
+      <form id="changePasswordForm" class="flex flex-col gap-2">
+        <label class="text-xs text-gray-400 mb-1" for="current-pass">Mevcut Şifreniz</label>
+        <input id="current-pass" name="current-pass" type="password" required class="bg-zinc-800 border border-zinc-700 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-pink-500" placeholder="Eski şifreniz" minlength="6" />
+        
+        <label class="text-xs text-gray-400 mt-2 mb-1" for="new-pass">Yeni Şifre</label>
+        <input id="new-pass" name="new-pass" type="password" required class="bg-zinc-800 border border-zinc-700 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-pink-500" placeholder="Yeni şifreniz" minlength="6" />
+        
+        <label class="text-xs text-gray-400 mt-2 mb-1" for="confirm-pass">Yeni Şifre (Tekrar)</label>
+        <input id="confirm-pass" name="confirm-pass" type="password" required class="bg-zinc-800 border border-zinc-700 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-pink-500" placeholder="Yeniden yazın" minlength="6" />
+        
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-xl py-2 mt-3 transition">Değiştir</button>
+        <div id="passwordChangeMsg" class="text-xs mt-1"></div>
+      </form>
+    </div>
+
+    <!-- GİZLİLİK FORMU GİZLİ -->
+    <div id="privacyPrefsFormWrapper" class="hidden flex-col gap-4">
+      <button class="backToMenuBtn text-xs text-gray-400 hover:text-pink-400 mb-2">&larr; Men&uuml;ye D&ouml;n</button>
+      <form id="privacyForm" class="flex flex-col gap-2">
+        <label class="flex items-center gap-2 text-sm text-gray-300">
+          <input type="checkbox" name="email-notif" class="accent-pink-500" checked />
+          E-posta ile bildirime izin ver
+        </label>
+        <label class="flex items-center gap-2 text-sm text-gray-300">
+          <input type="checkbox" name="sms-notif" class="accent-pink-500" />
+          SMS ile bildirime izin ver
+        </label>
+        <label class="flex items-center gap-2 text-sm text-gray-300">
+          <input type="checkbox" name="show-profile" class="accent-pink-500" />
+          Topluluktaki profilimi herkese göster
+        </label>
+        <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-xl py-2 mt-3 transition">Kaydet</button>
+        <div id="privacyChangeMsg" class="text-xs mt-1"></div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- ========== PROFİL DÜZENLE MODALI ========== -->
+<div id="profileEditModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 rounded-2xl shadow-2xl p-8 w-full max-w-lg flex flex-col relative">
+    <button id="closeProfileEditModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg">&times;</button>
+    <div class="font-bold text-xl text-pink-400 mb-5 text-center">Profili Düzenle</div>
+    <form id="profileEditForm" class="flex flex-col gap-4">
+      <!-- Profil fotoğrafı -->
+      <div class="flex items-center gap-4 mb-2">
+        <img id="profilePhotoPreview" src="https://i.pravatar.cc/120?img=49" class="w-16 h-16 rounded-full border-2 border-pink-400 shadow-md object-cover" alt="Profil Foto" />
+        <label class="cursor-pointer text-pink-400 hover:underline text-xs font-semibold">
+          Fotoğrafı Değiştir
+          <input id="profilePhotoInput" type="file" accept="image/*" class="hidden">
+        </label>
+      </div>
+      <div>
+        <label class="text-xs text-gray-400">Ad Soyad</label>
+        <input id="profileName" type="text" class="w-full px-3 py-2 rounded bg-zinc-800 border border-gray-600 text-white" minlength="2" maxlength="40" required />
+      </div>
+      <div>
+        <label class="text-xs text-gray-400">E-posta</label>
+        <input id="profileEmail" type="email" maxlength="80" class="w-full px-3 py-2 rounded bg-zinc-800 border border-gray-600 text-white" required />
+      </div>
+      <div>
+        <label class="text-xs text-gray-400">Telefon</label>
+        <input id="profilePhone" type="tel" class="w-full px-3 py-2 rounded bg-zinc-800 border border-gray-600 text-white" />
+      </div>
+      <div>
+        <label class="text-xs text-gray-400">Şehir / Yıl</label>
+        <div class="flex gap-2">
+          <input id="profileCity" type="text" placeholder="Şehir" class="flex-1 px-3 py-2 rounded bg-zinc-800 border border-gray-600 text-white" />
+          <input id="profileBirthyear" type="number" placeholder="Yıl" min="1920" max="2025" class="w-24 px-3 py-2 rounded bg-zinc-800 border border-gray-600 text-white" />
+        </div>
+      </div>
+      <div>
+        <label class="text-xs text-gray-400">Hakkında (isteğe bağlı)</label>
+        <textarea id="profileBio" rows="2" class="w-full px-3 py-2 rounded bg-zinc-800 border border-gray-600 text-white" maxlength="160" placeholder="Kısa biyografi"></textarea>
+      </div>
+      <div id="profileEditMsg" class="text-xs text-center mt-2"></div>
+      <button type="submit" class="w-full bg-pink-600 hover:bg-pink-700 text-white font-bold rounded-xl py-2 mt-2 transition">
+        Kaydet
+      </button>
+    </form>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-zinc-900 text-center py-4 text-xs text-gray-400 mt-12">
+  © 2025 Art Nail | 
+  <a href="/policy" class="hover:underline text-pink-400">KVKK & Gizlilik</a>
+</footer>
+
+
+<!-- Cihaz Silme Modalı -->
+<div id="deleteDeviceApprovalModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-6 w-full max-w-sm flex flex-col items-center gap-6">
+    <span class="font-bold text-xl">Tanımlı cihazınızı silmek istediğinizden emin misiniz?!</span>
+    <div class="flex gap-4 w-full">
+      <button id="approveDeleteDeviceBtn"
+        class="flex-1 bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg py-2 transition focus:outline-none">
+        Evet, Devam Et
+      </button>
+      <button id="denyDeleteDeviceBtn"
+        class="flex-1 bg-zinc-700 hover:bg-zinc-600 text-gray-200 border border-zinc-500 rounded-lg py-2 transition focus:outline-none">
+        Hayır
+      </button>
+    </div>
+    <div id="deviceApprovalFeedback" class="text-xs text-yellow-400 text-center"></div>
+  </div>
+</div>
+
+<!-- Bilgilendirme Modalı -->
+<div id="deviceFeedbackModal" class="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8 w-full max-w-sm flex flex-col items-center gap-3 relative">
+    <button id="closeDeviceFeedbackModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg focus:outline-none">&times;</button>
+    <div class="font-bold text-lg mb-2 text-center" id="deviceFeedbackModalMessage">
+      <!-- Mesaj buraya JS ile gelecek -->
+    </div>
+    <button id="okDeviceFeedbackModal" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-2 mt-2 transition focus:outline-none">
+      Tamam
+    </button>
+  </div>
+</div>
+
+<script>
+    let selectedDeviceId = null;
+    let userId = null;
+    let themeDb = null;
+    let email_notif = null;
+    let sms_notif = null;
+    let show_profile = null;
+
+    document.addEventListener("DOMContentLoaded", () => {
+        window.user = {{{userJson}}};
+        console.log(window.user);
+
+        userId = window.user._id;
+        themeDb = window.user.theme;
+        email_notif = window.user.privacy_prefs.email_notif || null;
+        sms_notif = window.user.privacy_prefs.sms_notif || null;
+        show_profile = window.user.privacy_prefs.show_profile || null;
+        
+
+        const devices = window.user.devices || [];
+        const maxDevices = 2;
+        document.getElementById('device-count').textContent = `(${devices.length}/${maxDevices})`;
+        const deviceList = document.getElementById("device-list");
+        deviceList.innerHTML = ""; // önce temizle
+
+        devices.forEach(device => {
+            // Gösterilecek isim (fallback varsa): deviceName, yoksa device_type+os
+            const name = device.deviceName
+                || device.device_info?.deviceName
+                || device.device_info?.model
+                || device.device_info?.os
+                || 'Cihaz';
+
+            // <li> oluştur
+            const li = document.createElement("li");
+            li.className = "flex items-center justify-between";
+            li.innerHTML = `
+              <span>${name}</span>
+              <button class="text-red-400 hover:underline" data-deviceid="${device.device_id}">Sil</button>
+            `;
+
+            deviceList.appendChild(li);
+        });
+
+        const deleteDeviceModal = document.getElementById("deleteDeviceApprovalModal");
+        const approveBtn = document.getElementById("approveDeleteDeviceBtn");
+        const denyBtn = document.getElementById("denyDeleteDeviceBtn");
+        const feedback = document.getElementById("deviceApprovalFeedback");
+
+        // (İsteğe bağlı: Sil butonları için event delegation)
+        deviceList.addEventListener("click", e => {
+          if (e.target.tagName === "BUTTON" && e.target.dataset.deviceid && devices.length == 2) {
+            selectedDeviceId = e.target.dataset.deviceid;
+            feedback.textContent = ""; // Her açılışta mesaj sıfırla
+            deleteDeviceModal.classList.remove("hidden");
+          } else if(e.target.tagName === "BUTTON" && e.target.dataset.deviceid && devices.length == 1){
+            showDeviceFeedbackModal("En az 1 kayıtlı cihazınız bulunmalıdır.");
+          }
+        });
+
+        // "Evet, Devam Et" tıklanırsa
+        approveBtn.onclick = async function() {
+          showLoader();
+          if (selectedDeviceId) {
+            const payload = {
+              status:"delete-device",
+              userId,
+              selectedDeviceId
+            };
+
+            try {
+              const res = await fetch('/user', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+              });
+              if (res.ok) {
+                // Başarıyla silindi, yönlendir:
+                window.location.href = '/user'; // veya window.location.reload();
+                /*
+                // DOM'dan kaldırmak istersen:
+                // let li = deviceList.querySelector(`button[data-deviceid='${selectedDeviceId}']`)?.closest("li");
+                // if (li) li.remove();
+                */
+              } else {
+                // hata mesajı göster
+                const data = await res.json().catch(() => ({}));
+                showDeviceFeedbackModal(data.message || "Cihaz silinemedi.");
+                hideLoader();
+                return;
+              }
+
+              // Modalı mutlaka kapat
+              deleteDeviceModal.classList.add("hidden");
+              selectedDeviceId = null;
+              hideLoader();
+            } catch (err) {
+              showDeviceFeedbackModal(data.message || "Sunucuya erişilemiyor.");
+              hideLoader();
+            }
+          }
+        }
+
+        // "Hayır" tıklanırsa modalı sadece kapa
+        denyBtn.onclick = function() {
+          deleteDeviceModal.classList.add("hidden");
+          selectedDeviceId = null;
+        };
+
+        // (Kullanıcı modal dışında bir yere tıklarsa da modalı kapatmak için:)
+        deleteDeviceModal.addEventListener("click", function(e) {
+          if (e.target === deleteDeviceModal) {
+            deleteDeviceModal.classList.add("hidden");
+            selectedDeviceId = null;
+          }
+        });
+
+        // Tema tuşları
+        // TEMA AÇILIŞTA YÜKLE
+        if (themeDb === "blue") {
+            pinkToBlue(true);
+        } else {
+            pinkToBlue(false);
+        }
+        function pinkToBlue(on = true) {
+          const classPairs = [
+            ['bg-pink-600', 'bg-blue-600'],
+            ['bg-pink-700', 'bg-blue-700'],
+            ['text-pink-400', 'text-blue-400'],
+            ['text-pink-300', 'text-blue-300'],     // svg'ler için!
+            ['border-pink-400', 'border-blue-400'],
+            ['border-pink-500', 'border-blue-500'],
+            ['border-pink-600', 'border-blue-600'],
+            ['bg-pink-400', 'bg-blue-400'],
+            ['accent-pink-500', 'accent-blue-500'], // checkbox için!
+            ['text-pink-600', 'text-blue-600']
+          ];
+          classPairs.forEach(([pink, blue]) => {
+            document.querySelectorAll(`.${on ? pink : blue}:not(.theme-btn)`).forEach(el => {
+              el.classList.remove(on ? pink : blue);
+              el.classList.add(on ? blue : pink);
+            });
+          });
+          document.querySelectorAll('.img-frame').forEach(el => {
+            if (on) {
+              el.classList.remove('border-pink-600');
+              el.classList.add('border-blue-600');
+            } else {
+              el.classList.remove('border-blue-600');
+              el.classList.add('border-pink-600');
+            }
+          });
+        }
+
+        document.getElementById("maviSwitch").onclick = async function() {
+          showLoader();
+          const payload = {
+            status: "save-theme",
+            userId: userId,
+            theme: "blue"
+          };
+          try {
+            const res = await fetch('/user', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+              pinkToBlue(true);
+              hideLoader();
+            } else {
+              const data = await res.json().catch(() => ({}));
+              showDeviceFeedbackModal(data.message || "Sunucu hatası!");
+              hideLoader();
+              return;
+            }
+          } catch (err) {
+            showDeviceFeedbackModal("Sunucuya erişilemiyor.");
+            hideLoader();
+          }
+        };
+        document.getElementById("pembeSwitch").onclick = async function() {
+          showLoader();
+          const payload = {
+            status: "save-theme",
+            userId: userId,
+            theme: "pink"
+          };
+          try {
+            const res = await fetch('/user', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            if (res.ok) {
+              pinkToBlue(false);
+              hideLoader();
+            } else {
+              const data = await res.json().catch(() => ({}));
+              showDeviceFeedbackModal(data.message || "Sunucu hatası!");
+              hideLoader();
+              return;
+            }
+          } catch (err) {
+            showDeviceFeedbackModal("Sunucuya erişilemiyor.");
+            hideLoader();
+          }
+        };
+
+//---------------------------------------------------------------------
+        // Hesap Ayarları & Gizlilik Modalı
+        const openBtn = document.getElementById('openSettingsPrivacyBtn');
+        const modal = document.getElementById('settingsPrivacyModal');
+        const closeBtn = document.getElementById('closeSettingsPrivacyModal');
+        const menu = document.getElementById('settingsMenuList');
+        const changePwBtn = document.getElementById('changePasswordMenuBtn');
+        const changePwForm = document.getElementById('changePasswordFormWrapper');
+        const privacyBtn = document.getElementById('privacyPrefsMenuBtn');
+        const privacyForm = document.getElementById('privacyPrefsFormWrapper');
+        const backBtns = document.querySelectorAll('.backToMenuBtn');
+
+        // Modal aç
+        if (openBtn) openBtn.onclick = function(e){
+          e.preventDefault();
+          modal.classList.remove('hidden');
+          showMenuOnly();
+        }
+
+        // Modal kapa
+        if (closeBtn) closeBtn.onclick = function(){ modal.classList.add('hidden'); }
+        modal.addEventListener('click', function(e) {
+          if (e.target === modal) modal.classList.add('hidden');
+        });
+
+        // Menüye dön (tüm geri butonları)
+        backBtns.forEach(btn => {
+          btn.onclick = showMenuOnly;
+        });
+
+        // İşlev: Sadece menüyü göster diğerlerini gizle
+        function showMenuOnly() {
+          menu.classList.remove('hidden');
+          changePwForm.classList.add('hidden');
+          privacyForm.classList.add('hidden');
+        }
+
+        // Şifre bölümüne geç
+        if(changePwBtn) changePwBtn.onclick = function(){
+          menu.classList.add('hidden');
+          changePwForm.classList.remove('hidden');
+          privacyForm.classList.add('hidden');
+        }
+
+        // Gizlilik bölümüne geç
+        if(privacyBtn) privacyBtn.onclick = function(){
+          menu.classList.add('hidden');
+          changePwForm.classList.add('hidden');
+          privacyForm.classList.remove('hidden');
+          fillPrivacyFormDefaults();
+        }
+
+        // Şifre formu validasyon
+        document.getElementById('changePasswordForm').onsubmit = async function(e){
+          e.preventDefault();
+
+          const curr = this['current-pass'].value;
+          const yeni = this['new-pass'].value;
+          const tek  = this['confirm-pass'].value;
+          const msg  = document.getElementById('passwordChangeMsg');
+
+          msg.textContent = '';
+          msg.className = "text-xs mt-1";
+
+          // 1. Uzunluk kontrolü
+          if(yeni.length < 6) {
+            msg.textContent = 'Şifre en az 6 karakter olmalı.';
+            msg.classList.add('text-red-400');
+            this['new-pass'].focus();
+            return;
+          }
+          if(yeni.length > 32) {
+            msg.textContent = 'Şifre en fazla 32 karakter olmalı.';
+            msg.classList.add('text-red-400');
+            this['new-pass'].focus();
+            return;
+          }
+
+          // 2. Şifreler eşleşmeli
+          if(yeni !== tek) {
+            msg.textContent = 'Yeni şifreler eşleşmiyor.';
+            msg.classList.add('text-red-400');
+            this['confirm-pass'].focus();
+            return;
+          }
+
+          // 3. Yeni şifre mevcut şifreyle aynı olamaz
+          if(curr && curr === yeni) {
+            msg.textContent = 'Yeni şifre, mevcut şifreden farklı olmalı.';
+            msg.classList.add('text-red-400');
+            this['new-pass'].focus();
+            return;
+          }
+
+          showLoader();
+          const payload = {
+            status: "change-password",
+            userId: userId,
+            curr,
+            yeni
+          };
+          try {
+            const res = await fetch('/user', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json' },
+              body: JSON.stringify(payload)
+            });
+            const data = await res.json().catch(() => ({}));
+            if (res.ok) {
+              showDeviceFeedbackModal(data.message || "Şifre başarıyla değiştirildi.");
+              this.reset();  // Sadece başarıda sıfırla
+              showMenuOnly();
+            } else {
+              showDeviceFeedbackModal(data.message || "Sunucu hatası!");
+              // Form sıfırlama YOK, kullanıcı tekrar denesin diye.
+              return;
+            }
+          } catch (err) {
+            showDeviceFeedbackModal("Sunucuya erişilemiyor.");
+          } finally {
+            hideLoader();
+          }
+        };
+        
+
+        // Gizlilik formu örnek
+        function fillPrivacyFormDefaults() {
+          const form = document.getElementById('privacyForm');
+          if (!form) return;
+          form['email-notif'].checked   = !!window.user.privacy_prefs.email_notif;
+          form['sms-notif'].checked     = !!window.user.privacy_prefs.sms_notif;
+          form['show-profile'].checked  = !!window.user.privacy_prefs.show_profile;
+        }
+
+        fillPrivacyFormDefaults();
+
+        document.getElementById('privacyForm').onsubmit = async function(e) {
+            e.preventDefault();
+            const msg = document.getElementById('privacyChangeMsg');
+            msg.textContent = '';
+            msg.className = "text-xs mt-1";
+
+            const email_notif  = this['email-notif'].checked;
+            const sms_notif    = this['sms-notif'].checked;
+            const show_profile = this['show-profile'].checked;
+
+            showLoader();
+            const payload = {
+                status: "save-privacy-prefs",
+                userId,
+                email_notif,
+                sms_notif,
+                show_profile
+            };
+
+            try {
+                const res = await fetch('/user', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                const data = await res.json().catch(() => ({}));
+                if (res.ok) {
+                    showDeviceFeedbackModal(data.message || "Tercihleriniz kaydedildi!");
+                    // Mevcut pencereye dönmek istiyorsan şunu ekle:
+                    showMenuOnly();
+                    window.user.privacy_prefs = { email_notif, sms_notif, show_profile };
+                } else {
+                    showDeviceFeedbackModal(data.message || "Sunucu hatası!");
+                }
+            } catch (err) {
+                showDeviceFeedbackModal("Sunucuya erişilemiyor.");
+            } finally {
+                hideLoader();
+            }
+        }
+
+        
+//---------------------------------------------------------------------
+        // Profil Düzenle Modalı
+
+        const profileModal      = document.getElementById('profileEditModal');
+        const openProfileModal  = document.getElementById('openProfileEditModal');
+        const closeProfileModal = document.getElementById('closeProfileEditModal');
+        const profileForm       = document.getElementById('profileEditForm');
+        const msgElem           = document.getElementById('profileEditMsg');
+
+        // Kullanıcı veri doldurma (window.user JS objesinden)
+        function fillProfileForm() {
+          if (!window.user) return;
+          document.getElementById('profileName').value      = window.user.fullname      || '';
+          document.getElementById('profileEmail').value     = window.user.email     || '';
+          document.getElementById('profilePhone').value     = window.user.phone     || '';
+          document.getElementById('profileCity').value      = window.user.city      || '';
+          document.getElementById('profileBirthyear').value = window.user.birth_year || '';
+          document.getElementById('profileBio').value       = window.user.bio       || '';
+          document.getElementById('profilePhotoPreview').src = window.user.photoUrl || "https://i.pravatar.cc/120?img=49";
+        }
+
+        // Aç-kapa işlevleri
+        if (openProfileModal) openProfileModal.onclick = (e) => {
+          e.preventDefault();
+          fillProfileForm();
+          profileModal.classList.remove('hidden');
+        };
+        if (closeProfileModal) closeProfileModal.onclick = () => profileModal.classList.add('hidden');
+        profileModal.addEventListener('click', (e) => {
+          if (e.target === profileModal) profileModal.classList.add('hidden');
+          msgElem.textContent = "";
+          msgElem.className = "text-xs mt-2 text-red-400";
+        });
+
+        // Profil fotoğraf önizleme
+        document.getElementById('profilePhotoInput').onchange = function(e) {
+          const file = e.target.files[0];
+          if (file) {
+            const reader = new FileReader();
+            reader.onload = function(ev) {
+              document.getElementById('profilePhotoPreview').src = ev.target.result;
+            };
+            reader.readAsDataURL(file);
+          }
+        };
+
+        // Profil kaydet
+        profileForm.onsubmit = async function (e) {
+          e.preventDefault();
+          msgElem.textContent = "";
+
+          // --- Değerleri oku
+          const name   = document.getElementById('profileName').value.trim();
+          const email  = document.getElementById('profileEmail').value.trim();
+          const phone  = document.getElementById('profilePhone').value.trim();
+          const city   = document.getElementById('profileCity').value.trim();
+          const year   = document.getElementById('profileBirthyear').value.trim();
+          const bio    = document.getElementById('profileBio').value.trim();
+
+          // --- 1. Ad Soyad zorunlu ve en az 2 karakter
+          if (!name || name.length < 2) {
+            msgElem.textContent = "İsim en az 2 karakter olmalı.";
+            msgElem.className = "text-xs mt-2 text-red-400";
+            document.getElementById('profileName').focus();
+            return;
+          }
+          if (name.length > 40) {
+            msgElem.textContent = "İsim en fazla 40 karakter olabilir.";
+            msgElem.className = "text-xs mt-2 text-red-400";
+            document.getElementById('profileName').focus();
+            return;
+          }
+
+          // --- 2. E-posta doğru formatta ve zorunlu
+          const emailRegex = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+          if (!email) {
+            msgElem.textContent = "E-posta zorunludur!";
+            msgElem.className = "text-xs mt-2 text-red-400";
+            document.getElementById('profileEmail').focus();
+            return;
+          }
+          if (!emailRegex.test(email)) {
+            msgElem.textContent = "Geçerli bir e-posta adresi girin!";
+            msgElem.className = "text-xs mt-2 text-red-400";
+            document.getElementById('profileEmail').focus();
+            return;
+          }
+          if (email.length > 80) {
+            msgElem.textContent = "E-posta adresi en fazla 80 karakter olabilir.";
+            msgElem.className = "text-xs mt-2 text-red-400";
+            document.getElementById('profileEmail').focus();
+            return;
+          }
+
+          // --- 3. Telefon (isteğe bağlı) ise, sayısal ve 9-15 arası olmalı (ülke kodu hariç)
+          if (phone && !/^[0-9+()\s-]{7,20}$/.test(phone)) {
+            msgElem.textContent = "Telefon numarası geçersiz!";
+            msgElem.className = "text-xs mt-2 text-red-400";
+            document.getElementById('profilePhone').focus();
+            return;
+          }
+
+          // --- 4. Şehir (isteğe bağlı) ise en az 2 karakter olsun
+          const cityRegex = /^[a-zA-ZçöşüğıİÇÖŞÜĞı\s-]{2,40}$/u;
+          if (city) {
+            if (city.length < 2) {
+              msgElem.textContent = "Şehir ismi en az 2 karakter olmalı!";
+              msgElem.className = "text-xs mt-2 text-red-400";
+              document.getElementById('profileCity').focus();
+              return;
+            }
+            if (city.length > 40) {
+              msgElem.textContent = "Şehir ismi en fazla 40 karakter olabilir!";
+              msgElem.className = "text-xs mt-2 text-red-400";
+              document.getElementById('profileCity').focus();
+              return;
+            }
+            if (!cityRegex.test(city)) {
+              msgElem.textContent = "Şehir ismi yalnızca harf ve boşluk içerebilir!";
+              msgElem.className = "text-xs mt-2 text-red-400";
+              document.getElementById('profileCity').focus();
+              return;
+            }
+          }
+
+          // --- 5. Doğum Yılı (isteğe bağlı) 1920-2025 arası olmalı
+          if (year) {
+            if (!/^\d{4}$/.test(year)) {
+              msgElem.textContent = "Yıl 4 rakamlı olmalıdır!";
+              msgElem.className = "text-xs mt-2 text-red-400";
+              document.getElementById('profileBirthyear').focus();
+              return;
+            }
+            if (Number(year) < 1920 || Number(year) > 2025) {
+              msgElem.textContent = "Lütfen geçerli bir yıl girin (1920 - 2025 arası)!";
+              msgElem.className = "text-xs mt-2 text-red-400";
+              document.getElementById('profileBirthyear').focus();
+              return;
+            }
+          }
+
+          // --- 6. Biyografi (isteğe bağlı) 260 karakterden fazla olmasın
+          if (bio && bio.length > 160) {
+            msgElem.textContent = "Biyografi en fazla 260 karakter olabilir.";
+            msgElem.className = "text-xs mt-2 text-red-400";
+            document.getElementById('profileBio').focus();
+            return;
+          }
+
+          // --- Burada payload oluşturuyoruz
+          const payload = {
+            status: "save-profile",
+            userId: window.user?._id,
+            name,
+            email,
+            phone,
+            city,
+            birthyear: year,
+            bio,
+          };
+
+          // FOTOĞRAF BASE64 veya başka upload nasıl yönetiliyorsa değiştir
+          const fileInput = document.getElementById('profilePhotoInput');
+          if (fileInput.files[0]) {
+            const reader = new FileReader();
+            reader.onload = async function(ev) {
+              payload.photoBase64 = ev.target.result;
+              await submitProfile(payload);
+            };
+            reader.readAsDataURL(fileInput.files[0]);
+          } else {
+            await submitProfile(payload);
+          }
+        };
+//---------------------------------------------------------------------
+
+    });
+
+    function showDeviceFeedbackModal(message) {
+        const modal = document.getElementById("deviceFeedbackModal");
+        const msg = document.getElementById("deviceFeedbackModalMessage");
+        msg.textContent = message || "Bir hata oluştu";
+        modal.classList.remove("hidden");
+    }
+    function closeDeviceFeedbackModal() {
+        document.getElementById("deviceFeedbackModal").classList.add("hidden");
+    }
+    document.getElementById("okDeviceFeedbackModal").onclick = closeDeviceFeedbackModal;
+    document.getElementById("closeDeviceFeedbackModal").onclick = closeDeviceFeedbackModal;
+
+    function showLoader() {
+      document.getElementById('loader').style.display = 'flex';
+    }
+    function hideLoader() {
+      document.getElementById('loader').style.display = 'none';
+    }
+
+  
+</script>
+
+</body>
+</html>

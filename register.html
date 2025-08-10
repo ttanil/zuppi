@@ -1,0 +1,84 @@
+<!DOCTYPE html>  
+<html lang="tr">  
+<head>  
+  <meta charset="UTF-8" />  
+  <meta name="viewport" content="width=device-width,initial-scale=1.0" />  
+  <title>Art Nail - Kayıt Ol</title>  
+  <script src="https://cdn.tailwindcss.com"></script>  
+  <style>  
+    body {background-color: #09090b;}  
+  </style>  
+</head>  
+<body class="min-h-screen flex items-center justify-center bg-black">  
+  <!-- KAYIT KARTI -->  
+  <div class="w-full max-w-md mx-auto px-4 py-10 flex flex-col items-center justify-center">  
+    <div class="bg-zinc-900/90 rounded-2xl shadow-2xl px-8 py-10 w-full flex flex-col gap-6">  
+      <!-- LOGO ve Başlık -->  
+      <div class="flex flex-col items-center mb-2">  
+        <span class="font-extrabold text-white text-3xl flex items-center select-none">  
+          ART  
+          <span class="inline-block w-7 h-7 ml-2 mr-2 bg-red-600 rounded-full animate-pulse"></span>  
+          NAIL  
+        </span>  
+        <span class="text-xs text-gray-400 tracking-widest mt-2 select-none">EN İYİLERİN SANATI</span>  
+      </div>  
+      <h2 class="text-white font-black text-2xl text-center mt-2 mb-4">Kayıt Ol</h2>  
+      <p class="text-gray-400 text-center text-sm mb-3">  
+        Zaten hesabın var mı?  
+        <a href="/login" class="text-red-400 hover:text-yellow-400 font-bold underline transition">Giriş Yap</a>  
+      </p>  
+      <!-- Form -->  
+      <form action="/register" method="post" class="flex flex-col gap-4">  
+        <div>  
+          <label for="fullname" class="text-sm text-gray-200 font-semibold mb-1 block">Ad Soyad</label>  
+          <input type="text" id="fullname" name="fullname" required  
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"  
+            placeholder="Adınız ve Soyadınız" autocomplete="name">  
+        </div>  
+        <div>  
+          <label for="email" class="text-sm text-gray-200 font-semibold mb-1 block">E-posta</label>  
+          <input type="email" id="email" name="email" required  
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"  
+            placeholder="e-posta adresiniz" autocomplete="username">  
+        </div>  
+        <div>  
+          <label for="password" class="text-sm text-gray-200 font-semibold mb-1 block">Şifre</label>  
+          <input type="password" id="password" name="password" required minlength="6"  
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"  
+            placeholder="şifreniz" autocomplete="new-password">  
+        </div>  
+        <div>  
+          <label for="password2" class="text-sm text-gray-200 font-semibold mb-1 block">Şifre Tekrar</label>  
+          <input type="password" id="password2" name="password2" required minlength="6"  
+            class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition"  
+            placeholder="şifrenizi tekrar yazın" autocomplete="new-password">  
+        </div>  
+        <!-- Örnek Hata Mesajı (isteğe bağlı, JS ile ekle): -->  
+        <!-- <div class="text-red-400 text-xs text-center">E-posta zaten kullanılıyor veya şifreler uyuşmuyor!</div> -->  
+        <div class="flex items-center gap-2 mb-2 mt-1">  
+          <input type="checkbox" id="kurallar" name="kurallar" required class="accent-red-600">  
+            <label for="kurallar" class="text-xs text-gray-400 select-none cursor-pointer">
+            <a href="/kvkk" target="_blank" class="underline hover:text-yellow-400">Kullanım Koşullarını</a> ve 
+            <a href="/privacy" target="_blank" class="underline hover:text-yellow-400">Gizlilik Politikası</a>nı okudum, onaylıyorum.
+          </label>
+        </div>
+        <button type="submit"
+          class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-3 mt-2 transition focus:outline-none focus:ring-2 focus:ring-yellow-400">
+          Kayıt Ol
+        </button>
+      </form>
+
+      <!-- veya bölümü -->
+      <div class="flex items-center gap-4 my-2">
+        <span class="border-b border-zinc-700 flex-1"></span>
+        <span class="text-gray-500 text-xs font-bold">veya</span>
+        <span class="border-b border-zinc-700 flex-1"></span>
+      </div>
+      <button class="flex gap-2 items-center bg-white text-black rounded-xl py-3 px-2 font-bold shadow hover:bg-gray-100 transition">
+        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google" class="h-5 w-5">
+        Google ile Kayıt Ol
+      </button>
+    </div>
+  </div>
+</body>
+</html>
