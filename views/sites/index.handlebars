@@ -574,8 +574,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.0/lottie.min.js"></script>
   <script>
         //const menuBtn = document.getElementById('mobile-menu-btn');
-        const mobileMenu = document.getElementById('mobile-menu');
-        const closeBtn = document.getElementById('close-mobile-menu');
+        //const mobileMenu = document.getElementById('mobile-menu');
+        //const closeBtn = document.getElementById('close-mobile-menu');
         const promo = document.getElementById('myPromoVideo');
         promo.addEventListener('timeupdate', function() {
             if (promo.currentTime >= 33) {
@@ -621,7 +621,7 @@
                 mobileMenu.classList.remove('hidden');
                 document.body.style.overflow = "hidden"; // scroll engelle
             });
-            */
+            
             // Kapat (x tuşu)
             closeBtn.addEventListener('click', function() {
                 mobileMenu.classList.add('hidden');
@@ -634,6 +634,7 @@
                     document.body.style.overflow = "";
                 }
             });
+*/
         });
 
         
