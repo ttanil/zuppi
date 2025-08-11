@@ -9,6 +9,26 @@
   <script src="https://cdn.tailwindcss.com"></script>  
   <style>  
     body {background-color: #09090b;}  
+    .uppi-text{
+      margin-top: 10px !important;
+    }
+    @media (max-width: 1023px) { /* 1024px'ye kadar (lg breakpoint öncesi) */
+      .uppi-text {
+        margin-top: 8px !important;
+      }
+    }
+
+    @media (max-width: 767px) { /* 768px'ye kadar (md breakpoint öncesi) */
+      .uppi-text {
+        margin-top: 8px !important;
+      }
+    }
+
+    @media (max-width: 639px) { /* 640px'ye kadar (sm breakpoint öncesi) */
+      .uppi-text {
+        margin-top: 7px !important;
+      }
+    }
   </style>  
 </head>  
 <body class="min-h-screen flex items-center justify-center bg-black">
@@ -27,14 +47,22 @@
       <!-- LOGO ve Başlık -->  
       <a href="/" class="flex flex-col items-center mb-2 select-none focus:outline-none group">
         <!-- LOGO kısmı: Pulse ve Zuppi yan yana -->
-        <span class="flex items-center">
-          <span class="inline-block w-7 h-7 bg-red-600 rounded-full animate-pulse mr-2 mt-2"></span>
-          <span class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none">
-            <span style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">zuppi</span>
-          </span>
+        <span class="flex items-center justify-center w-full gap-0">
+          <!-- Pulse animasyonlu kırmızı daire -->
+          <span class="inline-block w-7 h-7 bg-red-600 rounded-full animate-pulse mt-3"></span>
+          
+            <!-- Responsive Logo -->
+            <img src="/img/1kopya.png" alt="Zuppi Logo"
+              class="h-10 sm:h-14 w-auto select-none mt-3 sm:mt-0 ml-1 sm:ml-0" style="margin-bottom:2px">
+
+            <!-- "uppi" metni -->
+            <span class="uppi-text font-extrabold text-white text-2xl sm:text-4xl select-none -ml-4 sm:-ml-6 mt-2 relative sm:-top-1"
+              style="font-family:'Helvetica Neue',sans-serif; letter-spacing:0.08em;">
+              uppi
+            </span>
         </span>
         <!-- SLOGAN alt satırda -->
-        <span class="text-xs text-gray-400 tracking-widest mt-2 group-hover:text-yellow-400 transition mt-3">
+        <span class="text-xs text-gray-400 tracking-widest mt-2 group-hover:text-yellow-400 transition mt-4">
           EN İYİLERİN PLATFORMU
         </span>
       </a>
