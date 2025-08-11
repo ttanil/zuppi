@@ -23,6 +23,20 @@
   </div>
 
 <!-- Profil & Genel Panel (Desktop) -->
+<!-- LOGO + Slogan -->
+    <div class="flex items-center gap-3 min-w-[125px]">
+      <span class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none">
+        <img src="/img/1kopya.png" alt="Zuppi Logo"
+          class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-1" style="margin-bottom:2px">
+        <span
+          class="mr-1 -ml-6 sm:-ml-6 -mt-1"
+          style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">
+          uppi
+        </span>
+        <span id="logo-lottie" class="w-12 h-10 lottie-animation"></span>
+      </span>
+      <span class="-ml-12 sm-ml-5 mt-1 text-[10px] sm:text-xs text-gray-400 tracking-widest select-none">EN İYİLERİN PLATFORMU</span>
+    </div>
 <div class="max-w-5xl w-full mx-auto px-2 py-6 flex flex-col md:flex-row gap-7">
   <!-- SOL BLOK: Kullanıcı ve kısa özet -->
   <div class="flex flex-col gap-4 w-full md:w-1/3">
@@ -73,7 +87,7 @@
     </div>
 
     <!-- Home Sayfa Butonu -->
-    <div class="flex items-center justify-center mb-3">
+    <div class="items-center justify-center mb-3 hidden sm:flex">
         <a href="/home" class="bg-zinc-700 hover:bg-zinc-900 transition text-white font-bold px-7 py-3 rounded-lg shadow text-md">
             <svg class="inline mr-1 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 10.5L12 4l9 6.5V19a2 2 0 01-2 2h-4a2 2 0 01-2-2v-5h-2v5a2 2 0 01-2 2H5a2 2 0 01-2-2v-8.5z"></path></svg>
             Ana Sayfaya Dön
@@ -167,7 +181,7 @@
     </div>
 
     <!-- TOPLULUK VE KISA BAĞLANTILAR -->
-    <div class="bg-zinc-900 rounded-2xl p-6 shadow-md flex flex-wrap gap-3">
+    <div class="bg-zinc-900 rounded-2xl p-6 shadow-md flex flex-wrap gap-3 pb-16 sm:pb-8">
       <a href="#" class="bg-green-500 hover:bg-green-600 transition text-white px-4 py-2 rounded-lg flex items-center gap-2 font-bold text-xs mr-3">
         <svg width="18" height="18" fill="currentColor" class="inline">
           <path d="M10.02 12.318a4.565 4.565 0 002.706-1.317l.273-.283c.38-.395.395-1.024.034-1.414a.998.998 0 00-1.41-.032l-.306.304c-.567.563-1.342.877-2.158.857a3.326 3.326 0 01-2.33-.985 3.316 3.316 0 01-.985-2.33c-.02-.816.294-1.591.857-2.158l.304-.306a.997.997 0 00-.032-1.41.997.997 0 00-1.414.034l-.283.273a4.572 4.572 0 00-1.317 2.706c-.315 1.926.233 3.97 1.576 5.313 1.343 1.344 3.387 1.892 5.313 1.576z"/>
@@ -331,10 +345,34 @@
 </div>
 
 <!-- Footer -->
-<footer class="bg-zinc-900 text-center py-4 text-xs text-gray-400 mt-12">
+<footer class="bg-zinc-900 text-center py-4 text-xs text-gray-400 mt-12 hidden sm:block">
   © 2025 Art Nail | 
   <a href="/policy" class="hover:underline text-pink-400">KVKK & Gizlilik</a>
 </footer>
+
+<!-- Mobil Alt Menü: Sadece mobilde görünür, büyük ekranda gizli -->
+    <nav class="fixed bottom-0 left-0 z-50 w-full bg-zinc-900 border-t border-zinc-800 flex justify-between items-center px-3 py-1 sm:hidden">
+      <!-- Alışveriş -->
+      <a href="/shop" class="flex flex-col items-center text-gray-200 hover:text-yellow-400 py-1 px-2 flex-1">
+        <!-- Alışveriş SVG (Sepet) -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 6h12"></path>
+        </svg>
+        <span class="text-xs font-medium">Alışveriş</span>
+      </a>
+      <!-- Ana Sayfa -->
+      <a href="/home" class="flex flex-col items-center text-gray-200 hover:text-blue-400 py-1 px-2 flex-1">
+        <!-- Ana Sayfa SVG (Ev ikonu) -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M3 12L12 4l9 8"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+            d="M9 21V13h6v8"/>
+        </svg>
+        <span class="text-xs font-medium">Ana Sayfa</span>
+      </a>
+    </nav>
 
 
 <!-- Cihaz Silme Modalı -->

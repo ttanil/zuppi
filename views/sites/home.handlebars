@@ -100,9 +100,8 @@
             <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Online Satış</a>  
             <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Canlı Yayın</a>  
             <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Eğitmenler</a>  
-            <!--<a href="#" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Hesabım</a>  -->
-            <a href="/login" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Giriş Yap</a>  
-            <a href="/register" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Kayıt Ol</a>  
+            <a href="user" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Hesabım</a> 
+            <a href="/" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Çıkış</a>  
         </div>
         <!-- Hamburger butonu (sadece mobilde) 
         <button id="mobile-menu-btn" class="md:hidden flex items-center p-2 focus:outline-none" aria-label="Menüyü Aç/Kapat">
@@ -538,33 +537,32 @@
     <nav class="fixed bottom-0 left-0 z-50 w-full bg-zinc-900 border-t border-zinc-800 flex justify-between items-center px-3 py-1 sm:hidden">
       <!-- Alışveriş -->
       <a href="/shop" class="flex flex-col items-center text-gray-200 hover:text-yellow-400 py-1 px-2 flex-1">
-        <!-- Alışveriş SVG (örnek: Sepet) -->
+        <!-- Alışveriş SVG (Sepet) -->
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
             d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 6h12"></path>
         </svg>
         <span class="text-xs font-medium">Alışveriş</span>
       </a>
-      <!-- Giriş Yap -->
-      <a href="/login" class="flex flex-col items-center text-gray-200 hover:text-red-400 py-1 px-2 flex-1">
-        <!-- Giriş SVG (örnek: Login) -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" 
-            d="M15.75 9V5.75A2.75 2.75 0 0 0 13 3H6.75A2.75 2.75 0 0 0 4 5.75v12.5A2.75 2.75 0 0 0 6.75 21H13a2.75 2.75 0 0 0 2.75-2.75V15" />
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
-            d="M18 12l-6-6M12 6v12" />
-        </svg>
-        <span class="text-xs font-medium">Giriş Yap</span>
-      </a>
-      <!-- Kayıt Ol -->
-      <a href="/register" class="flex flex-col items-center text-gray-200 hover:text-green-400 py-1 px-2 flex-1">
-        <!-- Kayıt Ol SVG (örnek: User Plus) -->
+      <!-- Hesabım -->
+      <a href="/user" class="flex flex-col items-center text-gray-200 hover:text-blue-400 py-1 px-2 flex-1">
+        <!-- Hesabım SVG (Kullanıcı/kafa simgesi) -->
         <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
           <circle cx="12" cy="8" r="4" />
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 19a4 4 0 0 0-8 0"/>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 9v6m3-3h-6"/>
         </svg>
-        <span class="text-xs font-medium">Kayıt Ol</span>
+        <span class="text-xs font-medium">Hesabım</span>
+      </a>
+      <!-- Çıkış -->
+      <a href="/" class="flex flex-col items-center text-gray-200 hover:text-red-400 py-1 px-2 flex-1">
+        <!-- Çıkış SVG (Çıkış/ok simgesi) -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M17 16l4-4m0 0l-4-4m4 4H7"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M3 12H7"/>
+        </svg>
+        <span class="text-xs font-medium">Çıkış</span>
       </a>
     </nav>
 

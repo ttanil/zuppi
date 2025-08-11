@@ -1,0 +1,17 @@
+// En belirgin alanlar (gerektiğinde azaltabilirsin)
+  const list = [
+    device_info.os, 
+    device_info.browser, 
+    device_info.browser_version, 
+    device_info.device_type, 
+    device_info.user_agent, 
+    device_info.screen_resolution
+  ];
+
+tahsintanil@gmail.com
+
+
+Yapılacaklar
+user sayfasında hesap iptali
+
+
