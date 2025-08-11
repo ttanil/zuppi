@@ -8,6 +8,8 @@
     device_info.screen_resolution
   ];
 
+https://gtmetrix.com/
+
 tahsintanil@gmail.com
 
 
