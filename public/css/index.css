@@ -1,6 +1,2 @@
-@import "tailwindcss/preflight";
-@import "tailwindcss/components";
-@import "tailwindcss/utilities";
-
 @import "./fontFamily.css";
 @import "./common.css";
