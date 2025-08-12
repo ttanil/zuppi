@@ -3,7 +3,8 @@
 <head>  
   <meta charset="UTF-8" />  
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />  
-  <title>zuppi | Beauty Store</title>  
+  <title>zuppi | Beauty Store</title>
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
   <link rel="stylesheet" href="css/index.css">  
   <script src="https://cdn.tailwindcss.com"></script>  
   <style>  
@@ -59,16 +60,27 @@
         .navbar-search { max-width: 180px !important; }  
         main { padding: 0.6rem !important; }  
     }  
-  </style>  
+  </style>
 </head>  
 <body class="font-sans min-h-screen px-2 pb-10">  
 
   <!-- Navbar -->  
   <nav class="bg-white rounded-2xl mt-2 mx-auto max-w-6xl flex items-center justify-between p-4 shadow mb-8">  
     <div class="flex items-center gap-2">  
-      <img src="img/1kopya.png" alt="Zuppi Logo"  
-          class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-0 sm:mr-1" style="margin-bottom:2px">  
-      <span class="zuppi-font mr-1 -ml-5 sm:-ml-8 -mt-1 sm:-mt-1">uppi</span>  
+      <!-- Sadece büyük ekranda (lg ve üstü) tıklanabilir hale gelir -->
+      <a href="/" class="hidden lg:inline">
+        <img src="img/1kopya.png" alt="Zuppi Logo"
+          class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-0 sm:mr-1"
+          style="margin-bottom:2px">
+      </a>
+      <!-- Sadece küçük ve orta ekranlarda tıklamasız görünür -->
+      <img src="img/1kopya.png" alt="Zuppi Logo"
+        class="inline lg:hidden zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-0 sm:mr-1"
+        style="margin-bottom:2px">
+      <!-- Sadece lg ve üstü ekranda tıklanabilir -->
+      <a href="/" class="zuppi-font mr-1 -ml-5 sm:-ml-8 -mt-1 sm:-mt-1 hidden lg:inline">uppi</a>
+      <!-- Sadece küçük ekranlarda tıklamasız yazı -->
+      <span class="zuppi-font mr-1 -ml-5 sm:-ml-8 -mt-1 sm:-mt-1 inline lg:hidden">uppi</span> 
       <img src="img/shopping-cart.svg" alt="Yeni İkon" class="h-4 w-4 sm:h-5 sm:w-5 -mt-3 sm:-mt-2 ml-0 sm:ml-3">  
     </div>  
     <div class="  
@@ -94,13 +106,17 @@
             </svg>  
         </div>  
     </div>  
-    <div class="flex items-center gap-4 text-sm text-gray-700">  
-      <a href="#" class="relative flex items-center hover:text-green-700">  
-        <img src="img/shopping-cart-customer.svg" alt="Yeni İkon" class="h-7 w-7">  
-        <span class="ml-1">0</span>  
-      </a>  
-      <span class="hidden md:inline">&#9679;</span>  
-    </div>  
+    <div class="flex items-center gap-4 text-sm text-gray-700">
+      <!-- Sadece büyük ekranda görünen Ana Sayfa butonu -->
+      <a href="/" class="hidden lg:inline-flex items-center font-semibold hover:text-blue-700 transition mr-4">
+        Ana Sayfa
+      </a>
+      <a href="#" class="relative flex items-center hover:text-green-700">
+        <img src="img/shopping-cart-customer.svg" alt="Yeni İkon" class="h-7 w-7">
+        <span class="ml-1">0</span>
+      </a>
+      <span class="hidden md:inline">&#9679;</span>
+    </div>   
   </nav>  
 
   <div class="flex max-w-7xl mx-auto">  
