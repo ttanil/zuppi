@@ -37,7 +37,27 @@
       display: none;  
       background: rgba(20,20,20,0.25);  
       position: fixed; z-index: 30; inset: 0;  
-    }  
+    }
+
+    #ad-slot img { 
+      height: 90px; 
+      width: 270px; 
+      object-fit: contain; 
+      border-radius: 10px; 
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08); 
+      background: #fff; 
+    }
+    #ad-slot img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover; 
+      border-radius: 10px;
+      box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+      background: #fff;
+      display: block;
+     }
+
+
     @media (max-width: 1023px) {  
       aside.sidebar { display: none !important; }  
       .mobile-filter-btn { display: flex !important;}  
@@ -118,6 +138,15 @@
       <span class="hidden md:inline">&#9679;</span>
     </div>   
   </nav>  
+  
+  <!-- Reklam Alanı (Beyaz arka plan, mavi çerçeve) --> 
+  <div class="max-w-3xl mx-auto px-4 mt-4 mb-4"> 
+    <div id="ad-wrapper" class="bg-white border-4 border-blue-400 rounded-xl shadow-sm px-4 py-4"> 
+      <div id="ad-slot" class="flex items-center justify-center gap-4 sm:gap-6 flex-wrap" aria-label="Sponsorlu Bannerlar"> 
+        <!-- JS burayı dolduracak --> 
+      </div> 
+    </div> 
+  </div>
 
   <div class="flex max-w-7xl mx-auto">  
 
@@ -708,6 +737,38 @@
 
     // Başlangıçta ilk 6 ürünü göster
     renderProducts(PRODUCTS.slice(0,6));
+
+    //reklam banner 
+    const banners = [ 
+      { 
+        href: 'https://nailbox.com/', 
+        src: 'img/1-banner.png', 
+        alt: 'Nailbox (örnek açık kaynak görsel)' 
+      }, 
+      { 
+        href: 'https://ona.com/', 
+        src: 'img/1-banner.png', 
+        alt: 'ONA (örnek açık kaynak görsel)' 
+        } 
+      ]; // Hedef alan 
+      const adSlot = document.getElementById('ad-slot'); 
+      // Tek banner render eden fonksiyon 
+      function renderBanner(item) { 
+        adSlot.innerHTML = ` 
+          <a href="${item.href}" target="_blank" rel="noopener" 
+          class="inline-flex" title="${item.alt}"> 
+          <img src="${item.src}" alt="${item.alt}"> 
+          </a> `; 
+      } // Başlangıçta ilk banner 
+      let index = 0; 
+      renderBanner(banners[index]); 
+      // Her 6 saniyede sıradaki banner 
+      setInterval(() => { 
+        index = (index + 1) % banners.length; 
+        renderBanner(banners[index]); 
+      }, 6000);
+
+    //----------------------------
   </script>
 </body>
 </html>
