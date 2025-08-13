@@ -430,16 +430,29 @@
   <!-- Mobil Alt Menü: Sadece mobilde görünür, büyük ekranda gizli -->
     <nav class="fixed bottom-0 left-0 z-50 w-full bg-zinc-900 border-t border-zinc-800 flex justify-between items-center px-3 py-1 sm:hidden">
       <!-- Ana Sayfa -->
-      <a href="/home" class="flex flex-col items-center text-gray-200 hover:text-blue-400 py-1 px-2 flex-1">
-        <!-- Ana Sayfa SVG (Ev ikonu) -->
-        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M3 12L12 4l9 8"/>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
-            d="M9 21V13h6v8"/>
-        </svg>
-        <span class="text-xs font-medium">Ana Sayfa</span>
-      </a>
+      {{#ifEquals role "user"}}  
+          <a href="/home" class="flex flex-col items-center text-gray-200 hover:text-blue-400 py-1 px-2 flex-1">
+          <!-- Ana Sayfa SVG (Ev ikonu) -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M3 12L12 4l9 8"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M9 21V13h6v8"/>
+            </svg>
+            <span class="text-xs font-medium">Ana Sayfa</span>
+          </a>
+      {{else}}  
+          <a href="/" class="flex flex-col items-center text-gray-200 hover:text-blue-400 py-1 px-2 flex-1">
+          <!-- Ana Sayfa SVG (Ev ikonu) -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M3 12L12 4l9 8"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M9 21V13h6v8"/>
+            </svg>
+            <span class="text-xs font-medium">Ana Sayfa</span>
+          </a>
+      {{/ifEquals}}
       <!-- Hesabım -->
       <a href="/user" class="flex flex-col items-center text-gray-200 hover:text-blue-400 py-1 px-2 flex-1">
         <!-- Hesabım SVG (Kullanıcı/kafa simgesi) -->
