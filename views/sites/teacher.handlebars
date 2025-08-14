@@ -1,0 +1,1321 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>zuppi - Eğitmenler</title>
+    <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+    <link rel="stylesheet" href="css/index.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body { overflow-x: hidden; }
+        .lottie-animation {
+            margin-left: -18px;
+            margin-right: -18px;
+        }
+        
+        .inline-block {
+            margin-left: -21px;
+        }
+        
+        .zuppi-logo {
+            margin-top: 6px !important;
+        }
+        
+        .chip {
+            padding: 0.375rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            line-height: 1rem;
+            border: 1px solid #3f3f46;
+            background: #18181b;
+            color: #e5e7eb;
+            white-space: nowrap;
+            transition: border-color .2s ease;
+            cursor: pointer;
+        }
+        
+        .chip:hover {
+            border-color: #52525b;
+        }
+        
+        .chip-active {
+            border-color: #dc2626;
+            color: #fecaca;
+            background: rgba(24, 24, 27, 0.7);
+        }
+        
+        .teacher-card:hover .teacher-cover {
+            transform: scale(1.03);
+        }
+        
+        .teacher-card {
+            transition: all 0.3s ease;
+        }
+        
+        .teacher-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+        
+        @media (max-width: 640px) {
+            .chip {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.7rem;
+            }
+        }
+        
+        .chip:hover {
+            border-color: #52525b;
+        }
+        
+        .chip-active {
+            border-color: #dc2626;
+            color: #fecaca;
+            background: rgba(24, 24, 27, 0.7);
+        }
+        
+        .teacher-card:hover .teacher-cover {
+            transform: scale(1.03);
+        }
+        
+        .teacher-card {
+            transition: all 0.3s ease;
+        }
+        
+        .teacher-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Scrollbar gizleme */
+        .scrollbar-hide {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+            display: none;
+        }
+        /* Mobil chips için alt alta sıralama */
+        #expertiseChipsMobile .chip {
+            display: block;
+            width: 100%;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Veya flex-wrap kullanırsanız */
+        #expertiseChipsMobile.flex-wrap .chip {
+            flex-shrink: 0;
+        }
+        /* Mobil chips aktif durumu */
+        #expertiseChipsMobile .chip-active {
+            border-color: #dc2626 !important;
+            color: #fecaca !important;
+            background: rgba(220, 38, 38, 0.1) !important;
+        }
+
+        /* Mobil chips hover durumu */
+        #expertiseChipsMobile .chip:hover {
+            border-color: #52525b;
+        }
+
+        #expertiseChipsMobile .chip-active:hover {
+            border-color: #dc2626 !important;
+        }
+        
+        /* Mobil modal iyileştirmeleri */
+        @media (max-width: 768px) {
+            #detailModal > div {
+                max-width: calc(100vw - 16px) !important;
+                margin: 8px !important;
+                max-height: calc(100vh - 16px) !important;
+            }
+            
+            /* CV İçeriği mobilde daha küçük font */
+            #detailCV pre {
+                font-size: 0.875rem;
+                line-height: 1.4;
+            }
+        }
+        
+        /* Mobil için buton boyutları */
+        @media (max-width: 640px) {
+            .teacher-card button {
+                font-size: 0.75rem;
+                padding: 0.375rem 0.75rem;
+            }
+            
+        }
+    </style>
+</head>
+
+<body class="bg-black text-white min-h-screen">
+    <!-- NAVBAR -->
+  <nav class="w-full bg-zinc-900 border-b border-zinc-800 px-2 sm:px-6 py-3 flex flex-nowrap items-center justify-between gap-y-2">
+    <!-- LOGO + Slogan -->
+    <div class="flex items-center gap-3 min-w-[125px]">
+        {{#ifEquals role "user"}}
+        <a href="/home" class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none cursor-pointer">
+            <img src="/img/1kopya.png" alt="Zuppi Logo"
+                class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-1" style="margin-bottom:2px">
+            <span
+                class="mr-1 -ml-6 sm:-ml-6 -mt-1"
+                style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">
+                uppi
+            </span>
+            <span id="logo-lottie" class="w-12 h-10 lottie-animation"></span>
+        </a>
+        {{else}}
+        <a href="/" class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none cursor-pointer">
+            <img src="/img/1kopya.png" alt="Zuppi Logo"
+                class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-1" style="margin-bottom:2px">
+            <span
+                class="mr-1 -ml-6 sm:-ml-6 -mt-1"
+                style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">
+                uppi
+            </span>
+            <span id="logo-lottie" class="w-12 h-10 lottie-animation"></span>
+        </a>
+        {{/ifEquals}}
+
+      <span class="ml-2 text-[10px] sm:text-xs text-gray-400 tracking-widest hidden sm:block select-none">EN İYİLERİN PLATFORMU</span>
+    </div>
+
+    <!-- Menü ve Auth -->
+    <div class="flex flex-nowrap gap-1 sm:gap-3 items-center order-3">
+        <!-- Masaüstü menü (mobilde gizli) -->
+        <div class="hidden md:flex gap-1 sm:gap-3 items-center">
+            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Abonelik Paketleri</a>  
+            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Videolar</a>  
+            <a href="/shop" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Alışveriş</a>  
+            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Canlı Yayın</a>  
+            <a href="/teacher" class="text-xs sm:text-sm font-medium hover:text-red-500 transition text-red-500 ml-1">Eğitmenler</a>  
+            {{#ifEquals role "user"}}
+            <a href="/user" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Hesabım</a>
+            {{else}}
+            <a href="/login" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Giriş Yap</a>
+            {{/ifEquals}}
+
+            {{#ifEquals role "user"}}
+            <a href="/" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Çıkış</a>
+            {{else}}
+            <a href="/register" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Kayıt Ol</a>  
+            {{/ifEquals}}
+        </div>
+    </div>
+  </nav>
+    <div class="bg-gradient-to-r from-purple-900 to-red-900 p-3 text-center"> <a href="#" class="font-bold animate-pulse"> 🔴 CANLI YAYIN: Bugün 20:00'da "Tırnak Sırları" eğitimi. Katılmak için tıklayın! </a> </div>
+    <!-- BAŞLIK -->
+    <div class="w-full text-center">
+        <h1 class="text-lg sm:text-2xl md:text-3xl font-bold mt-6 sm:mt-7 mb-5 tracking-wide text-white"> Nail Art Dünyasının En İyi Eğitmenleri </h1>
+        <p class="text-gray-300 text-sm sm:text-base mb-6"> Profesyonel eğitmenlerle tanış, uzmanlıklarına göre filtrele ve en uygun eğitimi keşfet. </p>
+        <!-- Mobil Filtrele Butonu -->
+        <button id="openFilters" class="sm:hidden mx-auto mb-4 px-4 py-2 rounded-full bg-zinc-800 text-gray-200 text-sm border border-zinc-700 hover:border-zinc-600 transition flex items-center gap-2">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c0 0 0 0 0 0m0 0c0 0 0 0 0 0M3 12h18"></path>
+            </svg>
+            Filtrele
+        </button>
+    </div>
+    <!-- FİLTRE VE ARAMA ALANI -->
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 mb-8 hidden sm:block" id="filtersDesktop">
+        <div class="flex flex-col sm:flex-row gap-3 mb-4">
+            <div class="flex-1">
+                <div class="relative">
+                    <input id="teacherSearch" type="text" placeholder="Eğitmen ara (isim, uzmanlık...)" class="w-full bg-zinc-800 rounded-full py-2.5 pl-4 pr-10 text-sm md:text-base text-gray-200 placeholder-gray-400 border border-zinc-700 focus:outline-none focus:border-red-700 transition"
+                    />
+                    <svg class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                </div>
+            </div>
+            <div class="flex gap-2">
+                <select id="sortSelect" class="bg-zinc-800 border border-zinc-700 text-gray-200 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-red-700">
+                    <option value="popularity">Sırala: Popüler</option>
+                    <option value="rating">Sırala: En Yüksek Puan</option>
+                    <option value="courses">Sırala: En Çok Ders</option>
+                    <option value="new">Sırala: En Yeni</option>
+                </select>
+                <button id="resetFilters" class="px-3 py-2 rounded-lg border border-zinc-700 bg-zinc-800 text-gray-200 text-sm hover:border-zinc-600 transition">Sıfırla</button>
+
+            </div>
+        </div>
+        <!-- UzmanlıkChips -->
+        <div class="overflow-x-auto">
+            <div id="expertiseChips" class="flex gap-2 min-w-max pb-2">
+                <!-- JS ile doldurulacak -->
+            </div>
+        </div>
+    </div>
+    <!-- EĞİTMEN GRID -->
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 pb-20">
+        <div id="teacherGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <!-- JS ile doldurulacak -->
+        </div>
+        <div id="noResults" class="hidden text-center text-gray-400 text-sm sm:text-base py-10"> Aradığın kriterlere uygun eğitmen bulunamadı. </div>
+    </div>
+    <!-- PROFİL MODAL -->
+    <div id="teacherModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm" role="dialog" aria-modal="true">
+        <div class="relative w-full max-w-3xl mx-3 bg-zinc-900 rounded-2xl shadow-xl overflow-hidden">
+            <button id="closeTeacherModal" type="button" aria-label="Kapat" class="absolute top-2 right-2 text-white text-3xl bg-black/50 rounded-full px-3 py-1 hover:bg-opacity-90 z-50 focus:outline-none"> &times; </button>
+            <div class="grid md:grid-cols-2">
+                <div class="relative"> <img id="modalCover" src="" alt="cover" class="w-full h-56 md:h-full object-cover" /> <span id="modalBadge" class="absolute top-3 left-3 bg-red-600 text-white text-xs font-semibold px-3 py-1 rounded-full"> Öne Çıkan </span> </div>
+                <div
+                class="p-4 sm:p-6">
+                    <div class="flex items-center gap-3"> <img id="modalAvatar" src="" alt="avatar" class="w-14 h-14 rounded-full object-cover border border-zinc-700" />
+                        <div>
+                            <div id="modalName" class="text-lg sm:text-xl font-bold"></div>
+                            <div id="modalExpertise" class="text-xs sm:text-sm text-gray-400"></div>
+                        </div>
+                    </div>
+                    <p id="modalBio" class="text-gray-300 text-sm sm:text-base mt-3"></p>
+                    <div class="flex items-center gap-4 text-xs sm:text-sm text-gray-300 mt-3">
+                        <div class="flex items-center gap-1">
+                            <svg class="w-4 h-4 text-yellow-400" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" /> </svg> <span id="modalRating">4.9</span> </div>
+                        <div class="flex items-center gap-1">
+                            <svg class="w-4 h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M3 5h18v2H3zm0 6h12v2H3zm0 6h18v2H3z" /> </svg> <span id="modalCourses">12 ders</span> </div>
+                    </div>
+                    <div class="flex gap-2 mt-4"> 
+                        <a id="modalProfileLink" href="#" class="flex-1 text-center bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg py-2 transition"> 
+                            Detay 
+                        </a> 
+                        <a id="modalFollowLink" href="#" class="flex-1 text-center border border-zinc-700 hover:border-zinc-600 text-gray-200 font-semibold rounded-lg py-2 transition"> 
+                            Takip Et 
+                        </a>                        
+                    </div>
+                    <div class="mt-5">
+                        <div class="text-sm text-gray-400 mb-2">Öne çıkan dersler</div>
+                        <div id="modalCoursesList" class="grid grid-cols-2 gap-2">
+                            <!-- JS ile doldurulur -->
+                        </div>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- DETAY MODAL (CV) -->
+<div id="detailModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm" aria-modal="true">
+    <div class="relative w-full max-w-4xl mx-3 bg-zinc-900 rounded-2xl shadow-xl overflow-hidden max-h-[90vh] overflow-y-auto">
+        <!-- Header -->
+        <div class="sticky top-0 bg-zinc-900 border-b border-zinc-800 px-4 sm:px-6 py-4 flex justify-between items-center z-10">
+            <h2 id="modalTitle" class="text-xl sm:text-2xl font-bold text-white">Eğitmen CV & Detayları</h2>
+            <button id="closeDetailModal" type="button" aria-label="Kapat" class="text-white text-2xl hover:text-red-400 transition focus:outline-none">
+                &times;
+            </button>
+        </div>
+
+        <!-- Content -->
+        <div class="p-4 sm:p-6">
+            <!-- Eğitmen Header Bilgileri -->
+            <div class="flex flex-col sm:flex-row gap-6 mb-8">
+                <div class="flex-shrink-0 text-center sm:text-left">
+                    <img id="detailAvatar" src="" alt="avatar" class="w-24 h-24 sm:w-32 sm:h-32 rounded-full object-cover border-4 border-zinc-700 mx-auto sm:mx-0" />
+                </div>
+                <div class="flex-1">
+                    <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between mb-4">
+                        <div>
+                            <h3 id="detailName" class="text-2xl sm:text-3xl font-bold text-white mb-2"></h3>
+                            <p id="detailTitle" class="text-red-400 font-medium text-base sm:text-lg mb-3"></p>
+                            <div id="detailExpertiseList" class="flex flex-wrap gap-2 mb-4">
+                                <!-- JS ile doldurulacak -->
+                            </div>
+                        </div>
+                        <span id="detailBadge" class="bg-red-600 text-white text-sm font-semibold px-4 py-2 rounded-full hidden">
+                            ⭐ <span id="featuredText">Öne Çıkan</span>
+                        </span>
+                    </div>
+                    
+                    <!-- İstatistikler -->
+                    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 bg-zinc-800/30 rounded-lg p-4">
+                        <div class="text-center">
+                            <div class="flex items-center justify-center gap-1 text-yellow-400 mb-1">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                                </svg>
+                                <span id="detailRating" class="font-bold">4.9</span>
+                            </div>
+                            <span class="text-xs text-gray-400" id="ratingText">Puan</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="flex items-center justify-center gap-1 text-blue-400 mb-1">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                                </svg>
+                                <span id="detailCourses" class="font-bold">12</span>
+                            </div>
+                            <span class="text-xs text-gray-400" id="coursesText">Ders</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="flex items-center justify-center gap-1 text-green-400 mb-1">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+                                </svg>
+                                <span id="detailStudents" class="font-bold">850+</span>
+                            </div>
+                            <span class="text-xs text-gray-400" id="studentsText">Öğrenci</span>
+                        </div>
+                        <div class="text-center">
+                            <div class="flex items-center justify-center gap-1 text-purple-400 mb-1">
+                                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                                </svg>
+                                <span id="detailExperience" class="font-bold">14</span>
+                            </div>
+                            <span class="text-xs text-gray-400" id="experienceText">Yıl Deneyim</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CV İçeriği -->
+            <div class="mb-8">
+                <h4 class="text-xl font-bold text-white mb-4 flex items-center justify-between">
+                    <div class="flex items-center gap-3">
+                        <div class="bg-orange-500 p-2 rounded-lg">
+                            <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8l-6-6z"/>
+                                <polyline points="14,2 14,8 20,8"/>
+                            </svg>
+                        </div>
+                        <span id="cvTitle">Profesyonel CV & Deneyim</span>
+                    </div>
+                    <!-- Dil Seçimi -->  
+                    <div class="flex bg-zinc-800 rounded-lg p-1 border border-zinc-700">  
+                        <button id="langTR" class="px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 text-white bg-red-600 border border-red-500">  
+                            TR  
+                        </button>  
+                        <button id="langEN" class="px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 text-gray-400 hover:text-white hover:bg-zinc-700">  
+                            EN  
+                        </button>  
+                    </div> 
+                </h4>
+                <div id="detailCV" class="bg-gradient-to-br from-zinc-800/50 to-zinc-700/30 rounded-xl p-6 text-gray-300 leading-relaxed shadow-inner border border-zinc-700/50">
+                    <!-- JS ile doldurulacak -->
+                </div>
+            </div>
+
+            <!-- Popüler Dersler -->
+            <div class="mb-8">
+                <h4 class="text-xl font-bold text-white mb-4 flex items-center gap-3">
+                    <div class="bg-pink-500 p-2 rounded-lg">
+                        <svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+                        </svg>
+                    </div>
+                    <span id="coursesTitle">Öne Çıkan Dersler</span>
+                </h4>
+                <div id="detailCoursesList" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <!-- JS ile doldurulacak -->
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 pt-6 border-t border-zinc-700 p-4 sm:p-6 pb-20 sm:pb-6">
+                <a id="detailProfileLink" href="#" class="flex-1 text-center bg-gradient-to-r from-red-600 to-red-700 hover:from-red-700 hover:to-red-800 text-white font-bold rounded-xl py-4 transition-all duration-300 transform hover:scale-105 flex items-center justify-center gap-3 shadow-lg">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                    </svg>
+                    <span id="profileBtnText">Profile Git</span>
+                </a>
+                <button id="detailContactBtn" class="flex-1 text-center border-2 border-green-600 hover:border-green-500 hover:bg-green-600/10 text-green-400 font-bold rounded-xl py-4 transition-all duration-300 flex items-center justify-center gap-3">
+                    <svg class="w-6 h-6" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                    </svg>
+                    <span id="contactBtnText">İletişime Geç</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- FOOTER --> 
+<footer class="bg-zinc-900 py-6 mt-10"> 
+    <div class="container mx-auto px-4 flex flex-col md:flex-row justify-between items-center"> 
+        <div class="text-xs sm:text-sm mb-4 md:mb-0">© 2025 zuppi</div> 
+        <div class="text-xs sm:text-sm mb-4 md:mb-0"> 
+        <a href="/policy" class="hover:underline text-gray-400">KVKK & Gizlilik</a> 
+        </div> 
+        <div class="flex gap-3"> 
+            <!-- Whatsapp -->
+          <a href="#" class="bg-[#25D366] text-white px-3 py-1.5 rounded-full flex items-center gap-2 text-xs sm:text-sm">
+            <img src="img/whatsapp.png" alt="Google Play" class="h-5"/>
+            <span class="hidden sm:inline">Whatsapp Grubu</span>
+          </a>
+            <a href="#" class="bg-blue-500 text-white px-3 py-1.5 rounded-full flex items-center gap-2 text-xs sm:text-sm"> 
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 19L21 12 3 5v7l11 0" />
+                </svg> 
+                <span class="hidden sm:inline">Telegram Grubu</span> 
+            </a> 
+            <a href="#" class="bg-yellow-500 text-black px-3 py-1.5 rounded-full flex items-center gap-2 text-xs sm:text-sm"> 
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 14c3.314 0 6-1.343 6-3V7l-6-3-6 3v4c0 1.657 2.686 3 6 3zm0 0v6" /> 
+                </svg> 
+                <span>Eğitmen Olmak İster misin?</span> 
+            </a> 
+        </div> 
+    </div> 
+</footer> 
+<!-- Mobil Alt Menü --> 
+<nav class="fixed bottom-0 left-0 z-50 w-full bg-zinc-900 border-t border-zinc-800 flex justify-between items-center px-3 py-1 sm:hidden"> 
+    <!-- Ana Sayfa -->
+      {{#ifEquals role "user"}}  
+          <a href="/home" class="flex flex-col items-center text-gray-200 hover:text-blue-400 py-1 px-2 flex-1">
+          <!-- Ana Sayfa SVG (Ev ikonu) -->
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M3 12L12 4l9 8"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M9 21V13h6v8"/>
+            </svg>
+            <span class="text-xs font-medium">Ana Sayfa</span>
+          </a>
+      {{else}}  
+          <a href="/" class="flex flex-col items-center text-gray-200 hover:text-blue-400 py-1 px-2 flex-1">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M3 12L12 4l9 8"/>
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                d="M9 21V13h6v8"/>
+            </svg>
+            <span class="text-xs font-medium">Ana Sayfa</span>
+          </a>
+      {{/ifEquals}}
+
+    <a href="/shop" class="flex flex-col items-center text-gray-200 hover:text-yellow-400 py-1 px-2 flex-1"> 
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 6h12"></path> 
+        </svg> 
+        <span class="text-xs font-medium">Alışveriş</span> 
+    </a> 
+
+    {{#ifEquals role "user"}}
+    <a href="/user" class="flex flex-col items-center text-gray-200 hover:text-blue-400 py-1 px-2 flex-1">
+        <!-- Hesabım SVG (Kullanıcı/kafa simgesi) -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <circle cx="12" cy="8" r="4" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 19a4 4 0 0 0-8 0"/>
+        </svg>
+        <span class="text-xs font-medium">Hesabım</span>
+      </a>
+    {{else}}
+    <a href="/login" class="flex flex-col items-center text-gray-200 hover:text-red-400 py-1 px-2 flex-1"> 
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15.75 9V5.75A2.75 2.75 0 0 0 13 3H6.75A2.75 2.75 0 0 0 4 5.75v12.5A2.75 2.75 0 0 0 6.75 21H13a2.75 2.75 0 0 0 2.75-2.75V15" /> 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18 12l-6-6M12 6v12" /> 
+        </svg> 
+        <span class="text-xs font-medium">Giriş Yap</span>
+    </a>
+    {{/ifEquals}}
+
+    {{#ifEquals role "user"}}
+    <a href="/" class="flex flex-col items-center text-gray-200 hover:text-red-400 py-1 px-2 flex-1">
+        <!-- Çıkış SVG (Çıkış/ok simgesi) -->
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M17 16l4-4m0 0l-4-4m4 4H7"/>
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5"
+            d="M3 12H7"/>
+        </svg>
+        <span class="text-xs font-medium">Çıkış</span>
+      </a>
+    {{else}}
+    <a href="/register" class="flex flex-col items-center text-gray-200 hover:text-green-400 py-1 px-2 flex-1"> 
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6 mb-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor"> 
+            <circle cx="12" cy="8" r="4" /> 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 19a4 4 0 0 0-8 0"/> 
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M20 9v6m3-3h-6"/> 
+        </svg> 
+        <span class="text-xs font-medium">Kayıt Ol</span> 
+    </a>
+    {{/ifEquals}}
+
+</nav> 
+
+<!-- Mobil Filtre Paneli -->
+<div id="mobileFilterPanel" class="fixed inset-0 z-50 hidden">
+    <!-- Arka plan -->
+    <div id="mobileFilterBackdrop" class="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300"></div>
+    
+    <!-- Panel -->
+    <aside id="mobileFilterSheet" class="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-zinc-900 border-l border-zinc-800 translate-x-full transition-transform duration-300 flex flex-col">
+        <div class="p-4 border-b border-zinc-800 flex items-center justify-between">
+            <h3 class="text-lg font-bold">Filtrele</h3>
+            <button id="closeFilters" aria-label="Kapat" class="text-2xl text-gray-300 hover:text-white">&times;</button>
+        </div>
+
+        <div class="p-4 space-y-4 overflow-y-auto flex-1">
+            <!-- Arama -->
+            <div>
+                <label for="teacherSearchMobile" class="block text-xs text-gray-400 mb-1">Ara</label>
+                <div class="relative">
+                    <input id="teacherSearchMobile" type="text" placeholder="Eğitmen ara (isim, uzmanlık...)" class="w-full bg-zinc-800 rounded-full py-2.5 pl-4 pr-10 text-sm text-gray-200 placeholder-gray-400 border border-zinc-700 focus:outline-none focus:border-red-700 transition" />
+                    <svg class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <circle cx="11" cy="11" r="7"></circle>
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"></path>
+                    </svg>
+                </div>
+            </div>
+
+            <!-- Sıralama + Sıfırla -->
+            <div class="flex items-center gap-2">
+                <select id="sortSelectMobile" class="flex-1 bg-zinc-800 border border-zinc-700 text-gray-200 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-red-700">
+                    <option value="popularity">Sırala: Popüler</option>
+                    <option value="rating">Sırala: En Yüksek Puan</option>
+                    <option value="courses">Sırala: En Çok Ders</option>
+                    <option value="new">Sırala: En Yeni</option>
+                </select>
+                <button id="resetFiltersMobile" class="px-3 py-2 rounded-lg border border-zinc-700 bg-zinc-800 text-gray-200 text-sm hover:border-zinc-600 transition">Sıfırla</button>
+            </div>
+
+            <!-- Uzmanlık Chips -->
+            <div>
+                <div class="text-xs text-gray-400 mb-2">Uzmanlıklar</div>
+                <div id="expertiseChipsMobile" class="flex flex-wrap gap-2 pb-2">
+                <div class="overflow-x-auto scrollbar-hide -mx-1 px-1">
+                    <div id="expertiseChipsMobile" class="flex gap-2 min-w-max pb-2"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alt aksiyon -->
+        <div class="p-4 border-t border-zinc-800">
+            <button id="applyFiltersMobile" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg py-2.5 transition">Uygula</button>
+        </div>
+    </aside>
+</div>
+
+<script> 
+    // Örnek veri 
+    const TEACHERS = [ 
+        { 
+            id: 'miray', 
+            name: 'Miray Meral Kayıkçı', 
+            avatar: 'img/tirnak.png', 
+            cover: 'img/miray.jpg',
+            expertise: [
+                'Protez Tırnak', 
+                'Manikür', 
+                'Salon Teknikleri'
+            ], 
+            bio: "Ru Nail eğitmeni ve Disney çizim kitabı yazarı.", 
+            rating: 4.9, 
+            courses: 14, 
+            featured: true, 
+            profileUrl: '#', 
+            highlights: [ 
+                { 
+                    title: 'Protez Tırnakta İleri Teknikler', 
+                    thumb: 'img/instg6.jpg' 
+                }, 
+                { 
+                    title: 'Hızlı Salon Manikürü', 
+                    thumb: 'img/instg7.jpg' 
+                } 
+            ],
+            cv: `Miray Meral Kayıkcı – Master Trainer & Nail Art Specialist
+
+2010 yılında güzellik sektörüne adım attım. 2011'de Moskova'da ilk master eğitimimi tamamlayarak mezun oldum ve aynı yıl manikür ve tırnak sanatı alanında profesyonel kariyerime başladım.
+
+2013 yılında eğitmenlik kariyerime Gold Tırnak Center, Etiler'de başladım. 2015'te Sevgi Önel Akademi'de Master Trainer olarak görev aldım ve bu süreçte kendi salonumu da aktif olarak işlettim.
+
+2020'de Akademi Royal Eğitim Kurumları'nın tüm şubelerinde kadrolu Master Trainer olarak çalıştım. Aynı zamanda Selin Beauty Center bünyesindeki tırnak teknisyenlerinin işe alım ve eğitim süreçlerinden sorumlu oldum.
+
+2019 yılından bu yana Ru Nail Türkiye'nin baş eğitmeniyim.
+2024'te telif ve patent hakları bana ait olan, Disney karakterlerini içeren bir çizim kitabı yayımladım.
+2022'den itibaren Dubai'de, mesleğimi freelance olarak sürdürmekteyim.
+
+💅 Uzmanlık Alanlarım:
+• Manikür & Tırnak Sanatı
+• Nail Art Tasarım ve 3D Uygulamalar
+• Eğitmenlik & Workshop Organizasyonu
+• Eğitim Programı Hazırlama & Teknisyen Yetiştirme`,
+            cvEn:`I started my journey in the beauty industry in 2010. In 2011, I completed my first master program in Moscow and graduated, beginning my professional career in manicure and nail art in the same year.
+
+In 2013, I started my career as an educator at Gold Tırnak Center, Etiler. In 2015, I continued as a Master Trainer at Sevgi Önel Academy while also running my own salon.
+
+In 2020, I worked as a full-time Master Trainer at all branches of Akademi Royal Training Institutions. I was also responsible for the recruitment and training of nail technicians at Selin Beauty Center.
+
+Since 2019, I have been the Head Educator for Ru Nail Türkiye.
+In 2024, I published a nail art drawing book featuring Disney characters, with all copyright and patent rights belonging to me.
+Since 2022, I have been continuing my profession as a freelance artist in Dubai.
+
+💅 Areas of Expertise:
+	•	Manicure & Nail Art
+	•	Nail Art Design & 3D Applications
+	•	Teaching & Workshop Organization
+	•	Training Program Development & Technician Training`
+        },
+        { 
+            id: 'teoman', 
+            name: 'Teoman', 
+            avatar: 'img/1.jpg', 
+            cover: 'img/instg5.jpg', 
+            expertise: [
+                'Sanatsal Tasarım', 
+                'Boya Teknikleri'
+            ], 
+            bio: 'Yaratıcılığı merkeze alan bir yaklaşım. Renk ve kompozisyon üzerine yoğunlaşan atölyeler.', 
+            rating: 4.8, 
+            courses: 9, 
+            featured: false, 
+            profileUrl: '#',
+            highlights: [ 
+                { 
+                    title: 'Sanatsal Nail Art Başlangıç', 
+                    thumb: 'img/instg5.jpg' 
+                }, 
+                { 
+                    title: 'Kompozisyon ve Renk', 
+                    thumb: 'img/instg6.jpg' 
+                } 
+            ],
+            cv: `Teoman - Sanatsal Tasarım Uzmanı
+
+Güzel sanatlar eğitimi almış, nail art alanında yaratıcı çözümler üreten bir eğitmen. Renk teorisi ve kompozisyon konularında derinlemesine bilgiye sahip.
+
+🎨 Uzmanlık Alanlarım:
+• Sanatsal Nail Art Tasarım
+• Renk Teorisi ve Kompozisyon
+• 2D ve 3D Sanatsal Uygulamalar
+• Yaratıcı Atölye Yönetimi`,
+            cvEn: `Luidmila - Detail Pedicure Specialist
+
+An instructor specialized in detail pedicure and nail care techniques with 10+ years of industry experience.
+
+💅 Areas of Expertise:
+• Detail Pedicure Techniques
+• Nail Care Protocols
+• Hygiene and Sterilization
+• Professional Salon Management`
+        }, 
+        { 
+            id: 'arzu', 
+            name: 'Luidmila', 
+            avatar: 'img/instg6.jpg', 
+            cover: 'img/LUIDMILA.jpg', 
+            expertise: [
+                'Detail Pedicure', 
+                'Bakım'
+            ], 
+            bio: 'Detail pedicure teknikleri ve bakım protokollerinde 10+ yıl tecrübe.', 
+            rating: 4.7, 
+            courses: 11, 
+            featured: false, 
+            profileUrl: '#', 
+            highlights: [ 
+                { 
+                    title: 'Detail Pedicure Masterclass', 
+                    thumb: 'img/instg6.jpg' 
+                }, 
+                { 
+                    title: 'Bakım ve Hijyen', 
+                    thumb: 'img/instg7.jpg' 
+                } 
+            ],
+            cv: `Luidmila - Detail Pedicure Uzmanı
+
+10+ yıl sektör deneyimi ile detail pedicure ve tırnak bakım teknikleri konusunda uzmanlaşmış eğitmen.
+
+💅 Uzmanlık Alanlarım:
+• Detail Pedicure Teknikleri
+• Tırnak Bakım Protokolleri
+• Hijyen ve Sterilizasyon
+• Profesyonel Salon İşletmeciliği`,
+            cvEn: `Luidmila - Detail Pedicure Specialist
+
+An instructor specialized in detail pedicure and nail care techniques with 10+ years of industry experience.
+
+💅 Areas of Expertise:
+• Detail Pedicure Techniques
+• Nail Care Protocols
+• Hygiene and Sterilization
+• Professional Salon Management`
+        }, 
+        { 
+            id: 'sibel', 
+            name: 'Sibel Keskin', 
+            avatar: 'img/instg7.jpg', 
+            cover: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=600&q=80', 
+            expertise: ['Farklı Teknikler', 'Uygulama Pratiği'
+
+            ], 
+            bio: 'Çok yönlü tekniklerle sonuç odaklı eğitimler. Başlangıçtan ileri seviyeye.', 
+            rating: 4.9, 
+            courses: 12, 
+            featured: true, 
+            profileUrl: '#', 
+            highlights: 
+            [ 
+                { 
+                    title: 'Farklı Teknikler 101', 
+                    thumb: 'img/instg5.jpg'
+                }, 
+                { 
+                    title: 'Pratik Odaklı Eğitim', 
+                    thumb: 'img/instg6.jpg'
+                } 
+            ],
+            cv: `Sibel Keskin - Çok Disiplinli Nail Art Uzmanı
+
+Farklı teknik ve uygulamalarda uzmanlaşmış, pratik odaklı eğitim metodolojisi geliştirmiş deneyimli eğitmen.
+
+💅 Uzmanlık Alanlarım:
+• Çoklu Teknik Uygulamaları
+• Pratik Odaklı Eğitim Metodları
+• Başlangıç - İleri Seviye Programları
+• Hızlı Öğrenme Teknikleri`,
+            cvEn: `Sibel Keskin - Multi-Disciplinary Nail Art Specialist
+
+An experienced instructor specialized in various techniques and applications, who has developed practice-oriented training methodology.
+
+💅 Areas of Expertise:
+• Multi-Technical Applications
+• Practice-Oriented Training Methods
+• Beginner to Advanced Level Programs
+• Fast Learning Techniques`
+        } 
+    ]; 
+    // DOM Elementleri  
+    const teacherGrid = document.getElementById('teacherGrid');  
+    const teacherModal = document.getElementById('teacherModal');  
+    const closeTeacherModal = document.getElementById('closeTeacherModal');  
+    const detailModal = document.getElementById('detailModal');  
+    const closeDetailModalEl = document.getElementById('closeDetailModal');  
+    const teacherSearch = document.getElementById('teacherSearch');  
+    const teacherSearchTop = document.getElementById('teacherSearchTop');  
+    const sortSelect = document.getElementById('sortSelect');  
+    const resetFilters = document.getElementById('resetFilters');  
+    const expertiseChips = document.getElementById('expertiseChips');  
+    const noResults = document.getElementById('noResults');  
+    // Mobile filter panel
+    const mobileFilterPanel = document.getElementById('mobileFilterPanel');
+    const mobileFilterBackdrop = document.getElementById('mobileFilterBackdrop');
+    const mobileFilterSheet = document.getElementById('mobileFilterSheet');
+    const openFiltersBtn = document.getElementById('openFilters');
+    const closeFiltersBtn = document.getElementById('closeFilters');
+    const applyFiltersMobile = document.getElementById('applyFiltersMobile');
+
+    const teacherSearchMobile = document.getElementById('teacherSearchMobile');
+    const sortSelectMobile = document.getElementById('sortSelectMobile');
+    const resetFiltersMobile = document.getElementById('resetFiltersMobile');
+    const expertiseChipsMobile = document.getElementById('expertiseChipsMobile');
+
+
+    //------- filtre --------------------------------
+    // Panel aç-kapat
+    function openMobileFilters() {
+        mobileFilterPanel.classList.remove('hidden');
+        requestAnimationFrame(() => {
+            mobileFilterBackdrop.classList.remove('opacity-0');
+            mobileFilterSheet.classList.remove('translate-x-full');
+        });
+        // Değerleri senkronize et
+        syncDesktopToMobile();
+    }
+
+    function closeMobileFilters() {
+        mobileFilterBackdrop.classList.add('opacity-0');
+        mobileFilterSheet.classList.add('translate-x-full');
+        setTimeout(() => mobileFilterPanel.classList.add('hidden'), 300);
+    }
+
+    // Değer senkronizasyonu
+    function syncDesktopToMobile() {
+        if (teacherSearch && teacherSearchMobile) {
+            teacherSearchMobile.value = teacherSearch.value;
+            sortSelectMobile.value = sortSelect.value;
+            expertiseChipsMobile.innerHTML = expertiseChips.innerHTML;
+        }
+    }
+
+    function syncMobileToDesktop() {
+        if (teacherSearch && teacherSearchMobile) {
+            teacherSearch.value = teacherSearchMobile.value;
+            sortSelect.value = sortSelectMobile.value;
+            expertiseChips.innerHTML = expertiseChipsMobile.innerHTML;
+        }
+    }
+
+    // Event listeners
+    openFiltersBtn?.addEventListener('click', openMobileFilters);
+    closeFiltersBtn?.addEventListener('click', closeMobileFilters);
+    mobileFilterBackdrop?.addEventListener('click', closeMobileFilters);
+
+    applyFiltersMobile?.addEventListener('click', () => {
+        syncMobileToDesktop();
+        update(); // Bu satır eksikti
+        closeMobileFilters();
+    });
+
+    resetFiltersMobile?.addEventListener('click', (e) => {
+        e.preventDefault();
+        teacherSearchMobile.value = '';
+        sortSelectMobile.value = 'popularity';
+        [...expertiseChipsMobile.querySelectorAll('.chip-active')].forEach(c => c.classList.remove('chip-active'));
+        
+        // Desktop ile senkronize et
+        teacherSearch.value = '';
+        sortSelect.value = 'popularity';
+        activeExpertise.clear();
+        renderChips();
+        update();
+    });
+    // Mobil expertise chips için tıklama eventi
+    expertiseChipsMobile?.addEventListener('click', (e) => {
+        if (e.target.classList.contains('chip')) {
+            const chipText = e.target.textContent.trim();
+            
+            // Eğer "Tümü" chip'ine tıklanmışsa
+            if (e.target.dataset.chip === '__all' || chipText === 'Tümü') {
+                // Tüm aktif chip'leri temizle (mobilde)
+                [...expertiseChipsMobile.querySelectorAll('.chip-active')].forEach(c => c.classList.remove('chip-active'));
+                e.target.classList.add('chip-active');
+                
+                // Desktop'ta da temizle ve güncelle
+                activeExpertise.clear();
+                renderChips();
+            } else {
+                // Normal chip tıklanmışsa
+                e.target.classList.toggle('chip-active');
+                
+                // "Tümü" chip'inden aktif sınıfını kaldır (mobilde)
+                const allChipMobile = expertiseChipsMobile.querySelector('[data-chip="__all"]') || 
+                                    [...expertiseChipsMobile.querySelectorAll('.chip')].find(c => c.textContent.trim() === 'Tümü');
+                if (allChipMobile) {
+                    allChipMobile.classList.remove('chip-active');
+                }
+                
+                // Desktop ile senkronize et
+                const desktopChip = [...expertiseChips.querySelectorAll('.chip')]
+                    .find(chip => chip.textContent.trim() === chipText);
+                if (desktopChip) {
+                    desktopChip.classList.toggle('chip-active');
+                    
+                    // Desktop'ta activeExpertise set'ini güncelle
+                    const key = desktopChip.dataset.chip;
+                    if (activeExpertise.has(key)) {
+                        activeExpertise.delete(key);
+                    } else {
+                        activeExpertise.add(key);
+                    }
+                    
+                    // Desktop chip'lerini yeniden render et
+                    renderChips();
+                }
+            }
+        }
+    });
+    // Mobile search ve sort için event listener ekleyin
+    teacherSearchMobile?.addEventListener('input', () => {
+        teacherSearch.value = teacherSearchMobile.value;
+        update();
+    });
+
+    sortSelectMobile?.addEventListener('change', () => {
+        sortSelect.value = sortSelectMobile.value;
+        update();
+    });
+
+    //----------------------------------
+
+    // Uzmanlık listesi (unique)  
+    const EXPERTISE = [...new Set(TEACHERS.flatMap(t => t.expertise))];  
+    let activeExpertise = new Set(); // çoklu filtre  
+
+    // Chipleri çiz  
+    function renderChips() {  
+        expertiseChips.innerHTML = `  
+            <button class="chip ${activeExpertise.size === 0 ? 'chip-active' : ''}" data-chip="__all">  
+            Tümü  
+            </button>  
+            ${EXPERTISE.map(x => `  
+            <button class="chip ${activeExpertise.has(x) ? 'chip-active' : ''}" data-chip="${x}">  
+                ${x}  
+            </button>  
+            `).join('')}  
+        `;  
+
+        expertiseChips.querySelectorAll('button').forEach(btn => {  
+            btn.addEventListener('click', () => {  
+                const key = btn.dataset.chip;  
+                
+                if (key === '__all') {  
+                    activeExpertise.clear();  
+                } else {  
+                    if (activeExpertise.has(key)) {  
+                        activeExpertise.delete(key);  
+                    } else {  
+                        activeExpertise.add(key);  
+                    }  
+                }  
+                
+                renderChips();  
+                update();  
+            });  
+        });  
+    }  
+
+    // Kart şablonu  
+    function teacherCard(t) {  
+        const badges = t.expertise.slice(0, 3).map(x => `  
+            <span class="text-[10px] sm:text-xs px-1.5 sm:px-2 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-gray-300">${x}</span>  
+        `).join(' ');  
+
+        return `  
+            <article class="teacher-card bg-zinc-900/80 border border-zinc-800 rounded-2xl overflow-hidden shadow hover:shadow-lg">  
+            <div class="relative overflow-hidden">  
+                <img src="${t.cover}" alt="${t.name}" class="teacher-cover w-full h-40 sm:h-44 md:h-48 object-cover transition-transform duration-300" />  
+                ${t.featured ? `<span class="absolute top-2 sm:top-3 left-2 sm:left-3 bg-red-600 text-white text-[9px] sm:text-xs font-semibold px-2 py-1 rounded-full">Öne Çıkan</span>` : ''}  
+                <img src="${t.avatar}" alt="${t.name}" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-zinc-900 absolute -bottom-6 sm:-bottom-7 left-3 sm:left-4 object-cover" />  
+            </div>  
+            <div class="pt-8 sm:pt-9 px-3 sm:px-4 pb-3 sm:pb-4">  
+                <div class="flex items-center justify-between">  
+                <h3 class="text-base sm:text-lg font-bold truncate pr-2">${t.name}</h3>  
+                <div class="flex items-center gap-1 text-yellow-400 flex-shrink-0">  
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="currentColor">  
+                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>  
+                    </svg>  
+                    <span class="text-xs sm:text-sm text-gray-200">${t.rating.toFixed(1)}</span>  
+                </div>  
+                </div>  
+                <p class="text-gray-300 text-xs sm:text-sm mt-1 line-clamp-2">${t.bio}</p>  
+                <div class="flex flex-wrap gap-1 sm:gap-1.5 mt-2 sm:mt-3">${badges}</div>  
+                <div class="flex items-center justify-between mt-3 sm:mt-4 text-xs text-gray-400">  
+                <div class="flex items-center gap-1">  
+                    <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor">  
+                    <path d="M3 5h18v2H3zm0 6h12v2H3zm0 6h18v2H3z"/>  
+                    </svg>  
+                    <span class="text-xs">${t.courses} ders</span>  
+                </div>  
+                <div class="flex gap-1 sm:gap-2">  
+                    <button class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs sm:text-sm" data-detail="${t.id}">  
+                    Detay  
+                    </button>  
+                    <button class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-zinc-700 hover:border-zinc-600 text-gray-200 font-semibold text-xs sm:text-sm" data-open="${t.id}">  
+                    Profil  
+                    </button>  
+                </div>  
+                </div>  
+            </div>  
+            </article>  
+        `;  
+    }
+
+    // Listeyi çiz  
+    function renderTeachers(list) {  
+        if (!list.length) {  
+            teacherGrid.innerHTML = '';  
+            noResults.classList.remove('hidden');  
+            return;  
+        }  
+        
+        noResults.classList.add('hidden');  
+        teacherGrid.innerHTML = list.map(teacherCard).join('');  
+
+        // Profili Gör butonları (eski modal)  
+        teacherGrid.querySelectorAll('button[data-open]').forEach(btn => {  
+            btn.addEventListener('click', () => {  
+                const t = TEACHERS.find(x => x.id === btn.dataset.open);  
+                if (t) openModal(t);  
+            });  
+        });  
+
+        // Detay butonları (yeni CV modal)  
+        teacherGrid.querySelectorAll('button[data-detail]').forEach(btn => {  
+            btn.addEventListener('click', () => {  
+                const t = TEACHERS.find(x => x.id === btn.dataset.detail);  
+                if (t) openDetailModal(t);  
+            });  
+        });  
+    }  
+
+    // Filtreleme + sıralama  
+    function filterTeachers() {  
+        const q = (teacherSearch.value || '').trim().toLowerCase();  
+        let arr = TEACHERS.filter(t => {  
+            const inText =   
+            t.name.toLowerCase().includes(q) ||  
+            t.bio.toLowerCase().includes(q) ||  
+            t.expertise.join(' ').toLowerCase().includes(q);  
+
+            const expertiseOk =   
+            activeExpertise.size === 0 ||  
+            t.expertise.some(x => activeExpertise.has(x));  
+
+            return inText && expertiseOk;  
+        });  
+
+        const s = sortSelect.value;  
+        if (s === 'popularity') {  
+            arr.sort((a, b) => Number(b.featured) - Number(a.featured));  
+        } else if (s === 'rating') {  
+            arr.sort((a, b) => b.rating - a.rating);  
+        } else if (s === 'courses') {
+            arr.sort((a, b) => b.courses - a.courses);
+        } else if (s === 'new') {
+            // Örnek olması için isim sırası
+            arr.sort((a, b) => a.name.localeCompare(b.name));
+        }
+
+        return arr;
+    }
+
+    function update() {
+        renderTeachers(filterTeachers());
+    }
+
+    // Profil Modal (eski modal)
+    function openModal(t) {
+        document.getElementById('modalCover').src = t.cover;
+        document.getElementById('modalAvatar').src = t.avatar;
+        document.getElementById('modalName').textContent = t.name;
+        document.getElementById('modalExpertise').textContent = t.expertise.join(' • ');
+        document.getElementById('modalBio').textContent = t.bio;
+        document.getElementById('modalRating').textContent = t.rating.toFixed(1);
+        document.getElementById('modalCourses').textContent = `${t.courses} ders`;
+        document.getElementById('modalBadge').classList.toggle('hidden', !t.featured);
+        
+        // Detay butonuna teacher objesini kaydet
+        const modalProfileLink = document.getElementById('modalProfileLink');
+        modalProfileLink.onclick = function(e) {
+            e.preventDefault();
+            closeModal();
+            setTimeout(() => openDetailModal(t), 60);
+        };
+
+        const list = document.getElementById('modalCoursesList');
+        list.innerHTML = t.highlights.map(h => `
+            <div class="relative rounded-lg overflow-hidden">
+            <img src="${h.thumb}" alt="${h.title}" class="w-full h-24 object-cover">
+            <div class="absolute inset-x-0 bottom-0 bg-black/50 text-[11px] sm:text-xs px-2 py-1">${h.title}</div>
+            </div>
+        `).join('');
+
+        teacherModal.classList.remove('hidden');
+        teacherModal.classList.add('flex');
+    }
+
+    function closeModal() {
+        teacherModal.classList.add('hidden');
+        teacherModal.classList.remove('flex');
+    }
+
+    // Detay Modal (CV Modal)
+    function openDetailModal(t) {
+        // Avatar ve temel bilgiler
+        document.getElementById('detailAvatar').src = t.avatar;
+        document.getElementById('detailName').textContent = t.name;
+        document.getElementById('detailTitle').textContent = t.expertise.join(' • ');
+        
+        // Uzmanlık chips
+        const expertiseList = document.getElementById('detailExpertiseList');
+        expertiseList.innerHTML = t.expertise.map(exp => `
+            <span class="px-3 py-1 bg-red-600/20 border border-red-500/30 text-red-400 text-sm rounded-full">${exp}</span>
+        `).join('');
+
+        // Badge
+        document.getElementById('detailBadge').classList.toggle('hidden', !t.featured);
+
+        // İstatistikler
+        document.getElementById('detailRating').textContent = t.rating.toFixed(1);
+        document.getElementById('detailCourses').textContent = t.courses;
+        document.getElementById('detailStudents').textContent = `${t.students || '850+'}`;
+        document.getElementById('detailExperience').textContent = t.experience || '10';
+
+        // CV İçeriği
+        document.getElementById('detailCV').innerHTML = `
+            <pre class="whitespace-pre-wrap text-gray-300 leading-relaxed">${t.cv}</pre>
+        `;
+
+        // Popüler dersler
+        const detailCoursesList = document.getElementById('detailCoursesList');
+        detailCoursesList.innerHTML = t.highlights.map(h => `
+            <div class="relative rounded-xl overflow-hidden border border-zinc-700 hover:border-zinc-600 transition">
+                <img src="${h.thumb}" alt="${h.title}" class="w-full h-32 object-cover">
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                <div class="absolute bottom-0 left-0 right-0 p-3">
+                    <h5 class="text-white font-semibold text-sm">${h.title}</h5>
+                    <div class="flex items-center gap-2 mt-1">
+                        <div class="flex items-center gap-1 text-yellow-400">
+                            <svg class="w-3 h-3" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>
+                            </svg>
+                            <span class="text-xs">${t.rating.toFixed(1)}</span>
+                        </div>
+                        <span class="text-gray-400 text-xs">• 2.5 saat</span>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+
+        const detailProfileLink = document.getElementById('detailProfileLink');
+        detailProfileLink.onclick = function(e) {
+            e.preventDefault();
+            closeDetailModal();
+            setTimeout(() => openModal(t), 60);
+        };
+
+        // Modal'ı göster
+        detailModal.classList.remove('hidden');
+        detailModal.classList.add('flex');
+
+        // Dil butonları event listeners
+        document.getElementById('langTR').addEventListener('click', () => {
+            switchLanguage('tr', t);
+        });
+
+        document.getElementById('langEN').addEventListener('click', () => {
+            switchLanguage('en', t);
+        });
+
+        // Başlangıçta TR dilini ayarla
+        switchLanguage('tr', t);
+    }
+    // Dil değişkenleri ve çeviriler
+    let currentLanguage = 'tr';
+
+    const translations = {
+        tr: {
+            modalTitle: 'Eğitmen CV & Detayları',
+            cvTitle: 'Profesyonel CV & Deneyim',
+            coursesTitle: 'Öne Çıkan Dersler',
+            featuredText: 'Öne Çıkan',
+            ratingText: 'Puan',
+            coursesText: 'Ders',
+            studentsText: 'Öğrenci',
+            experienceText: 'Yıl Deneyim',
+            profileBtnText: 'Profile Git',
+            contactBtnText: 'İletişime Geç'
+        },
+        en: {
+            modalTitle: 'Instructor CV & Details',
+            cvTitle: 'Professional CV & Experience',
+            coursesTitle: 'Featured Courses',
+            featuredText: 'Featured',
+            ratingText: 'Rating',
+            coursesText: 'Courses',
+            studentsText: 'Students',
+            experienceText: 'Years Experience',
+            profileBtnText: 'Go to Profile',
+            contactBtnText: 'Contact'
+        }
+    };
+
+    // Dil değiştirme fonksiyonu
+    function switchLanguage(lang, teacher) {
+        currentLanguage = lang;
+        
+        // Buton stillerini güncelle
+        const trBtn = document.getElementById('langTR');
+        const enBtn = document.getElementById('langEN');
+        
+        if (lang === 'tr') {
+            trBtn.className = 'px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 text-white bg-red-600 border border-red-500';
+            enBtn.className = 'px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 text-gray-400 hover:text-white hover:bg-zinc-700';
+        } else {
+            enBtn.className = 'px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 text-white bg-red-600 border border-red-500';
+            trBtn.className = 'px-3 py-1.5 text-sm font-medium rounded-md transition-all duration-200 text-gray-400 hover:text-white hover:bg-zinc-700';
+        }
+        
+        // Metinleri güncelle
+        document.getElementById('modalTitle').textContent = translations[lang].modalTitle;
+        document.getElementById('cvTitle').textContent = translations[lang].cvTitle;
+        document.getElementById('coursesTitle').textContent = translations[lang].coursesTitle;
+        document.getElementById('featuredText').textContent = translations[lang].featuredText;
+        document.getElementById('ratingText').textContent = translations[lang].ratingText;
+        document.getElementById('coursesText').textContent = translations[lang].coursesText;
+        document.getElementById('studentsText').textContent = translations[lang].studentsText;
+        document.getElementById('experienceText').textContent = translations[lang].experienceText;
+        document.getElementById('profileBtnText').textContent = translations[lang].profileBtnText;
+        document.getElementById('contactBtnText').textContent = translations[lang].contactBtnText;
+        
+        // CV içeriğini güncelle
+        const cvContent = lang === 'en' && teacher.cvEn ? teacher.cvEn : teacher.cv;
+        document.getElementById('detailCV').innerHTML = `
+            <pre class="whitespace-pre-wrap text-gray-300 leading-relaxed">${cvContent}</pre>
+        `;
+    }
+
+    function closeDetailModal() {
+        detailModal.classList.add('hidden');
+        detailModal.classList.remove('flex');
+    }
+
+    // Event Listeners
+    teacherSearch.addEventListener('input', update);
+
+    if (teacherSearchTop) {
+        teacherSearchTop.addEventListener('input', (e) => {
+            teacherSearch.value = e.target.value;
+            update();
+        });
+    }
+
+    sortSelect.addEventListener('change', update);
+
+    resetFilters.addEventListener('click', () => {
+        teacherSearch.value = '';
+        if (teacherSearchTop) {
+            teacherSearchTop.value = '';
+        }
+        // Mobil alanları da temizle
+        if (teacherSearchMobile) {
+            teacherSearchMobile.value = '';
+        }
+        if (sortSelectMobile) {
+            sortSelectMobile.value = 'popularity';
+        }
+        activeExpertise.clear();
+        sortSelect.value = 'popularity';
+        renderChips();
+        update();
+    });
+
+    // Klavye: ESC ile modalleri kapat
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') {
+            closeModal();
+            closeDetailModal();
+            closeMobileFilters();
+        }
+    });
+
+    // Modal overlay tıklayınca kapat
+    if (teacherModal) {
+        teacherModal.addEventListener('click', (e) => {
+            if (e.target === teacherModal) closeModal();
+        });
+    }
+
+
+    // Kapat butonları
+    if (closeTeacherModal) {
+        closeTeacherModal.addEventListener('click', closeModal);
+    }
+
+    if (closeDetailModalEl) {
+        closeDetailModalEl.addEventListener('click', closeDetailModal);
+    }
+
+    // İletişime Geç butonu
+    if (document.getElementById('detailContactBtn')) {
+        document.getElementById('detailContactBtn').addEventListener('click', () => {
+            alert('İletişim formu yakında aktif olacak!');
+        });
+    }
+
+    // Başlangıç çizimleri
+    renderChips();
+    update();
+
+</script>
+</body>
+</html>

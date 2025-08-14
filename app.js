@@ -82,15 +82,17 @@ const userPage = require(path.join(__dirname, 'router', 'userPage.js'));
 const homePage = require(path.join(__dirname, 'router', 'homePage.js'));
 const policyPage = require(path.join(__dirname, 'router', 'policyPage.js'));
 const shopPage = require(path.join(__dirname, 'router', 'shopPage.js'));
+const teacherPage = require(path.join(__dirname, 'router', 'teacherPage.js'));
 
 
 app.use('/', indexPage);  
 app.use('/login', loginPage);  
 app.use('/register', registerPage);  
-app.use('/user', userPage);  
+app.use('/user', userPage);
 app.use('/home', homePage);  
 app.use('/policy', policyPage);  
 app.use('/shop', shopPage);  
+app.use('/teacher', teacherPage);  
 
 
 // Sunucuyu başlat  
