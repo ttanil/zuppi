@@ -151,16 +151,19 @@
 
   <!-- Mobil Kart Galerisi -->
 <div class="block sm:hidden relative px-4 py-6">
+  <p class="text-xl font-bold sm:text-base sm:font-normal md:text-lg text-gray-100 mt-6 mb-4 px-4">
+    Gündemkiler
+  </p>
   <!-- Sol Ok -->
-  <button id="mobile-prev" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black/90 rounded-full p-2 transition-all">
-    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <button id="mobile-prev" class="absolute left-2 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black/90 rounded-full p-2 transition-all mt-6">
+    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" d="M15 19l-7-7 7-7"/>
     </svg>
   </button>
 
   <!-- Sağ Ok -->
-  <button id="mobile-next" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black/90 rounded-full p-2 transition-all">
-    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+  <button id="mobile-next" class="absolute right-2 top-1/2 -translate-y-1/2 z-10 bg-black/70 hover:bg-black/90 rounded-full p-2 transition-all mt-6">
+    <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>
     </svg>
   </button>
@@ -169,11 +172,11 @@
   <div class="overflow-hidden mx-8">
     <div id="mobile-cards" class="flex transition-transform duration-300 ease-in-out gap-3">
       <!-- Kart 1 -->
-      <div class="flex-shrink-0 w-64 relative bg-zinc-900 rounded-2xl h-36 overflow-hidden shadow-lg"
+      <div class="flex-shrink-0 w-[280px] relative bg-zinc-900 rounded-2xl h-auto overflow-hidden shadow-lg"
         data-video="miray-tanitim.mp4" 
         data-title="Protez tırnağın sırları - Miray">
-        <img src="https://cdn.zuppi.live/miray.jpg" alt="Miray" class="w-full h-full object-cover" />
-        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        <img src="https://cdn.zuppi.live/miray2-m.png" alt="Miray" class="w-full h-full object-cover"/>
+        <div class="absolute inset-0 bg-gradient-to-t from-black/5 via-transparent to-transparent"></div>
         <div class="absolute bottom-3 left-3 text-white">
           <div class="text-sm font-semibold">Protez Tırnak Sırları</div>
           <div class="text-xs text-gray-300">Miray</div>
@@ -181,10 +184,10 @@
       </div>
 
       <!-- Kart 2 -->
-      <div class="flex-shrink-0 w-64 relative bg-zinc-900 rounded-2xl h-36 overflow-hidden shadow-lg"
+      <div class="flex-shrink-0 w-[280px] relative bg-zinc-900 rounded-2xl h-auto overflow-hidden shadow-lg"
         data-video="luidmila-tanitim.mp4" 
         data-title="Nail Art Teknikleri - Luidmila">
-        <img src="https://cdn.zuppi.live/LUIDMILA.jpg" alt="Luidmila" class="w-full h-full object-cover" />
+        <img src="https://cdn.zuppi.live/LUIDMILA-m.png" alt="Luidmila" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
         <div class="absolute bottom-3 left-3 text-white">
           <div class="text-sm font-semibold">Nail Art Teknikleri</div>
@@ -192,9 +195,19 @@
         </div>
       </div>
 
-      <!-- Kart 3 -->
-      <div class="flex-shrink-0 w-64 relative bg-zinc-900 rounded-2xl h-36 overflow-hidden shadow-lg">
-        <img src="https://cdn.zuppi.live/diodora.jpg" alt="Diodora" class="w-full h-full object-cover" />
+      <!-- Kart 3 reklam -->
+      <div class="flex-shrink-0 w-[280px] relative bg-zinc-900 rounded-2xl h-auto overflow-hidden shadow-lg">
+        <img src="https://cdn.zuppi.live/reklam1-m.png" alt="shelby" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        <div class="absolute bottom-3 left-3 text-white">
+    <!--<div class="text-sm font-semibold">Profesyonel Tırnak Bakımı</div>
+        <div class="text-xs text-gray-300">Diodora</div> -->
+        </div>
+      </div>
+
+      <!-- Kart 4 -->
+      <div class="flex-shrink-0 w-[280px] relative bg-zinc-900 rounded-2xl h-auto overflow-hidden shadow-lg">
+        <img src="https://cdn.zuppi.live/diodora-m.png" alt="Diodora" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
         <div class="absolute bottom-3 left-3 text-white">
           <div class="text-sm font-semibold">Profesyonel Tırnak Bakımı</div>
@@ -202,19 +215,29 @@
         </div>
       </div>
 
-      <!-- Kart 4 -->
-      <div class="flex-shrink-0 w-64 relative bg-zinc-900 rounded-2xl h-36 overflow-hidden shadow-lg">
-        <img src="https://cdn.zuppi.live/miray2.jpg" alt="Miray" class="w-full h-full object-cover" />
+      <!-- Kart 5 
+      <div class="flex-shrink-0 w-[280px] relative bg-zinc-900 rounded-2xl h-auto overflow-hidden shadow-lg">
+        <img src="https://cdn.zuppi.live/miray2.png" alt="Miray" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
         <div class="absolute bottom-3 left-3 text-white">
           <div class="text-sm font-semibold">Gel Tırnak Uygulaması</div>
           <div class="text-xs text-gray-300">Miray</div>
         </div>
+      </div>-->
+      
+      <!-- Kart 6 -->
+      <div class="flex-shrink-0 w-[280px] relative bg-zinc-900 rounded-2xl h-auto overflow-hidden shadow-lg">
+        <img src="https://cdn.zuppi.live/reklam2-m.png" alt="zora" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        <div class="absolute bottom-3 left-3 text-white">
+    <!--<div class="text-sm font-semibold">Profesyonel Tırnak Bakımı</div>
+        <div class="text-xs text-gray-300">Diodora</div> -->
+        </div>
       </div>
 
-      <!-- Kart 5 -->
-      <div class="flex-shrink-0 w-64 relative bg-zinc-900 rounded-2xl h-36 overflow-hidden shadow-lg">
-        <img src="https://cdn.zuppi.live/LUIDMILA.jpg" alt="Luidmila" class="w-full h-full object-cover" />
+      <!-- Kart 7 -->
+      <div class="flex-shrink-0 w-[280px] relative bg-zinc-900 rounded-2xl h-auto overflow-hidden shadow-lg">
+        <img src="https://cdn.zuppi.live/LUIDMILA-m.png" alt="Luidmila" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
         <div class="absolute bottom-3 left-3 text-white">
           <div class="text-sm font-semibold">Renk Karışımları</div>
@@ -222,9 +245,19 @@
         </div>
       </div>
 
-      <!-- Kart 6 -->
-      <div class="flex-shrink-0 w-64 relative bg-zinc-900 rounded-2xl h-36 overflow-hidden shadow-lg">
-        <img src="https://cdn.zuppi.live/miray.jpg" alt="Miray" class="w-full h-full object-cover" />
+      <!-- Kart 8 -->
+      <div class="flex-shrink-0 w-[280px] relative bg-zinc-900 rounded-2xl h-auto overflow-hidden shadow-lg">
+        <img src="https://cdn.zuppi.live/reklam3-m.png" alt="yulix" class="w-full h-full object-cover" />
+        <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+        <div class="absolute bottom-3 left-3 text-white">
+    <!--<div class="text-sm font-semibold">Profesyonel Tırnak Bakımı</div>
+        <div class="text-xs text-gray-300">Diodora</div> -->
+        </div>
+      </div>
+
+      <!-- Kart 9 -->
+      <div class="flex-shrink-0 w-[280px] relative bg-zinc-900 rounded-2xl h-auto overflow-hidden shadow-lg">
+        <img src="https://cdn.zuppi.live/miray2-m.png" alt="Miray" class="w-full h-full object-cover" />
         <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
         <div class="absolute bottom-3 left-3 text-white">
           <div class="text-sm font-semibold">Tırnak Tasarım Sanatı</div>
@@ -814,17 +847,16 @@
 
         if (container && prevBtn && nextBtn) {
           let currentIndex = 0;
-          const totalCards = container.children.length; // 6 kart
-          const containerWidth = container.parentElement.offsetWidth; // Görünür alan genişliği
-          const cardWidth = 256; // w-64
-          const gap = 12; // gap-3
+          const totalCards = container.children.length; // 9 kart
+          const cardWidth = 280;
+          const gap = 12;
+          
+          // Mobilde genellikle 1 kart görünür, bu yüzden maxIndex = totalCards - 1
+          const maxIndex = totalCards - 1; // 9 - 1 = 8
 
           function updateCarousel() {
             const translateX = -currentIndex * (cardWidth + gap);
             container.style.transform = `translateX(${translateX}px)`;
-            
-            // Son karta kadar kaydırabilme
-            const maxIndex = Math.max(0, totalCards - Math.floor(containerWidth / (cardWidth + gap)));
             
             prevBtn.style.opacity = currentIndex === 0 ? '0.5' : '1';
             nextBtn.style.opacity = currentIndex >= maxIndex ? '0.5' : '1';
@@ -840,14 +872,12 @@
           });
 
           nextBtn.addEventListener('click', function() {
-            const maxIndex = Math.max(0, totalCards - Math.floor(container.parentElement.offsetWidth / (cardWidth + gap)));
             if (currentIndex < maxIndex) {
               currentIndex++;
               updateCarousel();
             }
           });
 
-          // İlk yükleme ve resize olayı
           updateCarousel();
           window.addEventListener('resize', updateCarousel);
         }
