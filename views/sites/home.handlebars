@@ -104,30 +104,7 @@
             <a href="user" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Hesabım</a> 
             <a href="/" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Çıkış</a>  
         </div>
-        <!-- Hamburger butonu (sadece mobilde) 
-        <button id="mobile-menu-btn" class="md:hidden flex items-center p-2 focus:outline-none" aria-label="Menüyü Aç/Kapat">
-             Hamburger iconu 
-            <svg class="w-7 h-7 text-white" fill="none" stroke="currentColor" stroke-width="2"
-                viewBox="0 0 24 24" >
-            <path stroke-linecap="round" stroke-linejoin="round" d="M4 7h16M4 12h16M4 17h16"/>
-            </svg>
-        </button>
-        </div>-->
-
-        <!-- Mobil açılır menü 
-        <div id="mobile-menu" class="fixed inset-0 z-40 bg-black/80 backdrop-blur-sm flex flex-col justify-start items-end md:hidden hidden">
-        -->
-        <!-- Menü content 
-        <div class="bg-zinc-900 w-64 shadow-xl rounded-l-2xl p-6 mt-0 h-full flex flex-col gap-2 animate-slide-in">
-            <button id="close-mobile-menu" class="ml-auto mb-4 text-gray-400 hover:text-red-500 focus:outline-none text-xl" aria-label="Menüyü Kapat">&times;</button>
-            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Abonelik Paketleri</a>  
-            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Videolar</a>  
-            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Online Satış</a>  
-            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Canlı Yayın</a>  
-            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Eğitmenler</a>  
-            <a href="/login" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition">Giriş Yap</a>  
-            <a href="/register" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Kayıt Ol</a>
-        </div>-->
+        
     </div>
   </nav>
 
@@ -607,20 +584,9 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.10.0/lottie.min.js"></script>
   <script>
-        //const menuBtn = document.getElementById('mobile-menu-btn');
-        //const mobileMenu = document.getElementById('mobile-menu');
-        //const closeBtn = document.getElementById('close-mobile-menu');
 
         document.addEventListener('DOMContentLoaded', function() {
-          /*
-            lottie.loadAnimation({
-                container: document.getElementById('logo-lottie'),
-                renderer: 'svg',
-                loop: true,
-                autoplay: true,
-                path: 'img/nails.json'
-            });
-            */
+          
             lottie.loadAnimation({
                 container: document.getElementById('teacher-lottie'),
                 renderer: 'svg',
@@ -649,24 +615,7 @@
                 autoplay: true,
                 path: 'img/membership.json'
             });
-/*
-            menuBtn.addEventListener('click', function() {
-                mobileMenu.classList.remove('hidden');
-                document.body.style.overflow = "hidden"; // scroll engelle
-            });
-            // Kapat (x tuşu)
-            closeBtn.addEventListener('click', function() {
-                mobileMenu.classList.add('hidden');
-                document.body.style.overflow = "";
-            });
-            // Kapat (arka plana tıklayınca)
-            mobileMenu.addEventListener('click', function(e) {
-                if (e.target === mobileMenu) {
-                    mobileMenu.classList.add('hidden');
-                    document.body.style.overflow = "";
-                }
-            });
-*/
+
         });
 
         
