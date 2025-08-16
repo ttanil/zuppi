@@ -22,22 +22,22 @@
       margin-top:6px !important;
     }
 /*-----*/
-    @keyframes scroll-left {
+    @keyframes scroll-rtl {
       0% {
         transform: translateX(0);
       }
       100% {
-        transform: translateX(-100%);
+        transform: translateX(-50%);
       }
     }
 
-    .animate-scroll-left {
-      animation: scroll-left 20s linear infinite;
+    .animate-scroll-rtl {
+      animation: scroll-rtl 25s linear infinite;
       width: 200%; /* Container'ı genişlet */
     }
 
     /* Hover durumunda animasyonu durdur */
-    .animate-scroll-left:hover {
+    .animate-scroll-rtl:hover {
       animation-play-state: paused;
     }
     /*-----*/
@@ -316,49 +316,79 @@
   </div>
 </div>
 
+<div class="bck-img2 w-full text-center relative bg-[url('/img/bck2.png')] bg-[length:120%_100%] bg-center bg-no-repeat sm:bg-none min-h-[20px] sm:min-h-0 flex items-center sm:block">
+  <!-- Mobilde overlay (opsiyonel) -->
+  <div class="absolute inset-0 bg-black/50 sm:bg-transparent"></div>
+</div>
+
 <!-- Akan Reklam Görselleri Alanı - Sadece Mobil -->
-<div class="block sm:hidden relative py-6">
-  <!-- Akan Görseller Container -->
-  <div class="overflow-hidden relative">
-    <div class="flex animate-scroll-left">
+<div class="block sm:hidden relative py-6 mt-3">
+  <div class="font-black text-5xl sm:text-5xl md:text-6xl w-[75%] max-w-sm sm:max-w-md md:max-w-lg ml-1 grid grid-cols-6 text-center" 
+      style="font-family: Impact, sans-serif; color: black; -webkit-text-stroke: 0.3px white;">
+      <span>R</span>
+      <span>E</span>
+      <span>K</span>
+      <span>L</span>
+      <span>A</span>
+      <span>M</span>
+  </div>
+</div>
+
+<!-- Sabit Reklam Görselleri Alanı - Sadece Mobil -->
+<div class="block sm:hidden relative py-6 -mt-16 z-10">
+  <!-- Sabit Görseller Container -->
+  <div class="overflow-hidden">
+    <div class="flex animate-scroll-rtl">
       <!-- İlk Set -->
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-red-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-blue-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-green-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-purple-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-yellow-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-pink-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
       
-      <!-- Tam Aynı Tekrar (Kesintisiz akış için) -->
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-red-700">
+      <!-- Tekrar Set (Kesintisiz akış için) -->
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-blue-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-green-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-purple-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-yellow-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
-      <div class="flex-shrink-0 w-16 h-16 mx-2">
-        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" class="w-full h-full rounded-full object-cover border-2 border-pink-700">
+      <div class="flex-shrink-0 w-[100px] h-[115px] mx-4">
+        <img src="https://cdn.zuppi.live/shelby-m.png" alt="Reklam" 
+        class="w-full h-full rounded object-cover">
       </div>
     </div>
   </div>
