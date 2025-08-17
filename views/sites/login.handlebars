@@ -340,7 +340,7 @@
         const data = await res.json();
         document.getElementById('infoModalTitle').textContent = "Hata";
         document.getElementById('infoModalText').textContent =
-          data.error || 'Bir hata oluştu, lütfen tekrar deneyin.';
+        data.error || 'Bir hata oluştu, lütfen tekrar deneyin.';
       }
     };
 
@@ -361,31 +361,40 @@
         fingerprint
       };
 
-      const res = await fetch('/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
-      });
-      if (res.ok) {
-        const loginData = await res.json();
-        
-        // ✅ Fire-and-forget: Mail gönder ama bekleme
-        sendLoginNotificationEmail(email, device_info, loginData.user).catch(console.warn);
-        
-        // ✅ Hemen yönlendir
-        window.location.href = '/user';
+      try {
+        const res = await fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
 
-      } else {
-        // hata mesajı göster
-        const data = await res.json();
-        feedback.textContent = data.error || 'Giriş hatası!';
-        feedback.className = 'error';
-        if(data.error === "Yeni cihazla giriş yapılıyor!"){
-          openDeviceNameModal();
-        } else if(data.error === "Tanımlı olmayan cihazla giriş yapılıyor!") {
-          openNewDeviceApprovalModal();
+        const responseData = await res.json();
+
+        if (res.ok) {
+          // ✅ Başarılı
+          if (responseData.user?.deviceName) {
+            device_info.deviceName = responseData.user.deviceName;
+          }
+          
+          sendLoginNotificationEmail(email, device_info, responseData.user).catch(console.warn);
+          window.location.href = '/user';
+          
+        } else {
+          // ❌ Başarısız
+          feedback.textContent = responseData.error || 'Giriş hatası!';
+          feedback.className = 'error';
+          
+          if (responseData.error === "Yeni cihazla giriş yapılıyor!") {
+            openDeviceNameModal();
+          } else if (responseData.error === "Tanımlı olmayan cihazla giriş yapılıyor!") {
+            openNewDeviceApprovalModal();
+          }
         }
-        return;
+
+      } catch (error) {
+        console.error('❌ Network error:', error);
+        feedback.textContent = 'Bağlantı hatası!';
+        feedback.className = 'error';
       }
     });
 

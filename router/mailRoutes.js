@@ -53,6 +53,7 @@ router.post('/send', async (req, res) => {
 router.post('/login-notification', async (req, res) => {
   try {
     const { userEmail, deviceInfo, userInfo } = req.body;
+    console.log(deviceInfo);
     
     if (!userEmail || !deviceInfo) {
       return res.status(400).json({

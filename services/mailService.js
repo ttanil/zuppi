@@ -145,14 +145,7 @@ const sendLoginNotification = async (userEmail, deviceInfo, userInfo, clientInfo
                 <td style="padding: 8px 0; color: #666; font-weight: bold;">📱 Cihaz:</td>
                 <td style="padding: 8px 0; color: #333;">${deviceName}</td>
               </tr>
-              <tr>
-                <td style="padding: 8px 0; color: #666; font-weight: bold;">💻 İşletim Sistemi:</td>
-                <td style="padding: 8px 0; color: #333;">${deviceInfo.os}</td>
-              </tr>
-              <tr>
-                <td style="padding: 8px 0; color: #666; font-weight: bold;">🌐 Tarayıcı:</td>
-                <td style="padding: 8px 0; color: #333;">${deviceInfo.browser}</td>
-              </tr>
+              
               <tr>
                 <td style="padding: 8px 0; color: #666; font-weight: bold;">📍 Konum:</td>
                 <td style="padding: 8px 0; color: #333;">${location}</td>
@@ -192,6 +185,17 @@ const sendLoginNotification = async (userEmail, deviceInfo, userInfo, clientInfo
         </div>
       </div>
     `;
+
+    /*
+    <tr>
+      <td style="padding: 8px 0; color: #666; font-weight: bold;">💻 İşletim Sistemi:</td>
+      <td style="padding: 8px 0; color: #333;">${deviceInfo.os}</td>
+    </tr>
+    <tr>
+      <td style="padding: 8px 0; color: #666; font-weight: bold;">🌐 Tarayıcı:</td>
+      <td style="padding: 8px 0; color: #333;">${deviceInfo.browser}</td>
+    </tr>
+    */
 
     const result = await sendMail({
       to: userEmail,

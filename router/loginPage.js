@@ -43,6 +43,7 @@ router.post('/', async (req, res) => {
 
         let control = false;
         let A_token = null;
+        let deviceName = null;
 
         if(user.devices.length == 0){
           return res.status(401).json({ error: 'Yeni cihazla giriş yapılıyor!' });
@@ -52,6 +53,7 @@ router.post('/', async (req, res) => {
             if(isSameDevice){
               control = true;
               A_token = user.devices[i].A_token;
+              deviceName = user.devices[i].device_info.deviceName;
               //console.log(user.devices[i]);
               //console.log("girildi");
               break;
@@ -92,7 +94,14 @@ router.post('/', async (req, res) => {
             // 5. Yönlendirme veya başarılı mesaj
             //res.redirect('/user'); // Giriş sonrası ana sayfa
             res.status(201).json({  
-              message: 'Giriş başarılı!'  
+              message: 'Giriş başarılı!',
+              user: {
+                id: user._id,
+                email: user.email,
+                fullname: user.fullname,
+                role: user.role,
+                deviceName: deviceName || 'Bilinmeyen Cihaz' // ✅ DeviceName ekle
+              }
             });
           } else{
             return res.status(401).json({ error: 'Yeni cihazla giriş yapılıyor!' });
@@ -104,6 +113,7 @@ router.post('/', async (req, res) => {
             if(isSameDevice){
               control = true;
               A_token = user.devices[i].A_token;
+              deviceName = user.devices[i].device_info.deviceName;
               //console.log(user.devices[i]);
               //console.log("girildi");
               break;
@@ -143,7 +153,14 @@ router.post('/', async (req, res) => {
             // 5. Yönlendirme veya başarılı mesaj
             //res.redirect('/user'); // Giriş sonrası ana sayfa
             res.status(201).json({  
-              message: 'Giriş başarılı!'  
+              message: 'Giriş başarılı!',
+              user: {
+                id: user._id,
+                email: user.email,
+                fullname: user.fullname,
+                role: user.role,
+                deviceName: deviceName || 'Bilinmeyen Cihaz' // ✅ DeviceName ekle
+              }
             });
           } else{
             return res.status(401).json({ error: 'Tanımlı olmayan cihazla giriş yapılıyor!' });
