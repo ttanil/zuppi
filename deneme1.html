@@ -3,123 +3,442 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1.0" />
-  <title>KVKK & Gizlilik Politikası | Art Nail</title>
-  <meta name="color-scheme" content="dark">
-  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-  <meta name="description" content="Art Nail - KVKK ve Gizlilik Politikası">
+  <title>Abonelik Paketleri - zuppi</title>
+  <link rel="icon" type="image/png" href="/favicon.png" sizes="32x32">
+  <link rel="stylesheet" href="css/index.css">
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
   <style>
-    body { min-height: 100vh; }
-    @media (max-width: 900px) {
-      .policycol {
-        margin-top: 2rem !important;
-        padding-left: 1rem !important;
-        padding-right: 1rem !important;
-      }
+    body {
+      overflow-x: hidden;
+      font-family: 'Work Sans', sans-serif;
+    }
+
+    .inline-block {
+      margin-left: -21px;
+    }
+    
+    .zuppi-logo {
+      margin-top: 6px !important;
+    }
+    
+    .gradient-card {
+      background: linear-gradient(135deg, #1f2937 0%, #374151 100%);
+    }
+    
+    .premium-gradient {
+      background: linear-gradient(135deg, #dc2626 0%, #991b1b 50%, #7c2d12 100%);
+    }
+    
+    .popular-badge {
+      background: linear-gradient(45deg, #fbbf24, #f59e0b);
+      animation: pulse 2s infinite;
+    }
+    
+    .feature-check {
+      background: linear-gradient(45deg, #10b981, #059669);
+    }
+    
+    .hover-lift:hover {
+      transform: translateY(-8px);
+    }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+    }
+    
+    .floating {
+      animation: float 6s ease-in-out infinite;
     }
   </style>
 </head>
-<body class="bg-black min-h-screen flex flex-col">
+<body class="bg-black text-white min-h-screen">
 
-  <!-- NAVBAR -->
-  <nav class="w-full bg-zinc-900 border-b border-zinc-800 px-4 sm:px-8 py-3 flex items-center justify-between">
+  <!-- NAVBAR (Orijinal navbar'ı kullanıyoruz) -->
+  <nav class="w-full bg-zinc-900 border-b border-zinc-800 px-2 sm:px-6 py-3 flex flex-nowrap items-center justify-between gap-y-2">
     <!-- LOGO + Slogan -->
-    <div class="flex items-center gap-3">
-      <span class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none">
-        <span class="mr-1">ART</span>
-        <span id="logo-lottie" class="w-8 h-8 lottie-animation"></span>
-        <span>NAİL</span>
-      </span>
-      <span class="ml-2 text-[10px] sm:text-xs text-gray-400 tracking-widest hidden sm:block select-none">EN İYİLERİN SANATI</span>
+    <div class="flex items-center gap-3 min-w-[125px]">
+        <!--{{#ifEquals role "user"}} -->
+        <a href="/home" class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none cursor-pointer">
+            <img src="public/img/1kopya.png" alt="Zuppi Logo"
+                class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-1" style="margin-bottom:2px">
+            <span
+                class="mr-1 -ml-6 sm:-ml-6 -mt-1"
+                style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">
+                uppi
+            </span>
+            <span id="logo-lottie" class="w-12 h-10 lottie-animation"></span>
+        </a>
+        <!-- {{else}}
+        <a href="/" class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none cursor-pointer">
+            <img src="/img/1kopya.png" alt="Zuppi Logo"
+                class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-1" style="margin-bottom:2px">
+            <span
+                class="mr-1 -ml-6 sm:-ml-6 -mt-1"
+                style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">
+                uppi
+            </span>
+            <span id="logo-lottie" class="w-12 h-10 lottie-animation"></span>
+        </a>
+        {{/ifEquals}} -->
+
+      <span class="-ml-8 text-[10px] sm:text-xs text-gray-400 tracking-widest hidden sm:block select-none">EN İYİLERİN PLATFORMU</span>
     </div>
-    <!-- Menü -->
-    <div class="flex gap-3 items-center">
-      <a href="/" class="text-xs sm:text-sm font-medium text-gray-300 hover:text-yellow-400 transition">Ana Sayfa</a>
+
+    <!-- Menü ve Auth -->
+    <div class="flex flex-nowrap gap-1 sm:gap-3 items-center order-3">
+        <!-- Masaüstü menü (mobilde gizli) -->
+        <div class="hidden md:flex gap-1 sm:gap-3 items-center">
+            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition text-red-500 ml-1">Abonelik Paketleri</a>  
+            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Videolar</a>  
+            <a href="/shop" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Alışveriş</a>  
+            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Canlı Yayın</a>  
+            <a href="/teacher" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Eğitmenler</a>  
+            <!--{{#ifEquals role "user"}}-->
+            <a href="/user" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Hesabım</a>
+            <!--{{else}}
+            <a href="/login" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Giriş Yap</a>
+            {{/ifEquals}}-->
+
+            <!--{{#ifEquals role "user"}}
+            <a href="/" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Çıkış</a>
+            {{else}}
+            <a href="/register" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Kayıt Ol</a>  
+            {{/ifEquals}}-->
+        </div>
     </div>
   </nav>
 
-  <div class="font-black text-5xl sm:text-5xl md:text-6xl w-full max-w-sm sm:max-w-md md:max-w-lg mx-auto grid grid-cols-6 text-center" 
-     style="font-family: Impact, sans-serif; color: black; -webkit-text-stroke: 1px white;">
-    <span>R</span>
-    <span>E</span>
-    <span>K</span>
-    <span>L</span>
-    <span>A</span>
-    <span>M</span>
-</div>
-
-  <!-- ANA İÇERİK -->
-  <main class="flex flex-1 flex-col items-center justify-center pt-8 pb-6 bg-black">
-    <div class="policycol max-w-lg w-full bg-black bg-opacity-80 p-6 rounded-xl shadow-lg border border-zinc-800">
-      <h2 class="text-lg font-semibold mb-7 tracking-tight">KVKK &amp; Gizlilik Politikası</h2>
-      <section class="space-y-7 text-sm leading-relaxed text-white/90">
-        <div>
-          <h3 class="font-semibold mb-2">Kişisel Verilerin Korunması</h3>
-          <p>
-            Art Nail’e paylaştığınız tüm bilgileriniz, 6698 sayılı KVKK kapsamında güvenle saklanır.<br>
-            Verileriniz sadece platform hizmetimizi sunmak ve yasal sorumluluklarımızı yerine getirmek için kullanılır.
-          </p>
+  <!-- Hero Section -->
+  <div class="relative bg-gradient-to-br from-red-900/20 via-black to-purple-900/20 py-16 sm:py-24">
+    <div class="absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.02"%3E%3Ccircle cx="30" cy="30" r="2"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-50"></div>
+    
+    <div class="container mx-auto px-4 text-center relative z-10">
+      <div class="floating mb-8">
+        <h1 class="text-4xl sm:text-5xl md:text-6xl font-black mb-6" style="font-family: Impact, sans-serif; color: white; -webkit-text-stroke: 1px #dc2626;">
+          ABONELİK PAKETLERİ
+        </h1>
+      </div>
+      
+      <p class="text-lg sm:text-xl text-gray-300 max-w-3xl mx-auto mb-8">
+        Profesyonel nail art eğitimlerine sınırsız erişim. En iyi eğitmenlerden öğren, kariyerini ilerlet.
+      </p>
+      
+      <!-- Stats -->
+      <div class="flex flex-wrap justify-center gap-8 mb-12">
+        <div class="text-center">
+          <div class="text-3xl font-bold text-red-500">500+</div>
+          <div class="text-sm text-gray-400">Eğitim Videosu</div>
         </div>
-        <div>
-          <h3 class="font-semibold mb-2">Toplanan Bilgiler</h3>
-            <ul class="pl-4 list-disc">
-              <li>İletişim bilgileriniz (e-posta, telefon)</li>
-              <li>Profil bilgileriniz (ad, doğum yılı, şehir)</li>
-              <li>Oturum/cihaz güvenlik verileri</li>
-              <li>Kullanım ve tercih bilgileri</li>
-              <li>Abonelik &amp; ödeme geçmişiniz</li>
-            </ul>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-red-500">50+</div>
+          <div class="text-sm text-gray-400">Uzman Eğitmen</div>
         </div>
-        <div>
-          <h3 class="font-semibold mb-2">Verilerin Saklanması &amp; Silinmesi</h3>
-          <p>
-            Bilgileriniz, gerekli olduğu sürece ve yasal zorunluluklar kapsamında saklanır.<br>
-            <span class="text-yellow-400">destek@artnail.com</span> adresine yazarak istediğinizde silinmesini talep edebilirsiniz.
-          </p>
+        <div class="text-center">
+          <div class="text-3xl font-bold text-red-500">10K+</div>
+          <div class="text-sm text-gray-400">Mutlu Öğrenci</div>
         </div>
-        <div>
-          <h3 class="font-semibold mb-2">Veri Paylaşımı</h3>
-          <p>
-            Verileriniz sadece hizmetin verilmesi ve yasal gerekçeler dışında 
-            asla <span class="text-yellow-400 font-semibold">veri, asla amacı dışında</span> kullanılmaz.
-          </p>
-        </div>
-        <div>
-          <h3 class="font-semibold mb-2">Çerezler</h3>
-          <p>Sitenin çalışması ve güvenliği için çerezler kullanılır. Dilerseniz tarayıcı ayarlarından kontrol sağlayabilirsiniz.</p>
-        </div>
-        <div>
-          <h3 class="font-semibold mb-2">Haklarınız</h3>
-          <p>
-            Her zaman verilerinize ulaşma, düzeltme, silinmesini isteme ve işlemeye itiraz hakkınız var.<br>
-            Bize <span class="text-yellow-400 underline font-semibold">destek@artnail.com</span> üzerinden ulaşabilirsiniz.
-          </p>
-        </div>
-        <div>
-          <small class="text-xs text-zinc-400">Son güncelleme: Ağustos 2025</small>
-        </div>
-      </section>
+      </div>
     </div>
-  </main>
+  </div>
 
-  <!-- FOOTER -->
-  <footer class="w-full bg-zinc-900 border-t border-zinc-800 py-4 text-gray-400 flex flex-col sm:flex-row items-center justify-between px-4 sm:px-8 text-xs">
-    <div class="mb-1 sm:mb-0">&copy; 2025 Art Nail</div>
-    <div class="mb-1 sm:mb-0">KVKK &amp; Gizlilik</div>
-    <div>E-posta: <span class="text-yellow-400 font-semibold">destek@artnail.com</span></div>
-  </footer>
+  <!-- Pricing Cards -->
+  <div class="container mx-auto px-4 py-16 relative z-10">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-7xl mx-auto">
+      
+      <!-- Temel Paket -->
+      <div class="gradient-card rounded-3xl p-8 hover-lift transition-all duration-300 border border-zinc-700 hover:border-zinc-600">
+        <div class="text-center mb-8">
+          <h3 class="text-2xl font-bold mb-2">TEMEL</h3>
+          <p class="text-gray-400 mb-6">Başlangıç seviyesi için ideal</p>
+          <div class="mb-6">
+            <span class="text-5xl font-black">₺49</span>
+            <span class="text-gray-400">/ay</span>
+          </div>
+        </div>
+        
+        <div class="space-y-4 mb-8">
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 feature-check rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-200">100+ Temel eğitim videosu</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 feature-check rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-200">Mobil uygulama erişimi</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 feature-check rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-200">Sertifika programları</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-gray-600 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-500">Canlı yayın erişimi</span>
+          </div>
+        </div>
+        
+        <button class="w-full bg-zinc-700 hover:bg-zinc-600 text-white font-semibold py-3 rounded-full transition-colors duration-300">
+          Hemen Başla
+        </button>
+      </div>
 
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      lottie.loadAnimation({
-          container: document.getElementById('logo-lottie'),
-          renderer: 'svg',
-          loop: true,
-          autoplay: true,
-          path: 'img/nails.json'
-      });
+      <!-- Premium Paket (Popüler) -->
+      <div class="premium-gradient rounded-3xl p-8 hover-lift transition-all duration-300 border-2 border-red-500 relative transform scale-105">
+        <!-- Popular Badge -->
+        <div class="absolute -top-4 left-1/2 -translate-x-1/2 popular-badge px-6 py-2 rounded-full text-black font-bold text-sm">
+          🏆 EN POPÜLER
+        </div>
+        
+        <div class="text-center mb-8 mt-4">
+          <h3 class="text-2xl font-bold mb-2">PREMİUM</h3>
+          <p class="text-gray-200 mb-6">Profesyoneller için en iyi seçim</p>
+          <div class="mb-6">
+            <span class="text-5xl font-black">₺99</span>
+            <span class="text-gray-200">/ay</span>
+            <div class="text-sm text-yellow-300 mt-1">%25 İNDİRİM</div>
+          </div>
+        </div>
+        
+        <div class="space-y-4 mb-8">
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-white font-medium">500+ Tüm eğitim videoları</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-white font-medium">Canlı yayın katılımı</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-white font-medium">1-1 Mentörlük desteği</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-yellow-400 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-black" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-white font-medium">Premium sertifikalar</span>
+          </div>
+        </div>
+        
+        <button class="w-full bg-yellow-400 hover:bg-yellow-300 text-black font-bold py-3 rounded-full transition-colors duration-300">
+          Hemen Başla
+        </button>
+      </div>
 
-    });
-  </script>
+      <!-- VIP Paket -->
+      <div class="gradient-card rounded-3xl p-8 hover-lift transition-all duration-300 border border-purple-500">
+        <div class="text-center mb-8">
+          <h3 class="text-2xl font-bold mb-2">VIP</h3>
+          <p class="text-gray-400 mb-6">Sınırsız erişim ve kişisel gelişim</p>
+          <div class="mb-6">
+            <span class="text-5xl font-black">₺199</span>
+            <span class="text-gray-400">/ay</span>
+          </div>
+        </div>
+        
+        <div class="space-y-4 mb-8">
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-200">Tüm Premium özellikler</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-200">Özel masterclass'lar</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-200">Kişisel kariyer koçluğu</span>
+          </div>
+          
+          <div class="flex items-center gap-3">
+            <div class="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+              <svg class="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+              </svg>
+            </div>
+            <span class="text-gray-200">VIP topluluk erişimi</span>
+          </div>
+        </div>
+        
+        <button class="w-full bg-purple-600 hover:bg-purple-500 text-white font-semibold py-3 rounded-full transition-colors duration-300">
+          Hemen Başla
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Eğitmenler Preview -->
+  <div class="bg-zinc-900/50 py-16">
+    <div class="container mx-auto px-4">
+      <h2 class="font-black text-2xl sm:text-4xl md:text-4xl w-full max-w-4xl mx-auto text-center tracking-wider" 
+          style="font-family: Impact, sans-serif; color: black; -webkit-text-stroke: 0.3px white;">
+            DÜNYA ÇAPINDA UZMAN EĞİTMENLER
+      </h2>
+      <p class="text-gray-400 text-center mb-12 max-w-2xl mx-auto mt-4">
+        Alanında en iyilerden öğren. Uluslararası başarılı nail art uzmanları senin için hazırladı.
+      </p>
+      
+      <!-- Eğitmen Kartları (Mobil scroll, masaüstü grid) -->
+      <div class="overflow-x-auto sm:overflow-visible">
+        <div class="flex sm:grid sm:grid-cols-2 lg:grid-cols-4 gap-6 pb-4">
+          
+          <div class="flex-shrink-0 w-64 sm:w-auto bg-zinc-800 rounded-2xl p-6 text-center">
+            <div class="w-20 h-20 bg-red-600 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-bold">
+              A
+            </div>
+            <h4 class="font-semibold mb-2">Aynura Babajanowa</h4>
+            <p class="text-sm text-gray-400 mb-4">Art French Uzmanı</p>
+            <div class="flex justify-center gap-1">
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+            </div>
+          </div>
+
+          <div class="flex-shrink-0 w-64 sm:w-auto bg-zinc-800 rounded-2xl p-6 text-center">
+            <div class="w-20 h-20 bg-purple-600 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-bold">
+              M
+            </div>
+            <h4 class="font-semibold mb-2">Miray</h4>
+            <p class="text-sm text-gray-400 mb-4">Protez Tırnak Uzmanı</p>
+            <div class="flex justify-center gap-1">
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+            </div>
+          </div>
+
+          <div class="flex-shrink-0 w-64 sm:w-auto bg-zinc-800 rounded-2xl p-6 text-center">
+            <div class="w-20 h-20 bg-green-600 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-bold">
+              L
+            </div>
+            <h4 class="font-semibold mb-2">Luidmila</h4>
+            <p class="text-sm text-gray-400 mb-4">Renk Karışımları Uzmanı</p>
+            <div class="flex justify-center gap-1">
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+            </div>
+          </div>
+
+          <div class="flex-shrink-0 w-64 sm:w-auto bg-zinc-800 rounded-2xl p-6 text-center">
+            <div class="w-20 h-20 bg-blue-600 rounded-full mx-auto mb-4 flex items-center justify-center text-2xl font-bold">
+              D
+            </div>
+            <h4 class="font-semibold mb-2">Diodora</h4>
+            <p class="text-sm text-gray-400 mb-4">Tırnak Bakımı Uzmanı</p>
+            <div class="flex justify-center gap-1">
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+              <span class="text-yellow-400">★</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </h2>
+  </div>
+
+  <!-- FAQ Section -->
+  <div class="container mx-auto px-4 py-16">
+    <h2 class="text-3xl sm:text-4xl font-black text-center mb-12" style="font-family: Impact, sans-serif;">
+      SIK SORULAN SORULAR
+    </h2>
+    
+    <div class="max-w-4xl mx-auto space-y-4">
+      <div class="bg-zinc-800 rounded-2xl p-6">
+        <h4 class="font-semibold mb-3">Aboneliği dilediğim zaman iptal edebilir miyim?</h4>
+        <p class="text-gray-400">Evet, aboneliğinizi istediğiniz zaman iptal edebilirsiniz. İptal işleminden sonra mevcut dönem sonuna kadar tüm içeriklere erişiminiz devam eder.</p>
+      </div>
+      
+      <div class="bg-zinc-800 rounded-2xl p-6">
+        <h4 class="font-semibold mb-3">Mobil uygulamada da kullanabilir miyim?</h4>
+        <p class="text-gray-400">Elbette! Tüm paketlerde mobil uygulama erişimi bulunmaktadır. İstediğiniz zaman, istediğiniz yerden eğitimlerinize devam edebilirsiniz.</p>
+      </div>
+      
+      <div class="bg-zinc-800 rounded-2xl p-6">
+        <h4 class="font-semibold mb-3">Sertifikalar geçerli mi?</h4>
+        <p class="text-gray-400">Evet, verilen sertifikalar sektörde tanınan ve geçerli sertifikalardır. Profesyonel kariyerinizde kullanabilirsiniz.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- CTA Section -->
+  <div class="bg-gradient-to-r from-red-900 to-purple-900 py-16">
+    <div class="container mx-auto px-4 text-center">
+      <h2 class="text-3xl sm:text-4xl font-black mb-6">
+        HAYALİNDEKİ KARİYERE İLK ADIMI AT!
+      </h2>
+      <p class="text-xl mb-8 max-w-2xl mx-auto text-gray-200">
+        Binlerce öğrenci zaten başladı. Sen de katıl, nail art dünyasında yerini al.
+      </p>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <button class="bg-yellow-400 hover:bg-yellow-300 text-black font-bold px-8 py-4 rounded-full transition-colors duration-300 text-lg">
+          7 Gün Ücretsiz Dene
+        </button>
+        <button class="border-2 border-white hover:bg-white hover:text-black text-white font-semibold px-8 py-4 rounded-full transition-all duration-300 text-lg">
+          Demo İzle
+        </button>
+      </div>
+    </div>
+  </div>
+
 </body>
 </html>

@@ -5,6 +5,8 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const { S3Client, GetObjectCommand } = require('@aws-sdk/client-s3');
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+const nodemailer = require('nodemailer');
+
 //const Users = require(path.join(__dirname, '..', 'models', 'users'));
 //const bcrypt = require('bcrypt');
 
@@ -48,6 +50,69 @@ router.post('/video-url', async (req, res) => {
     res.status(404).send("Video bulunamadı!");
   }
 });
+
+
+const testZohoSMTP = async () => {
+  console.log('🔍 Zoho SMTP test başlıyor...');
+  console.log('📧 E-mail:', process.env.SMTP_USER);
+  
+const transporter = nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: parseInt(process.env.SMTP_PORT),
+    secure: false,
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
+    },
+    tls: {
+      rejectUnauthorized: false // Geçici SSL sorunu çözümü
+    }
+  });
+
+  try {
+    // Bağlantı testi
+    console.log('🔄 Bağlantı test ediliyor...');
+    await transporter.verify();
+    console.log('✅ SMTP bağlantısı başarılı!');
+    
+    // Test e-maili gönder
+    console.log('📤 Test e-maili gönderiliyor...');
+    const result = await transporter.sendMail({
+      from: `"Zuppi Test" <${process.env.SMTP_USER}>`,
+      to: "tahsintanil@gmail.com",
+      subject: '🎉 Zuppi SMTP Test - Başarılı!',
+      html: `
+        <h1 style="color: #ff6b9d;">SMTP Çalışıyor! 🚀</h1>
+        <p>Zuppi e-mail sistemi hazır.</p>
+        <p><strong>Gönderen:</strong> ${process.env.SMTP_USER}</p>
+        <p><strong>Tarih:</strong> ${new Date().toLocaleString('tr-TR')}</p>
+      `
+    });
+    
+    console.log('🎉 Test e-maili başarıyla gönderildi!');
+    console.log('📬 Message ID:', result.messageId);
+    console.log('📧 Zoho Mail kutunuzu kontrol edin!');
+    
+    return true;
+  } catch (error) {
+    console.error('❌ SMTP Hatası:', error.message);
+    
+    // Hata analizi
+    if (error.code === 'EAUTH') {
+      console.log('🔐 Çözüm: E-mail veya şifre yanlış olabilir');
+      console.log('💡 Zoho hesabınıza giriş yapabildiğinizi doğrulayın');
+    } else if (error.code === 'ECONNECTION') {
+      console.log('🌐 Çözüm: İnternet bağlantınızı kontrol edin');
+    } else {
+      console.log('📝 Tam hata:', error);
+    }
+    
+    return false;
+  }
+};
+
+// Test çalıştır
+testZohoSMTP();
 
 
 
