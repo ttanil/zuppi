@@ -84,6 +84,9 @@ const policyPage = require(path.join(__dirname, 'router', 'policyPage.js'));
 const shopPage = require(path.join(__dirname, 'router', 'shopPage.js'));
 const teacherPage = require(path.join(__dirname, 'router', 'teacherPage.js'));
 
+const mailRoutes = require(path.join(__dirname, 'router', 'mailRoutes.js'));
+const authRoutes = require(path.join(__dirname, 'router', 'authRoutes.js')); 
+
 
 app.use('/', indexPage);  
 app.use('/login', loginPage);  
@@ -93,6 +96,9 @@ app.use('/home', homePage);
 app.use('/policy', policyPage);  
 app.use('/shop', shopPage);  
 app.use('/teacher', teacherPage);  
+
+app.use('/api/mail', mailRoutes);
+app.use('/api/auth', authRoutes);
 
 
 // Sunucuyu başlat  

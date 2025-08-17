@@ -367,8 +367,14 @@
         body: JSON.stringify(payload)
       });
       if (res.ok) {
-        // yönlendir
+        const loginData = await res.json();
+        
+        // ✅ Fire-and-forget: Mail gönder ama bekleme
+        sendLoginNotificationEmail(email, device_info, loginData.user).catch(console.warn);
+        
+        // ✅ Hemen yönlendir
         window.location.href = '/user';
+
       } else {
         // hata mesajı göster
         const data = await res.json();
@@ -443,6 +449,41 @@
           resolve(info);
         }
       });
+    }
+
+    async function sendLoginNotificationEmail(userEmail, deviceInfo, userInfo) {
+      try {
+        console.log('📧 Login notification gönderiliyor:', userEmail);
+        
+        // ✅ SADECE GEREKLİ PARAMETRELERİ GÖNDERİYORUZ
+        const payload = {
+          type: 'login_notification', // Backend'de hangi mail türü olduğunu belirtiyor
+          userEmail,
+          deviceInfo,
+          userInfo
+        };
+
+        // ✅ Backend'deki hazır fonksiyonu kullan
+        const response = await fetch('/api/mail/login-notification', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify(payload)
+        });
+
+        if (response.ok) {
+          const result = await response.json();
+          console.log('✅ Login notification sent:', result.messageId);
+          return result;
+        } else {
+          const error = await response.json();
+          throw new Error(error.error || 'Mail gönderilemedi');
+        }
+      } catch (error) {
+        console.error('❌ Login mail error:', error);
+        throw error;
+      }
     }
   </script>
 </body>

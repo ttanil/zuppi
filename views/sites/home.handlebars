@@ -102,9 +102,12 @@
             <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Canlı Yayın</a>  
             <a href="/teacher" class="text-xs sm:text-sm font-medium hover:text-red-500 transition">Eğitmenler</a>  
             <a href="user" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Hesabım</a> 
-            <a href="/" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Çıkış</a>  
+            <a href="#" 
+              onclick="logout()" 
+              class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">
+              Çıkış
+            </a>        
         </div>
-        
     </div>
   </nav>
 
@@ -617,6 +620,28 @@
             });
 
         });
+
+        async function logout() {
+          try {
+            const response = await fetch('/api/auth/logout', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json'
+              }
+            });
+
+            if (response.ok) {
+              // ✅ Başarılıysa ana sayfaya yönlendir
+              window.location.href = '/';
+            } else {
+              console.error('Logout failed');
+            }
+          } catch (error) {
+            console.error('Logout error:', error);
+            // ✅ Hata olsa bile yönlendir (güvenlik için)
+            window.location.href = '/';
+          }
+        }
 
         
     
