@@ -128,10 +128,10 @@ const sendLoginVerificationEmail = async (userEmail, deviceInfo, userInfo, clien
     const ipAddress = clientInfo?.ip || 'Bilinmeyen IP';
 
     // Verification URL'leri
-    const verifyUrl = `${process.env.APP_URL}/api/mail/verify-login?token=${verificationToken}&action=approved`;
-    const denyUrl = `${process.env.APP_URL}/api/mail/verify-login?token=${verificationToken}&action=denied`;
-    //const verifyUrl = `http://127.0.0.1:5000/api/mail/verify-login?token=${verificationToken}&action=approved`;
-    //const denyUrl = `http://127.0.0.1:5000/api/mail/verify-login?token=${verificationToken}&action=denied`;
+    //const verifyUrl = `${process.env.APP_URL}/api/mail/verify-login?token=${verificationToken}&action=approved`;
+    //const denyUrl = `${process.env.APP_URL}/api/mail/verify-login?token=${verificationToken}&action=denied`;
+    const verifyUrl = `http://127.0.0.1:5000/api/mail/verify-login?token=${verificationToken}&action=approved`;
+    const denyUrl = `http://127.0.0.1:5000/api/mail/verify-login?token=${verificationToken}&action=denied`;
 
     const html = `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa;">
