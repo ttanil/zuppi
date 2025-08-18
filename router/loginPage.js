@@ -100,7 +100,7 @@ router.post('/', async (req, res) => {
                 email: user.email,
                 fullname: user.fullname,
                 role: user.role,
-                deviceName: deviceName || 'Bilinmeyen Cihaz' // ✅ DeviceName ekle
+                deviceName: deviceName || 'Bilinmeyen Cihaz'
               }
             });
           } else{
@@ -159,7 +159,7 @@ router.post('/', async (req, res) => {
                 email: user.email,
                 fullname: user.fullname,
                 role: user.role,
-                deviceName: deviceName || 'Bilinmeyen Cihaz' // ✅ DeviceName ekle
+                deviceName: deviceName || 'Bilinmeyen Cihaz'
               }
             });
           } else{
@@ -190,8 +190,17 @@ router.post('/', async (req, res) => {
             return res.status(401).json({ error: 'E-posta hatalı!' });
           }
 
-          // 3. Eksik device_info alanları varsa tamamla
-          // (boşsa null, yoksa gelen değer atanır)
+          //3. Cihaz sayısı kontrolü - 2 cihaz varsa sonuncusunu sil
+          if (user.devices.length >= 2) {
+            
+            // Son cihazı sil (array'in sonundaki)
+            const removedDevice = user.devices.pop();
+            
+            // Database'e kaydet
+            await user.save();
+          }
+
+          // 4. Eksik device_info alanları varsa tamamla
           const newDeviceInfo = {
             os: device_info.os || null,
             browser: device_info.browser || null,
@@ -216,10 +225,10 @@ router.post('/', async (req, res) => {
             loginHistory: []
           };
 
-          // 4. device_id üret
+          // 5. device_id üret
           const device_id = uuidv4();
 
-          // 5. A_token üret
+          // 6. A_token üret
           const payload = {
             user_id: user._id,
             email: user.email,
@@ -228,7 +237,7 @@ router.post('/', async (req, res) => {
           };
           const A_token = jwt.sign(payload, JWT_SECRET, { expiresIn: '365d' });
 
-          // 6. Yeni device objesini hazırla
+          // 7. Yeni device objesini hazırla
           const newDevice = {
             device_id,
             fingerprint: fingerprint || null,
@@ -237,25 +246,35 @@ router.post('/', async (req, res) => {
             last_login: new Date()
           };
 
-          // --------- ILK LOGIN GEÇMİŞİ EKLE -----------
+          // 8. İLK LOGIN GEÇMİŞİ EKLE
           newDevice.device_info.loginHistory.unshift({
             login_time: new Date(),
-            ip_address: getClientIp(req) // sadece backend’den alınır
+            ip_address: getClientIp(req), // sadece backend'den alınır
           });
 
-          // 7. User’ın cihaz listesine ekle ve kaydet
-          user.devices.push(newDevice);
+          // 9. User'ın cihaz listesine ekle (başa ekle - en yeni cihaz)
+          user.devices.unshift(newDevice); // push yerine unshift kullan
           await user.save();
 
-          // 8. Session ve Cookie işlemleri
+          // 10. Session ve Cookie işlemleri
           req.session.userId = user._id;
           req.session.userRole = user.role;
-          res.cookie('A_token', A_token, { httpOnly: true, sameSite: 'lax', path: '/' });
+          res.cookie('A_token', A_token, { 
+            httpOnly: true, 
+            sameSite: 'lax', 
+            path: '/'
+          });
 
-          res.status(201).json({ message: "Cihaz eklendi ve giriş yapıldı!" });
+          res.status(201).json({ 
+            message: "Cihaz eklendi ve giriş yapıldı!"
+          });
+
         } catch (err) {
-          console.error(err);
-          res.status(500).json({ error: 'Sunucu hatası, tekrar deneyin.' });
+          console.error('❌ Device registration error:', err);
+          res.status(500).json({ 
+            error: 'Sunucu hatası, tekrar deneyin.',
+            details: process.env.NODE_ENV === 'development' ? err.message : undefined
+          });
         }
       } else if(req.body.status === "device-approval-request"){
         console.log(req.body);

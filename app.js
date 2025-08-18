@@ -70,9 +70,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // CORS  
 app.use(cors({  
-    origin: 'http://127.0.0.1:5000',  
+    origin: [
+        'http://127.0.0.1:5000',
+        'http://localhost:5000',
+        'https://zuppi.live',
+        'https://www.zuppi.live'
+    ],
     credentials: true  
-}));  
+})); 
 
 // ROUTER'lar  
 const indexPage = require(path.join(__dirname, 'router', 'indexPage.js'));

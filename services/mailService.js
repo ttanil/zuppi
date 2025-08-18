@@ -1,10 +1,22 @@
 const nodemailer = require('nodemailer');
+const crypto = require('crypto');
 require('dotenv').config();
 
+// IN-MEMORY TOKEN STORAGE (Production'da Redis/Database kullan)
+const verificationTokens = new Map();
 
-// ✅ ZOHO.EU İÇİN SMTP TRANSPORTER
+// TOKEN TEMİZLEME SCHEDULER (Her 5 dakikada bir)
+setInterval(() => {
+  const now = Date.now();
+  for (const [token, data] of verificationTokens.entries()) {
+    if (now > data.expiresAt) {
+      verificationTokens.delete(token);
+    }
+  }
+}, 5 * 60 * 1000); // 5 dakika
+
+// ZOHO.EU İÇİN SMTP TRANSPORTER
 const createTransporter = () => {
-  
   return nodemailer.createTransport({
     host: process.env.SMTP_HOST, // smtp.zoho.eu
     port: parseInt(process.env.SMTP_PORT), // 587
@@ -17,62 +29,35 @@ const createTransporter = () => {
       rejectUnauthorized: false,
       ciphers: 'SSLv3'
     },
-    // ✅ DEBUG AYARLARI
     debug: false,
     logger: false
   });
 };
 
-// ✅ BAĞLANTI TEST FONKSİYONU - DETAYLI DEBUG
+// BAĞLANTI TEST FONKSİYONU
 const testConnection = async () => {
   try {
-    console.log('🔍 SMTP Ayarları Kontrol Ediliyor:');
-    console.log('📍 Host:', process.env.SMTP_HOST);
-    console.log('🔌 Port:', process.env.SMTP_PORT);
-    console.log('🔐 Secure:', process.env.SMTP_SECURE);
-    console.log('👤 User:', process.env.SMTP_USER);
-    console.log('🔑 Pass:', process.env.SMTP_PASS ? '✅ Mevcut (' + process.env.SMTP_PASS.length + ' karakter)' : '❌ YOK');
-    
     const transporter = createTransporter();
-    console.log('⏳ SMTP bağlantısı test ediliyor...');
     
     await transporter.verify();
-    console.log('✅ SMTP bağlantısı başarılı - Zoho.eu aktif!');
     return true;
   } catch (error) {
-    console.error('❌ SMTP bağlantı hatası:');
-    console.error('   Mesaj:', error.message);
-    console.error('   Kod:', error.code);
-    console.error('   Host:', error.hostname || 'N/A');
-    console.error('   Port:', error.port || 'N/A');
-    
-    // ✅ YAYGIN HATALARA ÖZEL ÇÖZÜM ÖNERİLERİ
-    if (error.code === 'EAUTH') {
-      console.error('💡 Çözüm: Zoho Mail\'de App Password oluşturun!');
-    } else if (error.code === 'ECONNREFUSED') {
-      console.error('💡 Çözüm: smtp.zoho.eu yerine smtppro.zoho.eu deneyin');
-    } else if (error.code === 'ETIMEDOUT') {
-      console.error('💡 Çözüm: Port 465 (SSL) veya VPN kullanımını deneyin');
-    }
-    
     return false;
   }
 };
 
-// ✅ GENEL MAİL GÖNDERME FONKSİYONU
+//GENEL MAİL GÖNDERME FONKSİYONU
 const sendMail = async ({ to, subject, text, html, from = null, clientInfo = null }) => {
   try {
-    
     const transporter = createTransporter();
     
-    // IP adresi varsa HTML'e ekle
     let finalHtml = html || `<p>${text || 'E-mail içeriği'}</p>`;
     if (clientInfo && clientInfo.ip && html) {
       finalHtml = html.replace('[Sunucu tarafından eklenecek]', clientInfo.ip);
     }
     
     const mailOptions = {
-      from: from || `"${process.env.APP_NAME || 'Zuppi'}" <${process.env.SMTP_USER}>`,
+      from: from || `"${process.env.APP_NAME || 'zuppi'}" <${process.env.SMTP_USER}>`,
       to,
       subject,
       text: text || 'E-mail içeriği',
@@ -98,10 +83,282 @@ const sendMail = async ({ to, subject, text, html, from = null, clientInfo = nul
   }
 };
 
-// ✅ LOGIN NOTIFICATION EMAIL FONKSİYONU
+// LOGIN VERİFİKASYON TOKEN OLUŞTUR
+const generateVerificationToken = () => {
+  return crypto.randomBytes(32).toString('hex');
+};
+
+// LOGIN VERİFİKASYON EMAİL GÖNDER
+const sendLoginVerificationEmail = async (userEmail, deviceInfo, userInfo, clientInfo = null) => {
+  try {
+    const verificationToken = generateVerificationToken();
+    const expiresAt = Date.now() + (2 * 60 * 1000); // 2 dakika
+    
+    // Token'ı memory'de sakla
+    verificationTokens.set(verificationToken, {
+      userEmail,
+      deviceInfo,
+      userInfo,
+      clientInfo,
+      createdAt: Date.now(),
+      expiresAt,
+      verified: false
+    });
+
+    const loginTime = new Date().toLocaleString('tr-TR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZone: 'Europe/Istanbul'
+    });
+
+    const deviceName = deviceInfo.deviceName || 'Bilinmeyen Cihaz';
+    const location = deviceInfo.geo_location 
+      ? `${deviceInfo.geo_location.latitude.toFixed(4)}, ${deviceInfo.geo_location.longitude.toFixed(4)}`
+      : 'Konum bilgisi alınamadı';
+    const ipAddress = clientInfo?.ip || 'Bilinmeyen IP';
+
+    // Verification URL'leri
+    //const verifyUrl = `${process.env.APP_URL}/api/mail/verify-login?token=${verificationToken}&action=approved`;
+    //const denyUrl = `${process.env.APP_URL}/api/mail/verify-login?token=${verificationToken}&action=denied`;
+    const verifyUrl = `http://127.0.0.1:5000/api/mail/verify-login?token=${verificationToken}&action=approved`;
+    const denyUrl = `http://127.0.0.1:5000/api/mail/verify-login?token=${verificationToken}&action=denied`;
+
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa;">
+        <div style="background: linear-gradient(135deg, #ff6b9d, #c44569); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">🔐 Giriş Onay Talebi</h1>
+          <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">Bu giriş sizin tarafınızdan mı yapılıyor?</p>
+        </div>
+        
+        <div style="padding: 30px; background: white;">
+          <h2 style="color: #333; margin-top: 0;">Merhaba ${userInfo?.name || 'zuppi kullanıcısı'}! 👋</h2>
+          
+          <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin: 25px 0; text-align: center;">
+            <h3 style="color: #856404; margin-top: 0; font-size: 18px;">⚠️ Güvenlik Onayı Gerekli</h3>
+            <p style="color: #856404; margin-bottom: 0; font-size: 14px;">
+              Hesabınıza giriş yapılmak isteniyor. Bu girişi onaylayın veya reddedin.
+            </p>
+          </div>
+          
+          <div style="background: #f8f9fa; border-left: 4px solid #ff6b9d; padding: 20px; margin: 25px 0;">
+            <h3 style="color: #333; margin-top: 0; font-size: 18px;">📊 Giriş Detayları</h3>
+            
+            <table style="width: 100%; border-collapse: collapse;">
+              <tr>
+                <td style="padding: 8px 0; color: #666; font-weight: bold; width: 140px;">⏰ Tarih & Saat:</td>
+                <td style="padding: 8px 0; color: #333;">${loginTime}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #666; font-weight: bold;">📱 Cihaz:</td>
+                <td style="padding: 8px 0; color: #333;">${deviceName}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #666; font-weight: bold;">📍 Konum:</td>
+                <td style="padding: 8px 0; color: #333;">${location}</td>
+              </tr>
+              <tr>
+                <td style="padding: 8px 0; color: #666; font-weight: bold;">🌍 IP Adresi:</td>
+                <td style="padding: 8px 0; color: #333;">${ipAddress}</td>
+              </tr>
+            </table>
+          </div>
+          
+          <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; padding: 15px; margin: 25px 0; text-align: center;">
+            <p style="color: #721c24; margin: 0; font-size: 14px; font-weight: bold;">
+              ⏱️ Bu onay linki 2 dakika içinde geçersiz olacaktır!
+            </p>
+          </div>
+          
+          <div style="text-align: center; margin: 30px 0;">
+            <h3 style="color: #333; margin-bottom: 20px;">Bu giriş sizin tarafınızdan mı yapılıyor?</h3>
+            
+            <div style="margin: 20px 0;">
+              <a href="${verifyUrl}" 
+                 style="background: linear-gradient(135deg, #28a745, #20c997); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; margin: 10px; font-weight: bold; font-size: 16px;">
+                ✅ EVET, BENİM
+              </a>
+            </div>
+            
+            <div style="margin: 20px 0;">
+              <a href="${denyUrl}" 
+                 style="background: linear-gradient(135deg, #dc3545, #c82333); color: white; padding: 15px 30px; text-decoration: none; border-radius: 8px; display: inline-block; margin: 10px; font-weight: bold; font-size: 16px;">
+                ❌ HAYIR, DEĞİL
+              </a>
+            </div>
+          </div>
+          
+          <div style="background: #d4edda; border: 1px solid #c3e6cb; border-radius: 8px; padding: 15px; margin: 25px 0;">
+            <h4 style="color: #155724; margin-top: 0; font-size: 14px;">🔒 Güvenlik Bilgilendirmesi</h4>
+            <p style="color: #155724; margin-bottom: 0; font-size: 13px;">
+              • Bu giriş sizinse "EVET, BENİM" butonuna tıklayın<br>
+              • Sizin değilse "HAYIR, DEĞİL" butonuna tıklayın ve derhal şifrenizi değiştirin<br>
+              • 2 dakika içinde onaylamazsanız giriş otomatik olarak reddedilecektir
+            </p>
+          </div>
+        </div>
+        
+        <div style="background: #343a40; color: #fff; text-align: center; padding: 20px;">
+          <p style="margin: 0; font-size: 14px; opacity: 0.8;">
+            Bu e-posta otomatik olarak gönderilmiştir. Doğrudan yanıtlamayın.
+          </p>
+          <p style="margin: 10px 0 0 0; font-size: 12px; opacity: 0.6;">
+            Token: ${verificationToken.substring(0, 8)}... | Süre: 2 dakika
+          </p>
+        </div>
+      </div>
+    `;
+
+    const result = await sendMail({
+      to: userEmail,
+      subject: '🔐 zuppi Giriş Onayı - 2 Dakika İçinde Onaylayın!',
+      html,
+      text: `zuppi hesabınıza giriş yapmak için onay gerekli. Onay: ${verifyUrl} | Red: ${denyUrl} | Süre: 2 dakika`,
+      from: `"zuppi Güvenlik" <${process.env.SMTP_USER}>`,
+      clientInfo
+    });
+
+    return {
+      success: true,
+      verificationToken,
+      expiresAt,
+      result
+    };
+
+  } catch (error) {
+    console.error('❌ Login verification email error:', error);
+    throw error;
+  }
+};
+
+// VERIFICATION TOKENS'LARı DIŞARI VER (DEBUG İÇİN)
+const getVerificationTokens = () => {
+  return verificationTokens;
+};
+
+// VERİFİKASYON İŞLEMİNİ GÜNCELLEYEN FONKSİYON
+const verifyLoginToken = async (token, action = 'approved') => {
+  try {
+    // Token var mı kontrol et
+    const tokenData = verificationTokens.get(token);
+    if (!tokenData) {
+      return {
+        success: false,
+        error: 'Onay linki geçersiz veya süresi dolmuş',
+        code: 'TOKEN_NOT_FOUND'
+      };
+    }
+    
+    // Token süresi dolmuş mu kontrol et
+    if (Date.now() > tokenData.expiresAt) {
+      verificationTokens.delete(token);
+      return {
+        success: false,
+        error: 'Onay linki süresi dolmuş (2 dakika)',
+        code: 'TOKEN_EXPIRED'
+      };
+    }
+    
+    // Token zaten kullanılmış mı kontrol et
+    if (tokenData.verified) {
+      return {
+        success: false,
+        error: 'Bu onay linki zaten kullanılmış',
+        code: 'TOKEN_ALREADY_USED'
+      };
+    }
+
+    // Token'ı işaretle
+    const verificationTime = new Date().toLocaleString('tr-TR', {
+      year: 'numeric',
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    
+    const deviceName = tokenData.deviceInfo.deviceName || tokenData.deviceInfo.browser || 'Bilinmeyen Cihaz';
+    
+    // Token data'yı güncelle
+    tokenData.verified = true;
+    tokenData.verificationTime = verificationTime;
+    
+    // ✅ ACTION FIX - approve/deny -> approved/denied
+    let finalAction = action;
+    if (action === 'approve') {
+      finalAction = 'approved';
+    } else if (action === 'deny') {
+      finalAction = 'denied';
+    }
+    
+    tokenData.action = finalAction;
+    verificationTokens.set(token, tokenData);
+    
+    // Başarılı response döndür
+    if (finalAction === 'approved') {
+      return {
+        success: true,
+        action: 'approved',
+        message: 'Giriş başarıyla onaylandı',
+        data: {
+          userEmail: tokenData.userEmail,
+          deviceName,
+          verificationTime,
+          originalLoginTime: new Date(tokenData.createdAt).toLocaleString('tr-TR')
+        }
+      };
+      
+    } else if (finalAction === 'denied') {
+      return {
+        success: true,
+        action: 'denied',
+        message: 'Giriş reddedildi. Güvenliğiniz için şifrenizi değiştirmenizi öneririz.',
+        data: {
+          userEmail: tokenData.userEmail,
+          deviceName,
+          verificationTime,
+          securityAlert: true
+        }
+      };
+    }
+    
+  } catch (error) {
+    console.error('❌ verifyLoginToken error:', error);
+    return {
+      success: false,
+      error: 'Onay işlemi sırasında hata oluştu: ' + error.message,
+      code: 'VERIFICATION_ERROR'
+    };
+  }
+};
+
+// AKTIF TOKEN'LARI LİSTELE (DEBUG)
+const getActiveTokens = () => {
+  const activeTokens = [];
+  const now = Date.now();
+  
+  for (const [token, data] of verificationTokens.entries()) {
+    if (now <= data.expiresAt) {
+      activeTokens.push({
+        token: token.substring(0, 8) + '...',
+        userEmail: data.userEmail,
+        createdAt: new Date(data.createdAt).toLocaleTimeString(),
+        expiresAt: new Date(data.expiresAt).toLocaleTimeString(),
+        remainingSeconds: Math.round((data.expiresAt - now) / 1000)
+      });
+    }
+  }
+  
+  return activeTokens;
+};
+
+// REGULAR LOGIN NOTIFICATION (Onaysız)
 const sendLoginNotification = async (userEmail, deviceInfo, userInfo, clientInfo = null) => {
   try {
-    
     const loginTime = new Date().toLocaleString('tr-TR', {
       year: 'numeric',
       month: 'long',
@@ -130,7 +387,7 @@ const sendLoginNotification = async (userEmail, deviceInfo, userInfo, clientInfo
           <h2 style="color: #333; margin-top: 0;">Merhaba ${userInfo?.name || 'zuppi kullanıcısı'}! 👋</h2>
           
           <p style="color: #666; line-height: 1.6; margin-bottom: 25px;">
-            Zuppi hesabınıza başarılı bir giriş yapıldı. Aşağıda giriş detaylarını bulabilirsiniz:
+            zuppi hesabınıza başarılı bir giriş yapıldı. Aşağıda giriş detaylarını bulabilirsiniz:
           </p>
           
           <div style="background: #f8f9fa; border-left: 4px solid #ff6b9d; padding: 20px; margin: 25px 0;">
@@ -145,7 +402,6 @@ const sendLoginNotification = async (userEmail, deviceInfo, userInfo, clientInfo
                 <td style="padding: 8px 0; color: #666; font-weight: bold;">📱 Cihaz:</td>
                 <td style="padding: 8px 0; color: #333;">${deviceName}</td>
               </tr>
-              
               <tr>
                 <td style="padding: 8px 0; color: #666; font-weight: bold;">📍 Konum:</td>
                 <td style="padding: 8px 0; color: #333;">${location}</td>
@@ -186,17 +442,6 @@ const sendLoginNotification = async (userEmail, deviceInfo, userInfo, clientInfo
       </div>
     `;
 
-    /*
-    <tr>
-      <td style="padding: 8px 0; color: #666; font-weight: bold;">💻 İşletim Sistemi:</td>
-      <td style="padding: 8px 0; color: #333;">${deviceInfo.os}</td>
-    </tr>
-    <tr>
-      <td style="padding: 8px 0; color: #666; font-weight: bold;">🌐 Tarayıcı:</td>
-      <td style="padding: 8px 0; color: #333;">${deviceInfo.browser}</td>
-    </tr>
-    */
-
     const result = await sendMail({
       to: userEmail,
       subject: '🔐 zuppi Hesabınıza Giriş Yapıldı',
@@ -214,7 +459,7 @@ const sendLoginNotification = async (userEmail, deviceInfo, userInfo, clientInfo
   }
 };
 
-// ✅ İLETİŞİM FORMU E-MAİLİ
+// İLETİŞİM FORMU E-MAİLİ
 const sendContactEmail = async ({ name, email, message, subject = 'İletişim Formu' }) => {
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -248,7 +493,7 @@ const sendContactEmail = async ({ name, email, message, subject = 'İletişim Fo
   });
 };
 
-// ✅ HOŞ GELDİN E-MAİLİ
+// HOŞ GELDİN E-MAİLİ
 const sendWelcomeEmail = async (userEmail, userName) => {
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
@@ -281,12 +526,18 @@ const sendWelcomeEmail = async (userEmail, userName) => {
   });
 };
 
-// ✅ EXPORT KISMI
+
+
+// EXPORT'A EKLE
 module.exports = {
   testConnection,
   sendMail,
   sendWelcomeEmail,
   sendContactEmail,
   sendLoginNotification,
+  sendLoginVerificationEmail,
+  verifyLoginToken,
+  getActiveTokens,
+  getVerificationTokens,
   createTransporter
 };
