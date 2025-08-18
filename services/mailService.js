@@ -5,12 +5,18 @@ require('dotenv').config();
 // IN-MEMORY TOKEN STORAGE (Production'da Redis/Database kullan)
 const verificationTokens = new Map();
 
-// TOKEN TEMİZLEME SCHEDULER (Her 5 dakikada bir)
+// TOKEN ve Verification codes TEMİZLEME SCHEDULER (Her 5 dakikada bir)
 setInterval(() => {
   const now = Date.now();
   for (const [token, data] of verificationTokens.entries()) {
     if (now > data.expiresAt) {
       verificationTokens.delete(token);
+    }
+  }
+
+  for (const [email, data] of verificationCodes.entries()) {
+    if (now > data.expiresAt) {
+      verificationCodes.delete(email);
     }
   }
 }, 5 * 60 * 1000); // 5 dakika
@@ -287,7 +293,7 @@ const verifyLoginToken = async (token, action = 'approved') => {
     tokenData.verified = true;
     tokenData.verificationTime = verificationTime;
     
-    // ✅ ACTION FIX - approve/deny -> approved/denied
+    // ACTION FIX - approve/deny -> approved/denied
     let finalAction = action;
     if (action === 'approve') {
       finalAction = 'approved';
@@ -504,7 +510,7 @@ const sendWelcomeEmail = async (userEmail, userName) => {
       <div style="padding: 30px; background: white;">
         <h2 style="color: #333;">Nail Art Dünyasına Hoş Geldiniz!</h2>
         <p style="color: #666; line-height: 1.6;">
-          Artık ${process.env.APP_NAME} ailesinin bir parçasısınız! 💅<br>
+          Artık zuppi ailesinin bir parçasısınız! 💅<br>
           En güzel nail art tasarımlarını keşfedin, kendi kreasyonlarınızı paylaşın.
         </p>
         
@@ -527,6 +533,252 @@ const sendWelcomeEmail = async (userEmail, userName) => {
 };
 
 
+//----------------------------------
+// EMAIL VERIFICATION CODES STORAGE
+const verificationCodes = new Map();
+
+// HANELİ DOĞRULAMA KODU OLUŞTUR
+const generateVerificationCode = () => {
+  return Math.floor(100000 + Math.random() * 900000).toString(); // 6 haneli sayı
+};
+
+// EMAIL DOĞRULAMA KODU GÖNDER
+const sendVerificationCode = async (userEmail, type = 'login', clientInfo = null) => {
+  try {
+    const verificationCode = generateVerificationCode();
+    const expiresAt = Date.now() + (5 * 60 * 1000); // 5 dakika
+    
+    // Kodu memory'de sakla
+    verificationCodes.set(userEmail, {
+      code: verificationCode,
+      type,
+      createdAt: Date.now(),
+      expiresAt,
+      attempts: 0,
+      maxAttempts: 3,
+      verified: false
+    });
+
+    const sendTime = new Date().toLocaleString('tr-TR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZone: 'Europe/Istanbul'
+    });
+
+    const userName = userEmail.split('@')[0];
+    const typeText = type === 'register' ? 'Kayıt Doğrulama' : 'Giriş Doğrulama';
+    const actionText = type === 'register' ? 'kayıt işleminizi tamamlamak' : 'giriş yapabilmek';
+
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa;">
+        <div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">🔐 ${typeText}</h1>
+          <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">6 haneli doğrulama kodunuz</p>
+        </div>
+        
+        <div style="padding: 30px; background: white;">
+          <h2 style="color: #333; margin-top: 0;">Merhaba ${userName}! 👋</h2>
+          
+          <p style="color: #666; line-height: 1.6; margin-bottom: 25px;">
+            zuppi hesabınızda ${actionText} için doğrulama kodu aşağıda yer almaktadır:
+          </p>
+          
+          <div style="background: linear-gradient(135deg, #667eea, #764ba2); border-radius: 12px; padding: 30px; text-align: center; margin: 30px 0;">
+            <h3 style="color: white; margin: 0 0 15px 0; font-size: 18px;">🔑 Doğrulama Kodunuz</h3>
+            <div style="background: white; color: #333; font-size: 36px; font-weight: bold; padding: 20px; border-radius: 8px; letter-spacing: 8px; font-family: monospace;">
+              ${verificationCode}
+            </div>
+            <p style="color: rgba(255,255,255,0.9); margin: 15px 0 0 0; font-size: 14px;">
+              Bu kodu ${type === 'register' ? 'kayıt' : 'giriş'} sayfasına giriniz
+            </p>
+          </div>
+          
+          <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin: 25px 0;">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+              <span style="font-size: 20px; margin-right: 10px;">⏱️</span>
+              <h4 style="color: #856404; margin: 0; font-size: 16px;">Önemli Bilgiler</h4>
+            </div>
+            <ul style="color: #856404; margin: 10px 0 0 0; padding-left: 20px; font-size: 14px;">
+              <li>Bu kod <strong>5 dakika</strong> içinde geçersiz olacak</li>
+              <li>Maksimum <strong>3 deneme</strong> hakkınız var</li>
+              <li>Kodu kimseyle paylaşmayın</li>
+              <li>Gönderilme zamanı: <strong>${sendTime}</strong></li>
+            </ul>
+          </div>
+          
+          <div style="background: #e8f5e8; border: 1px solid #d4edda; border-radius: 8px; padding: 15px; margin: 25px 0;">
+            <h4 style="color: #155724; margin-top: 0; font-size: 14px;">🔒 Güvenlik Uyarısı</h4>
+            <p style="color: #155724; margin-bottom: 0; font-size: 13px;">
+              Bu doğrulama kodunu sadece zuppi.live sitesinde kullanın. Başka hiçbir yerde girmeyin!
+            </p>
+          </div>
+        </div>
+        
+        <div style="background: #343a40; color: #fff; text-align: center; padding: 20px;">
+          <p style="margin: 0; font-size: 14px; opacity: 0.8;">
+            Bu e-posta otomatik olarak gönderilmiştir. Doğrudan yanıtlamayın.
+          </p>
+          <p style="margin: 10px 0 0 0; font-size: 12px; opacity: 0.6;">
+            © ${new Date().getFullYear()} ${process.env.APP_NAME || 'zuppi'} - ${typeText} Sistemi
+          </p>
+        </div>
+      </div>
+    `;
+
+    const result = await sendMail({
+      to: userEmail,
+      subject: `🔐 ${process.env.APP_NAME || 'zuppi'} ${typeText} Kodu: ${verificationCode}`,
+      html,
+      text: `${process.env.APP_NAME || 'zuppi'} doğrulama kodunuz: ${verificationCode}. Bu kod 5 dakika içinde geçersiz olacak.`,
+      from: `"zuppi Doğrulama" <iletisim@zuppi.live>`,
+      clientInfo
+    });
+
+
+    return {
+      success: true,
+      code: verificationCode, // Debug için (production'da kaldır)
+      expiresAt,
+      result
+    };
+
+  } catch (error) {
+    console.error('❌ Send verification code error:', error);
+    throw error;
+  }
+};
+
+// EMAIL DOĞRULAMA KODUNU KONTROL ET
+const verifyEmailCode = async (userEmail, inputCode, type = 'login') => {
+  try {
+    // Kod var mı kontrol et
+    const codeData = verificationCodes.get(userEmail);
+    if (!codeData) {
+      return {
+        success: false,
+        error: 'Doğrulama kodu bulunamadı veya süresi dolmuş',
+        code: 'CODE_NOT_FOUND'
+      };
+    }
+    
+    // Kod süresi dolmuş mu kontrol et
+    if (Date.now() > codeData.expiresAt) {
+      verificationCodes.delete(userEmail);
+      return {
+        success: false,
+        error: 'Doğrulama kodu süresi dolmuş (5 dakika)',
+        code: 'CODE_EXPIRED'
+      };
+    }
+    
+    // Kod zaten kullanılmış mı kontrol et
+    if (codeData.verified) {
+      return {
+        success: false,
+        error: 'Bu doğrulama kodu zaten kullanılmış',
+        code: 'CODE_ALREADY_USED'
+      };
+    }
+    
+    // Max deneme aşıldı mı kontrol et
+    if (codeData.attempts >= codeData.maxAttempts) {
+      verificationCodes.delete(userEmail);
+      return {
+        success: false,
+        error: 'Çok fazla hatalı deneme. Yeni kod talep edin.',
+        code: 'MAX_ATTEMPTS_EXCEEDED'
+      };
+    }
+    
+    // Kod doğru mu kontrol et
+    if (codeData.code !== inputCode.toString()) {
+      codeData.attempts++;
+      verificationCodes.set(userEmail, codeData);
+      
+      const remainingAttempts = codeData.maxAttempts - codeData.attempts;
+      
+      return {
+        success: false,
+        error: `Doğrulama kodu hatalı! Kalan deneme: ${remainingAttempts}`,
+        code: 'INVALID_CODE',
+        remainingAttempts
+      };
+    }
+    
+    // Tür kontrol et
+    if (codeData.type !== type) {
+      return {
+        success: false,
+        error: 'Doğrulama kodu türü uyuşmuyor',
+        code: 'TYPE_MISMATCH'
+      };
+    }
+    
+    // Kod doğru - işaretle
+    const verificationTime = new Date().toLocaleString('tr-TR', {
+      year: 'numeric',
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    
+    codeData.verified = true;
+    codeData.verificationTime = verificationTime;
+    verificationCodes.set(userEmail, codeData);
+        
+    // Başarılı response döndür
+    return {
+      success: true,
+      message: 'E-posta doğrulama başarılı!',
+      data: {
+        userEmail,
+        type,
+        verificationTime,
+        originalSendTime: new Date(codeData.createdAt).toLocaleString('tr-TR')
+      }
+    };
+    
+  } catch (error) {
+    console.error('❌ verifyEmailCode error:', error);
+    return {
+      success: false,
+      error: 'Doğrulama işlemi sırasında hata oluştu: ' + error.message,
+      code: 'VERIFICATION_ERROR'
+    };
+  }
+};
+
+// AKTIF VERIFICATION CODES LİSTELE (DEBUG)
+const getActiveVerificationCodes = () => {
+  const activeCodes = [];
+  const now = Date.now();
+  
+  for (const [email, data] of verificationCodes.entries()) {
+    if (now <= data.expiresAt) {
+      activeCodes.push({
+        email,
+        code: data.code, // Production'da kaldır
+        type: data.type,
+        createdAt: new Date(data.createdAt).toLocaleTimeString(),
+        expiresAt: new Date(data.expiresAt).toLocaleTimeString(),
+        remainingSeconds: Math.round((data.expiresAt - now) / 1000),
+        attempts: data.attempts,
+        verified: data.verified
+      });
+    }
+  }
+  
+  return activeCodes;
+};
+//--------------------------------
+
+
 
 // EXPORT'A EKLE
 module.exports = {
@@ -539,5 +791,8 @@ module.exports = {
   verifyLoginToken,
   getActiveTokens,
   getVerificationTokens,
-  createTransporter
+  createTransporter,
+  sendVerificationCode,
+  verifyEmailCode,
+  getActiveVerificationCodes
 };

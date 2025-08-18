@@ -12,6 +12,15 @@
   </style>
 </head>
 <body class="min-h-screen flex items-center justify-center bg-black">
+
+  <div id="loader" style="display:none;">
+    <div class="loader-bg"></div>
+    <div class="loader-card">
+      <div class="spinner-border text-danger" style="width:2.5rem; height:2.5rem;" role="status"></div>
+      <span class="loader-msg">Yükleniyor...</span>
+    </div>
+  </div>
+
   <!-- GİRİŞ/KAYIT KARTI -->
   <div class="w-full max-w-md mx-auto px-4 py-10 flex flex-col items-center justify-center">
     <div class="bg-zinc-900/90 rounded-2xl shadow-2xl px-8 py-10 w-full flex flex-col gap-6">
@@ -390,6 +399,7 @@
       };
 
       try {
+        showLoader();
         const res = await fetch('/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -405,12 +415,19 @@
           }
           
           sendLoginNotificationEmail(email, device_info, responseData.user).catch(console.warn);
-          window.location.href = '/user';
+          feedback.textContent = 'Giriş başarılı! Yönlendiriliyorsunuz...';
+          feedback.className = 'success';
+          feedback.style.color = '#22c55e';
+          
+          setTimeout(() => {
+            window.location.href = '/user';
+          }, 900);
           
         } else {
           // Başarısız
-          feedback.textContent = responseData.error || 'Giriş hatası!';
+          feedback.textContent = responseData.error || responseData.message || 'Giriş hatası!';
           feedback.className = 'error';
+          feedback.style.color = '#ef4444';
           
           if (responseData.error === "Yeni cihazla giriş yapılıyor!") {
             openDeviceNameModal();
@@ -423,7 +440,9 @@
         console.error('❌ Network error:', error);
         feedback.textContent = 'Bağlantı hatası!';
         feedback.className = 'error';
-      }
+      }finally {
+          hideLoader();
+        }
     });
 
     async function getFingerprintAndDeviceInfoWithGeo() {
@@ -1308,6 +1327,13 @@
   window.emailVerification = emailVerification;
 
 //----------------------------
+
+  function showLoader() {
+    document.getElementById('loader').style.display = 'flex';
+  }
+  function hideLoader() {
+    document.getElementById('loader').style.display = 'none';
+  }
   </script>
 </body>
 </html>

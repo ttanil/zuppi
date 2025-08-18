@@ -9,7 +9,10 @@ const {
   verifyLoginToken,
   getActiveTokens,
   getVerificationTokens,
-  testConnection 
+  testConnection,
+  sendVerificationCode,
+  verifyEmailCode,
+  getActiveVerificationCodes
 } = require('../services/mailService');
 
 // GELİŞTİRİLMİŞ GENEL MAİL ENDPOINT'İ
@@ -687,5 +690,104 @@ router.get('/status', async (req, res) => {
     });
   }
 });
+
+//-----------------------------------
+
+// E-posta doğrulama kodu gönder
+router.post('/send-verification-code', async (req, res) => {
+  try {
+    const { email, type } = req.body;
+    
+    // Validasyon
+    if (!email || !type) {
+      return res.status(400).json({ error: 'Email ve tip gerekli!' });
+    }
+    
+    if (!['register', 'login'].includes(type)) {
+      return res.status(400).json({ error: 'Geçersiz doğrulama tipi!' });
+    }
+    
+    // Client bilgisi al
+    const clientInfo = {
+      ip: getClientIp(req),
+      userAgent: req.get('User-Agent')
+    };
+    
+    // mailService kullanarak kod gönder
+    const result = await sendVerificationCode(email, type, clientInfo);
+        
+    res.status(200).json({
+      success: true,
+      message: 'Doğrulama kodu gönderildi!',
+      expiresAt: result.expiresAt
+    });
+    
+  } catch (error) {
+    console.error('❌ Send verification code error:', error);
+    res.status(500).json({ 
+      error: 'Doğrulama kodu gönderilemedi!',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// E-posta doğrulama kodunu kontrol et
+router.post('/verify-email-code', async (req, res) => {
+  try {
+    const { email, code, type } = req.body;
+    
+    // Validasyon
+    if (!email || !code || !type) {
+      return res.status(400).json({ error: 'Email, kod ve tip gerekli!' });
+    }
+    
+    if (!/^\d{6}$/.test(code)) {
+      return res.status(400).json({ error: 'Kod 6 haneli sayı olmalıdır!' });
+    }
+    
+    if (!['register', 'login'].includes(type)) {
+      return res.status(400).json({ error: 'Geçersiz doğrulama tipi!' });
+    }
+    
+    // mailService kullanarak kod doğrula
+    const result = await verifyEmailCode(email, code, type);
+    
+    if (result.success) {
+      
+      res.status(200).json({
+        success: true,
+        message: 'E-posta doğrulama başarılı!',
+        data: result.data
+      });
+    } else {
+      
+      res.status(400).json({
+        success: false,
+        error: result.error,
+        code: result.code,
+        remainingAttempts: result.remainingAttempts
+      });
+    }
+    
+  } catch (error) {
+    console.error('❌ Verify email code error:', error);
+    res.status(500).json({ 
+      error: 'Doğrulama işlemi başarısız!',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+function getClientIp(req) {
+  return req.headers['x-forwarded-for'] || 
+         req.headers['x-real-ip'] || 
+         req.connection?.remoteAddress || 
+         req.socket?.remoteAddress || 
+         (req.connection?.socket ? req.connection.socket.remoteAddress : null) ||
+         req.ip || 
+         'Unknown';
+}
+
+//-------------------------------------
 
 module.exports = router;

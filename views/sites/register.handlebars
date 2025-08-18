@@ -531,20 +531,29 @@
           ...data
         };
 
-        const res = await fetch('/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (res.ok) {
-          // yönlendir
-          window.location.href = '/user';
-        } else {
-          // hata mesajı göster
-          const data = await res.json();
-          feedback.textContent = data.error || 'Giriş hatası!';
+        try {
+          showLoader(); // Loader'ı başta göster
+          
+          const res = await fetch('/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(payload)
+          });
+
+          if (res.ok) {
+            // yönlendir
+            window.location.href = '/user';
+          } else {
+            // hata mesajı göster
+            const data = await res.json();
+            feedback.textContent = data.error || 'Giriş hatası!';
+            feedback.className = 'error';
+          }
+        } catch (error) {
+          feedback.textContent = 'Ağ hatası! Lütfen tekrar deneyin.';
           feedback.className = 'error';
-          return;
+        } finally {
+          hideLoader();
         }
       };
 
@@ -645,48 +654,322 @@
         try {
           const formData = new FormData(this);
           showLoader();
+          
           for (let [key, value] of formData.entries()) data[key] = value;
-
           data.membershipType = selectedMembershipType;
 
           const {device_info, fingerprint} = await getFingerprintAndDeviceInfo();
           data.device_info = device_info;
           data.fingerprint = fingerprint;
 
-          const res = await fetch('/register', {
+          // İlk önce backend validasyonunu kontrol et
+          feedback.textContent = 'Veriler kontrol ediliyor...';
+          feedback.className = 'message';
+
+          const validationResponse = await fetch('/register', {
             method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({data,status:"new-user"})
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              data: data,
+              status: "new-user"
+            })
           });
-          const json = await res.json();
 
-          if(res.ok) {
-            feedback.textContent = 'Kayıt başarılı! Giriş yapmak için devam ediniz.';
-            feedback.className = 'message';
-            feedback.style.color = '#fff';
-          
-            openDeviceNameModal();
+          const validationResult = await validationResponse.json();
 
-          } else {
-            feedback.textContent = json.message || 'Kayıt sırasında hata oluştu.';
+          // Validasyon hatası varsa göster ve dur
+          if (!validationResponse.ok) {
+            feedback.textContent = validationResult.message || 'Kayıt hatası!';
             feedback.className = 'error';
-            feedback.style.color = '#fff';
+            feedback.style.color = '#ff4444'; // Kırmızı renk
+            return; // İşlemi durdur
           }
+
+          // Validasyon geçti, şimdi email kodu gönder
+          feedback.textContent = 'Validasyon başarılı! E-posta doğrulama kodu gönderiliyor...';
+          feedback.className = 'message';
+          feedback.style.color = '#fff';
+
+          const emailResult = await sendEmailVerificationCode(email);
+          
+          if (!emailResult.success) {
+            feedback.textContent = emailResult.error || 'E-posta doğrulama kodu gönderilemedi!';
+            feedback.className = 'error';
+            feedback.style.color = '#ff4444';
+            return;
+          }
+
+          // Her şey tamam, email modalını aç
+          feedback.textContent = 'Doğrulama kodu gönderildi! E-postanızı kontrol edin.';
+          feedback.className = 'message';
+          feedback.style.color = '#22c55e'; // Yeşil renk
+          
+          openEmailVerificationModal(email, data);
+
         } catch (err) {
+          console.error('❌ Register error:', err);
           feedback.textContent = 'Bir hata oluştu, lütfen tekrar deneyin.';
           feedback.className = 'error';
-          feedback.style.color = '#fff';
-          this.reset();
-          // Seçiciyi sıfırla
-          selectedMembershipType = null;
+          feedback.style.color = '#ff4444';
+        } finally {
+          hideLoader();
+        }
+      });
+
+      //------------------------------------------
+      // Email doğrulama kodu gönder
+      async function sendEmailVerificationCode(userEmail) {
+        try {
+          const response = await fetch('/api/mail/send-verification-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              email: userEmail,
+              type: 'register'
+            })
+          });
+          
+          const result = await response.json();
+
+          if (response.ok) {
+            return { success: true, result };
+          } else {
+            return { success: false, error: result.error || 'Kod gönderilemedi!' };
+          }
+          
+        } catch (error) {
+          console.error('❌ Send verification error:', error);
+          return { success: false, error: 'E-posta gönderimi başarısız!' };
+        }
+      }
+
+      // Email doğrulama modalı aç
+      function openEmailVerificationModal(userEmail, userData) {
+        const userName = userEmail.split('@')[0];
+        
+        const modalHTML = `
+          <div id="emailVerificationModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+            <div class="bg-white rounded-lg p-8 max-w-md w-full mx-4">
+              <div class="text-center">
+                <span class="text-4xl mb-4 block">📧</span>
+                <h2 class="text-2xl font-bold mb-4">E-posta Doğrulama</h2>
+                <p class="text-gray-600 mb-6">
+                  Merhaba <strong>${userName}</strong>!<br>
+                  <strong>${userEmail}</strong> adresine 6 haneli doğrulama kodu gönderdik.
+                </p>
+                
+                <div class="mb-6">
+                  <label class="block text-sm font-medium mb-2">Doğrulama Kodu:</label>
+                  <input type="text" 
+                        id="verificationCodeInput" 
+                        placeholder="123456" 
+                        maxlength="6"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md text-center text-xl tracking-widest"
+                        style="letter-spacing: 0.5em;">
+                  <div id="verificationError" class="text-red-500 text-sm mt-2"></div>
+                </div>
+                
+                <div class="space-y-3">
+                  <button onclick="verifyEmailCodeAndRegister()" class="w-full bg-green-600 text-white py-2 px-4 rounded hover:bg-green-700">
+                    ✅ Doğrula ve Kayıt Ol
+                  </button>
+                  <button onclick="resendVerificationCode()" class="w-full bg-blue-600 text-white py-2 px-4 rounded hover:bg-blue-700">
+                    🔄 Tekrar Gönder
+                  </button>
+                  <button onclick="closeEmailVerificationModal()" class="w-full bg-gray-500 text-white py-2 px-4 rounded hover:bg-gray-600">
+                    ❌ İptal Et
+                  </button>
+                </div>
+                
+                <p class="text-xs text-gray-500 mt-4">
+                  Kod 5 dakika içinde geçersiz olacak
+                </p>
+              </div>
+            </div>
+          </div>
+        `;
+        
+        document.body.insertAdjacentHTML('beforeend', modalHTML);
+        window.pendingUserData = userData;
+        
+        setTimeout(() => {
+          document.getElementById('verificationCodeInput').focus();
+        }, 100);
+      }
+
+      // Email doğrulandıktan SONRA kayıt yap
+      async function verifyEmailCodeAndRegister() {
+        const codeInput = document.getElementById('verificationCodeInput');
+        const errorDiv = document.getElementById('verificationError');
+        const code = codeInput.value.trim();
+        
+        // Validasyon
+        if (!code) {
+          errorDiv.textContent = 'Lütfen doğrulama kodunu giriniz.';
+          codeInput.focus();
+          return;
+        }
+        if (!/^\d{6}$/.test(code)) {
+          errorDiv.textContent = 'Doğrulama kodu 6 haneli sayı olmalıdır.';
+          codeInput.focus();
+          return;
+        }
+        
+        errorDiv.textContent = '';
+        
+        try {
+          showLoader();
+          
+          // 1) Önce email kodunu doğrula
+          const verifyResponse = await fetch('/api/mail/verify-email-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              email: email,
+              code: code,
+              type: 'register'
+            })
+          });
+          
+          const verifyResult = await verifyResponse.json();
+          
+          if (!verifyResponse.ok) {
+            errorDiv.textContent = verifyResult.error || 'Doğrulama kodu hatalı!';
+            codeInput.focus();
+            return;
+          }
+
+          // 2) Email doğrulandı, şimdi kayıt yap
+          const registerResponse = await fetch('/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              data: window.pendingUserData,
+              status: "email-verified"
+            })
+          });
+
+          if (registerResponse.ok) {
+            closeEmailVerificationModal();
+            
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = 'E-posta doğrulandı! Kayıt tamamlanıyor...';
+            feedback.className = 'message';
+            feedback.style.color = '#fff';
+            
+            openDeviceNameModal(); // Cihaz ismi modalını aç
+            
+          } else {
+            const registerResult = await registerResponse.json();
+            errorDiv.textContent = registerResult.error || 'Kayıt sırasında hata oluştu!';
+          }
+          
+        } catch (error) {
+          console.error('❌ Verify and register error:', error);
+          errorDiv.textContent = 'Doğrulama başarısız! Tekrar deneyin.';
+        } finally {
+          hideLoader();
+        }
+      }
+
+      // Email doğrulama modalını kapat
+      function closeEmailVerificationModal() {
+        const modal = document.getElementById('emailVerificationModal');
+        if (modal) {
+          modal.remove();
+        }
+        
+        // Form'u sıfırla (isteğe bağlı)
+        const regForm = document.getElementById('registerForm');
+        if (regForm) {
+          regForm.reset();
+        }
+        
+        // Seçimleri sıfırla
+        selectedMembershipType = null;
+        const monthBtn = document.getElementById('monthBtn');
+        const yearBtn = document.getElementById('yearBtn');
+        if (monthBtn && yearBtn) {
           monthBtn.classList.remove('bg-red-600');
           yearBtn.classList.remove('bg-yellow-500');
           monthBtn.classList.add('bg-gray-700');
           yearBtn.classList.add('bg-gray-700');
-        } finally {
-          hideLoader(); // loader her durumda (hata veya başarıda) saklanacak
         }
-      });
+      }
+
+      // Email kodunu doğrula
+      async function verifyEmailCode() {
+        const codeInput = document.getElementById('verificationCodeInput');
+        const errorDiv = document.getElementById('verificationError');
+        const code = codeInput.value.trim();
+        
+        // Basit validasyon
+        if (!code) {
+          errorDiv.textContent = 'Lütfen doğrulama kodunu giriniz.';
+          codeInput.focus();
+          return;
+        }
+        if (!/^\d{6}$/.test(code)) {
+          errorDiv.textContent = 'Doğrulama kodu 6 haneli sayı olmalıdır.';
+          codeInput.focus();
+          return;
+        }
+        
+        errorDiv.textContent = '';
+        
+        try {
+          const response = await fetch('/api/mail/verify-email-code', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ 
+              email: email,
+              code: code,
+              type: 'register'
+            })
+          });
+          
+          const result = await response.json();
+          
+          if (response.ok) {
+            closeEmailVerificationModal();
+            openDeviceNameModal(); // Şimdi cihaz ismi modalını aç
+          } else {
+            errorDiv.textContent = result.error || 'Doğrulama kodu hatalı!';
+            codeInput.focus();
+          }
+          
+        } catch (error) {
+          console.error('❌ Email verification error:', error);
+          errorDiv.textContent = 'Doğrulama başarısız! Tekrar deneyin.';
+        }
+      }
+
+      // Doğrulama kodunu tekrar gönder
+      async function resendVerificationCode() {
+        try {
+          const result = await sendEmailVerificationCode(email);
+          
+          const errorDiv = document.getElementById('verificationError');
+          
+          if (result.success) {
+            errorDiv.style.color = 'green';
+            errorDiv.textContent = 'Doğrulama kodu tekrar gönderildi!';
+          } else {
+            errorDiv.style.color = '#ef4444';
+            errorDiv.textContent = result.error;
+          }
+          
+          setTimeout(() => {
+            errorDiv.textContent = '';
+            errorDiv.style.color = '#ef4444';
+          }, 3000);
+          
+        } catch (error) {
+          console.error('❌ Resend error:', error);
+        }
+      }
+
+//-----------------------------------------------
       
 
 

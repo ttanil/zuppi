@@ -56,7 +56,7 @@ router.post('/login-success', async (req, res) => {
     // User role mevcut sistemden al
     let userRole = user.role || 'user';
 /*
-    // ✅ Admin kontrolü (mevcut sisteminizle uyumlu)
+    // Admin kontrolü (mevcut sisteminizle uyumlu)
     if (email === 'tahsintanil@gmail.com' || email === 'admin@zuppi.live') {
       userRole = 'admin';
     } else if (email.endsWith('@zuppi.live')) {
