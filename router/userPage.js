@@ -89,7 +89,17 @@ router.post('/', async (req, res) => {
 
             // ARŞİVE EKLE
             user.deletedDevices = user.deletedDevices || [];
-            user.deletedDevices.push(deviceToDelete);
+
+            const archivedDevice = {
+                ...deviceToDelete.toObject(), // Mongoose objesini plain object'e çevir
+                deleted_at: new Date(),
+                deleted_reason: 'Kullanıcı tarafından manuel silme',
+                deleted_by_system: false,
+                deleted_by_user: true,
+                deleted_by_admin: false
+            };
+            
+            user.deletedDevices.push(archivedDevice);
 
             // devices'tan çıkart
             user.devices = user.devices.filter(dev => dev.device_id !== selectedDeviceId);

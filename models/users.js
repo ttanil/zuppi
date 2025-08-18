@@ -32,7 +32,13 @@ const deviceSchema = new mongoose.Schema({
     loginHistory: { type: [loginHistorySchema], default: [] }
   },
   A_token: { type: String, required: true },
-  last_login: { type: Date, default: Date.now }
+  last_login: { type: Date, default: Date.now },
+  // SİLME BİLGİLERİ
+  deleted_at: { type: Date },
+  deleted_reason: { type: String },
+  deleted_by_system: { type: Boolean },
+  deleted_by_user: { type: Boolean },
+  deleted_by_admin: { type: Boolean }
 }, { _id: false });
 
 const instructorSchema = new mongoose.Schema({

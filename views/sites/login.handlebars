@@ -266,14 +266,17 @@
 
       device_info.deviceName = val;
 
-      const payload = {
-        status:"device-name",
-        email,
-        device_info,
-        fingerprint
-      };
+      
 
       try {
+        showLoader();
+        const payload = {
+          status:"device-name",
+          email,
+          device_info,
+          fingerprint
+        };
+
         const res = await fetch('/login', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -303,6 +306,8 @@
         console.error('❌ Network error:', error);
         feedback.textContent = 'Bağlantı hatası!';
         feedback.className = 'error';
+      } finally{
+        hideLoader();
       }
     
     };
@@ -1035,6 +1040,7 @@
         let checkCount = 0;
         const maxChecks = 60; // 2 dakika (2 saniyede bir)
         
+        showLoader2();
         this.verificationCheckInterval = setInterval(async () => {
           checkCount++;
           
@@ -1069,8 +1075,9 @@
             if (response.ok) {
               const result = await response.json();
               
-              if (result.verified) {
+              if (result.verified || result.expired || checkCount >= maxChecks) {
                 this.stopVerificationCheck();
+                hideLoader();
                 
                 if (result.action === 'approved') {
                   this.handleSuccessfulLogin(result.userData);
@@ -1079,6 +1086,7 @@
                 }
               } else if (result.expired || checkCount >= maxChecks) {
                 this.stopVerificationCheck();
+                hideLoader();
                 this.showNotification('Doğrulama süresi doldu. Lütfen tekrar deneyin.', 'error');
                 setTimeout(() => {
                   try {
@@ -1333,6 +1341,17 @@
   }
   function hideLoader() {
     document.getElementById('loader').style.display = 'none';
+  }
+  function showLoader() {
+    const loader = document.getElementById('loader');
+    const loaderBg = loader.querySelector('.loader-bg');
+    
+    loader.style.display = 'flex';
+    
+    // Backdrop-filter'ı kapat
+    if (loaderBg) {
+      loaderBg.style.backdropFilter = 'none';
+    }
   }
   </script>
 </body>

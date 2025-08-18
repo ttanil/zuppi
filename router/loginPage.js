@@ -195,9 +195,20 @@ router.post('/', async (req, res) => {
             
             // Son cihazı sil (array'in sonundaki)
             const removedDevice = user.devices.pop();
+      
+            // ARŞİVE EKLE
+            user.deletedDevices = user.deletedDevices || [];
             
-            // Database'e kaydet
-            await user.save();
+            // Silinen cihaza silme tarihi ekle
+            const archivedDevice = {
+              ...removedDevice.toObject(), // Mongoose objesini plain object'e çevir
+              deleted_at: new Date(),
+              deleted_reason: 'Cihaz limit aşımı (2 cihaz sınırı)',
+              deleted_by_system: true
+            };
+            
+            user.deletedDevices.push(archivedDevice);
+            
           }
 
           // 4. Eksik device_info alanları varsa tamamla
