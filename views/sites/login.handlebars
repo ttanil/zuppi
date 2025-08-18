@@ -405,6 +405,7 @@
           }
           
           sendLoginNotificationEmail(email, device_info, responseData.user).catch(console.warn);
+          window.location.href = '/user';
           
         } else {
           // Başarısız
