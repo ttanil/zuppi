@@ -100,7 +100,7 @@
     </button> -->
       <!-- Şifre hatırlatma -->
       <div class="flex flex-row justify-center mt-3">
-        <a href="/forgot-password" class="text-xs text-gray-400 hover:text-yellow-400 transition underline">Şifremi unuttum</a>
+        <a href="#" id="forgotPasswordLink" class="text-xs text-gray-400 hover:text-yellow-400 transition underline">Şifremi unuttum</a>
       </div>
       <div id="feedback" style="color:#fff;" class="text-xs text-center mt-2"></div>
     </div>
@@ -164,6 +164,146 @@
   </div>
 </div>
 
+<!-- Şifre Sıfırlama Modal 1: E-posta Giriş -->
+<div id="forgotPasswordModal" class="fixed inset-0 z-50 bg-black bg-opacity-70 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8 w-[90%] max-w-md flex flex-col items-center gap-4 relative">
+    <button id="closeForgotPasswordModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg focus:outline-none">&times;</button>
+    
+    <div class="font-bold text-lg mb-2 flex flex-col items-center">
+      <span class="text-2xl">🔐 Şifremi Unuttum</span>
+      <span class="text-xs text-gray-400 mt-2 text-center">E-posta adresinizi girin, size 6 haneli kod gönderelim</span>
+    </div>
+    
+    <input
+      id="resetEmailInput"
+      type="email"
+      class="bg-zinc-800 border border-zinc-600 rounded-lg py-2 px-3 w-full mt-2 mb-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-red-500"
+      placeholder="E-posta adresiniz"
+      autocomplete="email"
+      required
+    />
+    
+    <div id="resetEmailError" class="text-red-400 text-xs mb-1 w-full text-center"></div>
+    <div id="resetEmailSuccess" class="text-green-400 text-xs mb-1 w-full text-center hidden"></div>
+    
+    <button id="sendResetCodeBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-2 mt-2 transition focus:outline-none">
+      <span id="sendResetBtnText">Kod Gönder</span>
+      <span id="sendResetBtnSpinner" class="hidden">
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Gönderiliyor...
+      </span>
+    </button>
+    
+    <div class="text-xs text-gray-400 text-center">
+      Hesabınız yok mu? <a href="/register" class="text-red-400 hover:text-red-300 underline">Kayıt ol</a>
+    </div>
+  </div>
+</div>
+
+<!-- Şifre Sıfırlama Modal 2: Kod Doğrulama -->
+<div id="verifyResetCodeModal" class="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8 w-full max-w-md flex flex-col items-center gap-4 relative">
+    <button id="closeVerifyResetCodeModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg focus:outline-none">&times;</button>
+    
+    <div class="font-bold text-lg mb-2 flex flex-col items-center">
+      <span class="text-2xl">📧 Kodu Doğrulayın</span>
+      <span class="text-xs text-gray-400 mt-2 text-center">E-posta adresinize gönderilen 6 haneli kodu girin</span>
+    </div>
+    
+    <div class="text-xs text-yellow-400 bg-yellow-900 bg-opacity-30 px-3 py-2 rounded-lg text-center w-full">
+      <span id="resetEmailDisplay"></span> adresine kod gönderildi
+    </div>
+    
+    <input
+      id="resetCodeInput"
+      type="text"
+      maxlength="6"
+      pattern="[0-9]{6}"
+      class="bg-zinc-800 border border-zinc-600 rounded-lg py-2 px-3 w-full mt-2 mb-2 text-gray-100 placeholder-gray-400 focus:outline-none focus:border-red-500 text-center text-2xl font-mono tracking-widest"
+      placeholder="000000"
+      autocomplete="off"
+      required
+    />
+    
+    <div id="resetCodeError" class="text-red-400 text-xs mb-1 w-full text-center"></div>
+    <div id="resetCodeCountdown" class="text-yellow-400 text-xs mb-1 w-full text-center hidden"></div>
+    
+    <button id="verifyResetCodeBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-2 mt-2 transition focus:outline-none">
+      <span id="verifyResetBtnText">Kodu Doğrula</span>
+      <span id="verifyResetBtnSpinner" class="hidden">
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Doğrulanıyor...
+      </span>
+    </button>
+    
+    <div class="text-xs text-gray-400 text-center">
+      <button id="resendResetCodeBtn" class="text-red-400 hover:text-red-300 underline focus:outline-none disabled:opacity-50 disabled:cursor-not-allowed">
+        Kodu tekrar gönder
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Şifre Sıfırlama Modal 3: Yeni Şifre Belirleme -->
+<div id="newPasswordModal" class="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center hidden">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8 w-full max-w-md flex flex-col items-center gap-4 relative">
+    <button id="closeNewPasswordModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg focus:outline-none">&times;</button>
+    
+    <div class="font-bold text-lg mb-2 flex flex-col items-center">
+      <span class="text-2xl">🔑 Yeni Şifre</span>
+      <span class="text-xs text-gray-400 mt-2 text-center">Güçlü bir şifre seçin (en az 6 karakter)</span>
+    </div>
+    
+    <div class="w-full space-y-3">
+      <input
+        id="newPasswordInput"
+        type="password"
+        minlength="6"
+        maxlength="100"
+        class="bg-zinc-800 border border-zinc-600 rounded-lg py-2 px-3 w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:border-red-500"
+        placeholder="Yeni şifreniz"
+        autocomplete="new-password"
+        required
+      />
+      
+      <input
+        id="confirmPasswordInput"
+        type="password"
+        minlength="6"
+        maxlength="100"
+        class="bg-zinc-800 border border-zinc-600 rounded-lg py-2 px-3 w-full text-gray-100 placeholder-gray-400 focus:outline-none focus:border-red-500"
+        placeholder="Şifrenizi tekrar girin"
+        autocomplete="new-password"
+        required
+      />
+    </div>
+    
+    <div id="newPasswordError" class="text-red-400 text-xs mb-1 w-full text-center"></div>
+    <div id="newPasswordSuccess" class="text-green-400 text-xs mb-1 w-full text-center hidden"></div>
+    
+    <button id="saveNewPasswordBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold rounded-xl py-2 mt-2 transition focus:outline-none">
+      <span id="savePasswordBtnText">Şifremi Değiştir</span>
+      <span id="savePasswordBtnSpinner" class="hidden">
+        <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white inline" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+        </svg>
+        Kaydediliyor...
+      </span>
+    </button>
+    
+    <div class="text-xs text-gray-400 bg-zinc-800 px-3 py-2 rounded-lg text-center w-full">
+      💡 Güçlü şifre: Büyük/küçük harf, sayı ve özel karakter kullanın
+    </div>
+  </div>
+</div>
+
 
   <script src="https://openfpcdn.io/fingerprintjs/v4.1.1/fp.umd.min.js"></script>
   <script>
@@ -171,6 +311,18 @@
 
     let device_info, fingerprint;
     let email = null;
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Şifre sıfırlama modalını başlat
+      window.forgotPasswordManager = new ForgotPasswordManager();
+    });
+
+    // Sayfa kapatılırken cleanup
+    window.addEventListener('beforeunload', () => {
+      if (window.forgotPasswordManager) {
+        window.forgotPasswordManager.destroy();
+      }
+    });
 
     // Şifre göz/gizle özelliği
     document.getElementById('togglePassword').addEventListener('click', function () {
@@ -1335,6 +1487,631 @@
   window.emailVerification = emailVerification;
 
 //----------------------------
+
+// Şifre Sıfırlama Modal Yöneticisi  
+  class ForgotPasswordManager {  
+    constructor() {  
+      this.currentEmail = '';  
+      this.resetToken = '';  
+      this.countdownTimer = null;
+      this.resendRetryTimer = null;
+      this.resendCooldown = 30; // saniye  
+      
+      this.init();  
+    }  
+
+    init() {  
+      // Modal açma event'i  
+      const forgotPasswordLink = document.getElementById('forgotPasswordLink');
+        if (forgotPasswordLink) {
+          forgotPasswordLink.addEventListener('click', (e) => {  
+            e.preventDefault();  
+            this.openStep1Modal();  
+          });
+        } else {
+          console.warn('Forgot password link not found!');
+        }
+
+        // Modal'ları initialize et
+        this.initStep1Modal();  
+        this.initStep2Modal();  
+        this.initStep3Modal();  
+    }  
+
+    // 1 E-POSTA GİRİŞ  
+    initStep1Modal() {  
+      const modal = document.getElementById('forgotPasswordModal');  
+      const closeBtn = document.getElementById('closeForgotPasswordModal');  
+      const emailInput = document.getElementById('resetEmailInput');  
+      const sendBtn = document.getElementById('sendResetCodeBtn');  
+      const errorDiv = document.getElementById('resetEmailError');  
+      const successDiv = document.getElementById('resetEmailSuccess');  
+
+      // Kapat butonları  
+      closeBtn.addEventListener('click', () => this.closeStep1Modal());  
+
+      // Enter tuşu  
+      emailInput.addEventListener('keypress', (e) => {  
+        if (e.key === 'Enter') this.sendResetCode();  
+      });  
+
+      // Kod gönder butonu  
+      sendBtn.addEventListener('click', () => this.sendResetCode());  
+
+      // Email input temizleme  
+      emailInput.addEventListener('input', () => {  
+        this.clearStep1Messages();  
+      });  
+    }  
+
+    openStep1Modal() {  
+      const modal = document.getElementById('forgotPasswordModal');  
+      modal.classList.remove('hidden');  
+      document.body.style.overflow = 'hidden';  
+      document.getElementById('resetEmailInput').focus();  
+      this.clearStep1Messages();  
+    }  
+
+    closeStep1Modal() {  
+      const modal = document.getElementById('forgotPasswordModal');  
+      modal.classList.add('hidden');  
+      document.body.style.overflow = '';  
+      this.resetStep1();  
+    }  
+
+    resetStep1() {  
+      document.getElementById('resetEmailInput').value = '';  
+      this.clearStep1Messages();  
+      this.setStep1Loading(false);  
+    }  
+
+    clearStep1Messages() {  
+      document.getElementById('resetEmailError').textContent = '';  
+      document.getElementById('resetEmailSuccess').classList.add('hidden');  
+    }  
+
+    setStep1Loading(loading) {  
+      const btn = document.getElementById('sendResetCodeBtn');  
+      const text = document.getElementById('sendResetBtnText');  
+      const spinner = document.getElementById('sendResetBtnSpinner');  
+      
+      btn.disabled = loading;  
+      if (loading) {  
+        text.classList.add('hidden');  
+        spinner.classList.remove('hidden');  
+      } else {  
+        text.classList.remove('hidden');  
+        spinner.classList.add('hidden');  
+      }  
+    }  
+
+    async sendResetCode() {  
+      const email = document.getElementById('resetEmailInput').value.trim();  
+      const errorDiv = document.getElementById('resetEmailError');  
+      const successDiv = document.getElementById('resetEmailSuccess');  
+
+      // Email validasyonu  
+      if (!email) {  
+        errorDiv.textContent = 'E-posta adresi gerekli!';  
+        return;  
+      }  
+
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;  
+      if (!emailRegex.test(email)) {  
+        errorDiv.textContent = 'Geçerli bir e-posta adresi girin!';  
+        return;  
+      }  
+
+      this.setStep1Loading(true);  
+      this.clearStep1Messages();  
+
+      try {  
+        const response = await fetch('/api/mail/forgot-password', {  
+          method: 'POST',  
+          headers: {  
+            'Content-Type': 'application/json',  
+          },  
+          body: JSON.stringify({ email })  
+        });  
+
+        const data = await response.json();  
+
+        if (data.success) {  
+          this.currentEmail = email;  
+          successDiv.textContent = 'Kod gönderildi! E-postanızı kontrol edin.';  
+          successDiv.classList.remove('hidden');  
+          
+          // 1.5 saniye bekle, sonra step 2'ye geç  
+          setTimeout(() => {  
+            this.closeStep1Modal();  
+            this.openStep2Modal();  
+          }, 1500);  
+          
+        } else {  
+          if (data.code === 'TOO_MANY_REQUESTS' || data.code === 'RATE_LIMITED') {
+            errorDiv.textContent = data.error;
+            
+            // Retry after süresi varsa countdown başlat
+            if (data.retryAfter) {
+              this.startStep1RetryCountdown(data.retryAfter);
+            }
+          } else {
+            errorDiv.textContent = data.error || 'E-posta gönderilemedi!';
+          }
+        }  
+      } catch (error) {  
+        console.error('Send reset code error:', error);  
+        errorDiv.textContent = 'Bağlantı hatası! Tekrar deneyin.';  
+      } finally {  
+        this.setStep1Loading(false);  
+      }  
+    }  
+
+
+    // 2 KOD DOĞRULAMA  
+    initStep2Modal() {  
+      const modal = document.getElementById('verifyResetCodeModal');  
+      const closeBtn = document.getElementById('closeVerifyResetCodeModal');  
+      const codeInput = document.getElementById('resetCodeInput');  
+      const verifyBtn = document.getElementById('verifyResetCodeBtn');  
+      const resendBtn = document.getElementById('resendResetCodeBtn');  
+
+      // Kapat butonları  
+      closeBtn.addEventListener('click', () => this.closeStep2Modal());  
+
+      // Enter tuşu  
+      codeInput.addEventListener('keypress', (e) => {  
+        if (e.key === 'Enter') this.verifyResetCode();  
+      });  
+
+      // Sadece rakam girişi  
+      codeInput.addEventListener('input', (e) => {  
+        e.target.value = e.target.value.replace(/\D/g, '').substring(0, 6);  
+        this.clearStep2Messages();  
+        
+        // 6 haneli kod otomatik doğrula  
+        if (e.target.value.length === 6) {  
+          setTimeout(() => this.verifyResetCode(), 500);  
+        }  
+      });  
+
+      // Doğrula butonu  
+      verifyBtn.addEventListener('click', () => this.verifyResetCode());  
+
+      // Tekrar gönder butonu  
+      resendBtn.addEventListener('click', () => this.resendResetCode());  
+    }  
+
+    openStep2Modal() {  
+      const modal = document.getElementById('verifyResetCodeModal');  
+      const emailDisplay = document.getElementById('resetEmailDisplay');  
+      
+      modal.classList.remove('hidden');  
+      document.body.style.overflow = 'hidden';  
+      emailDisplay.textContent = this.currentEmail;  
+      document.getElementById('resetCodeInput').focus();  
+      
+      this.clearStep2Messages();  
+      this.startCountdown();  
+    }  
+
+    closeStep2Modal() {  
+      const modal = document.getElementById('verifyResetCodeModal');  
+      modal.classList.add('hidden');  
+      document.body.style.overflow = '';  
+      this.resetStep2();  
+    }  
+
+    resetStep2() {  
+      document.getElementById('resetCodeInput').value = '';  
+      this.clearStep2Messages();  
+      this.setStep2Loading(false);  
+      this.stopCountdown();
+      
+      const resendBtn = document.getElementById('resendResetCodeBtn');
+      resendBtn.textContent = 'Kodu tekrar gönder';
+      resendBtn.disabled = false;
+    }
+
+    clearStep2Messages() {  
+      document.getElementById('resetCodeError').textContent = '';  
+    }  
+
+    setStep2Loading(loading) {  
+      const btn = document.getElementById('verifyResetCodeBtn');  
+      const text = document.getElementById('verifyResetBtnText');  
+      const spinner = document.getElementById('verifyResetBtnSpinner');  
+      
+      btn.disabled = loading;  
+      if (loading) {  
+        text.classList.add('hidden');  
+        spinner.classList.remove('hidden');  
+      } else {  
+        text.classList.remove('hidden');  
+        spinner.classList.add('hidden');  
+      }  
+    }  
+
+    startCountdown() {  
+      let timeLeft = 120; // 2 dakika  
+      const countdownDiv = document.getElementById('resetCodeCountdown');  
+      
+      countdownDiv.classList.remove('hidden');  
+      
+      this.countdownTimer = setInterval(() => {  
+        const minutes = Math.floor(timeLeft / 60);  
+        const seconds = timeLeft % 60;  
+        countdownDiv.textContent = `Kod ${minutes}:${seconds.toString().padStart(2, '0')} içinde geçersiz olacak`;  
+        
+        if (timeLeft <= 0) {  
+          this.stopCountdown();  
+          countdownDiv.textContent = 'Kod süresi doldu! Yeni kod talep edin.';  
+          countdownDiv.classList.add('text-red-400');  
+        }  
+        
+        timeLeft--;  
+      }, 1000);  
+    }  
+
+    stopCountdown() {  
+      if (this.countdownTimer) {  
+        clearInterval(this.countdownTimer);  
+        this.countdownTimer = null;  
+      }  
+    }  
+
+    async verifyResetCode() {  
+      const code = document.getElementById('resetCodeInput').value.trim();  
+      const errorDiv = document.getElementById('resetCodeError');  
+
+      if (!code || code.length !== 6) {  
+        errorDiv.textContent = '6 haneli kod gerekli!';  
+        return;  
+      }  
+
+      this.setStep2Loading(true);  
+      this.clearStep2Messages();  
+
+      try {  
+        const response = await fetch('/api/mail/verify-reset-code', {  
+          method: 'POST',  
+          headers: {  
+            'Content-Type': 'application/json',  
+          },  
+          body: JSON.stringify({   
+            email: this.currentEmail,   
+            code   
+          })  
+        });  
+
+        const data = await response.json();  
+
+        if (data.success) {  
+          this.resetToken = data.resetToken;  
+          
+          // Başarılı mesajı göster  
+          setTimeout(() => {  
+            this.closeStep2Modal();  
+            this.openStep3Modal();  
+          }, 500);  
+          
+        } else {  
+          errorDiv.textContent = data.error || 'Geçersiz kod!';  
+          if (data.remainingAttempts !== undefined) {  
+            errorDiv.textContent += ` (${data.remainingAttempts} deneme kaldı)`;  
+          }  
+        }  
+      } catch (error) {  
+        console.error('Verify reset code error:', error);  
+        errorDiv.textContent = 'Bağlantı hatası! Tekrar deneyin.';  
+      } finally {  
+        this.setStep2Loading(false);  
+      }  
+    }  
+
+    async resendResetCode() {  
+      const resendBtn = document.getElementById('resendResetCodeBtn');  
+      
+      resendBtn.disabled = true;  
+      resendBtn.textContent = 'Gönderiliyor...';  
+
+      try {  
+        const response = await fetch('/api/mail/forgot-password', {  
+          method: 'POST',  
+          headers: {  
+            'Content-Type': 'application/json',  
+          },  
+          body: JSON.stringify({ email: this.currentEmail })  
+        });  
+
+        const data = await response.json();  
+
+        if (data.success) {  
+          document.getElementById('resetCodeError').textContent = '';  
+          document.getElementById('resetCodeInput').value = '';
+
+          this.stopCountdown();
+          this.startCountdown();  
+          
+          // Cooldown başlat  
+          let cooldown = this.resendCooldown;  
+          const cooldownInterval = setInterval(() => {  
+            resendBtn.textContent = `Tekrar gönder (${cooldown}s)`;  
+            cooldown--;  
+            
+            if (cooldown < 0) {  
+              clearInterval(cooldownInterval);  
+              resendBtn.textContent = 'Kodu tekrar gönder';  
+              resendBtn.disabled = false;  
+            }  
+          }, 1000);  
+          
+        } else {  
+          if (data.code === 'TOO_MANY_REQUESTS' || data.code === 'RATE_LIMITED') {
+            document.getElementById('resetCodeError').textContent = data.error;
+            
+            // Retry after süresi varsa resend button'ı da disable et
+            if (data.retryAfter) {
+              this.startResendRetryCountdown(data.retryAfter);
+              return; // Early return - normal cooldown başlatma
+            }
+          } else {
+            document.getElementById('resetCodeError').textContent = data.error || 'Kod gönderilemedi!';
+          }
+          
+          resendBtn.textContent = 'Kodu tekrar gönder';  
+          resendBtn.disabled = false;  
+        }  
+      } catch (error) {  
+        console.error('Resend reset code error:', error);  
+        document.getElementById('resetCodeError').textContent = 'Bağlantı hatası!';  
+        resendBtn.textContent = 'Kodu tekrar gönder';  
+        resendBtn.disabled = false;  
+      }  
+    }
+
+    // Resend button için özel retry countdown
+    startResendRetryCountdown(seconds) {
+      const resendBtn = document.getElementById('resendResetCodeBtn');
+      
+      resendBtn.disabled = true;
+      
+      let timeLeft = seconds;
+      const retryInterval = setInterval(() => {
+        resendBtn.textContent = `Tekrar dene (${timeLeft}s)`;
+        timeLeft--;
+        
+        if (timeLeft < 0) {
+          clearInterval(retryInterval);
+          resendBtn.textContent = 'Kodu tekrar gönder';
+          resendBtn.disabled = false;
+        }
+      }, 1000);
+    }
+
+    // 3 YENİ ŞİFRE  
+    initStep3Modal() {  
+      const modal = document.getElementById('newPasswordModal');  
+      const closeBtn = document.getElementById('closeNewPasswordModal');  
+      const newPasswordInput = document.getElementById('newPasswordInput');  
+      const confirmPasswordInput = document.getElementById('confirmPasswordInput');  
+      const saveBtn = document.getElementById('saveNewPasswordBtn');  
+
+      // Kapat butonları  
+      closeBtn.addEventListener('click', () => this.closeStep3Modal()); 
+
+      // Enter tuşları  
+      newPasswordInput.addEventListener('keypress', (e) => {  
+        if (e.key === 'Enter') confirmPasswordInput.focus();  
+      });  
+
+      confirmPasswordInput.addEventListener('keypress', (e) => {  
+        if (e.key === 'Enter') this.saveNewPassword();  
+      });  
+
+      // Input değişikliklerinde hata temizle  
+      [newPasswordInput, confirmPasswordInput].forEach(input => {  
+        input.addEventListener('input', () => this.clearStep3Messages());  
+      });  
+
+      // Kaydet butonu  
+      saveBtn.addEventListener('click', () => this.saveNewPassword());  
+    }  
+
+    openStep3Modal() {  
+      const modal = document.getElementById('newPasswordModal');  
+      modal.classList.remove('hidden');  
+      document.body.style.overflow = 'hidden';  
+      document.getElementById('newPasswordInput').focus();  
+      this.clearStep3Messages();  
+    }  
+
+    closeStep3Modal() {  
+      const modal = document.getElementById('newPasswordModal');  
+      modal.classList.add('hidden');  
+      document.body.style.overflow = '';  
+      this.resetStep3();  
+    }  
+
+    resetStep3() {  
+      document.getElementById('newPasswordInput').value = '';  
+      document.getElementById('confirmPasswordInput').value = '';  
+      this.clearStep3Messages();  
+      this.setStep3Loading(false);  
+    }  
+
+    clearStep3Messages() {  
+      document.getElementById('newPasswordError').textContent = '';  
+      document.getElementById('newPasswordSuccess').classList.add('hidden');  
+    }  
+
+    setStep3Loading(loading) {  
+      const btn = document.getElementById('saveNewPasswordBtn');  
+      const text = document.getElementById('savePasswordBtnText');  
+      const spinner = document.getElementById('savePasswordBtnSpinner');  
+      
+      btn.disabled = loading;  
+      if (loading) {  
+        text.classList.add('hidden');  
+        spinner.classList.remove('hidden');  
+      } else {  
+        text.classList.remove('hidden');  
+        spinner.classList.add('hidden');  
+      }  
+    }  
+
+    async saveNewPassword() {  
+      const newPassword = document.getElementById('newPasswordInput').value;  
+      const confirmPassword = document.getElementById('confirmPasswordInput').value;  
+      const errorDiv = document.getElementById('newPasswordError');
+      const successDiv = document.getElementById('newPasswordSuccess');
+
+      // Şifre validasyonu
+      if (!newPassword || !confirmPassword) {
+        errorDiv.textContent = 'Tüm alanları doldurun!';
+        return;
+      }
+
+      if (newPassword.length < 6) {
+        errorDiv.textContent = 'Şifre en az 6 karakter olmalıdır!';
+        return;
+      }
+
+      if (newPassword.length > 100) {
+        errorDiv.textContent = 'Şifre çok uzun! (Max 100 karakter)';
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        errorDiv.textContent = 'Şifreler eşleşmiyor!';
+        return;
+      }
+
+      // Güçlü şifre kontrolü (opsiyonel)
+      const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+      if (!strongPasswordRegex.test(newPassword)) {
+        errorDiv.textContent = 'Şifreniz en az 1 küçük harf, 1 büyük harf ve 1 rakam içermelidir!';
+        return;
+      }
+
+      this.setStep3Loading(true);
+      this.clearStep3Messages();
+
+      try {
+        const response = await fetch('/api/mail/reset-password', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            resetToken: this.resetToken,
+            newPassword: newPassword
+          })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+          successDiv.textContent = '🎉 Şifreniz başarıyla değiştirildi!';
+          successDiv.classList.remove('hidden');
+          
+          // 2 saniye bekle, sonra modal'ı kapat ve başarı mesajı göster
+          setTimeout(() => {
+            this.closeStep3Modal();
+            this.showSuccessMessage();
+          }, 2000);
+          
+        } else {
+          errorDiv.textContent = data.error || 'Şifre değiştirilemedi!';
+        }
+      } catch (error) {
+        console.error('Reset password error:', error);
+        errorDiv.textContent = 'Bağlantı hatası! Tekrar deneyin.';
+      } finally {
+        this.setStep3Loading(false);
+      }
+    }
+
+    // Başarı mesajı göster
+    showSuccessMessage() {
+      // Ana sayfada toast notification göster
+      this.showToast('Şifreniz başarıyla değiştirildi! Giriş yapabilirsiniz.', 'success');
+      
+      // State'i temizle
+      this.currentEmail = '';
+      this.resetToken = '';
+    }
+
+    // Toast notification gösterici
+    showToast(message, type = 'info') {
+      // Varolan toast'ları kaldır
+      const existingToast = document.querySelector('.password-reset-toast');
+      if (existingToast) {
+        existingToast.remove();
+      }
+
+      // Yeni toast oluştur
+      const toast = document.createElement('div');
+      toast.className = `password-reset-toast fixed top-4 right-4 z-[60] px-6 py-4 rounded-lg shadow-lg text-white font-medium max-w-md transform transition-all duration-300 translate-x-full`;
+      
+      // Type'a göre renk
+      const bgColor = type === 'success' ? 'bg-green-600' : 
+                      type === 'error' ? 'bg-red-600' : 'bg-blue-600';
+      
+      const icon = type === 'success' ? '✅' : 
+                  type === 'error' ? '❌' : 'ℹ️';
+      
+      toast.classList.add(bgColor);
+      toast.innerHTML = `
+        <div class="flex items-center gap-3">
+          <span class="text-xl">${icon}</span>
+          <span>${message}</span>
+          <button class="ml-auto text-white hover:text-gray-200 focus:outline-none" onclick="this.parentElement.parentElement.remove()">
+            ×
+          </button>
+        </div>
+      `;
+
+      document.body.appendChild(toast);
+
+      // Animasyon
+      setTimeout(() => {
+        toast.classList.remove('translate-x-full');
+      }, 100);
+
+      // 5 saniye sonra otomatik kaldır
+      setTimeout(() => {
+        if (toast.parentElement) {
+          toast.classList.add('translate-x-full');
+          setTimeout(() => {
+            toast.remove();
+          }, 300);
+        }
+      }, 5000);
+    }
+
+    // Cleanup metodu
+    destroy() {
+      // Tüm timer'ları temizle
+      if (this.countdownTimer) {
+        clearInterval(this.countdownTimer);
+      }
+      
+      if (this.retryTimer) {
+        clearInterval(this.retryTimer);
+      }
+      
+      // Resend retry timer'ını da temizle
+      if (this.resendRetryTimer) {
+        clearInterval(this.resendRetryTimer);
+      }
+      
+      document.body.style.overflow = '';
+    }
+  }
+
+
+//-------------------------------------
 
   function showLoader() {
     document.getElementById('loader').style.display = 'flex';

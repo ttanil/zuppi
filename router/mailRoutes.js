@@ -1,5 +1,10 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
+const mongoose = require('mongoose');
+const Users = require(path.join(__dirname, '..', 'models', 'users'));
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const { 
   sendMail, 
   sendContactEmail, 
@@ -12,8 +17,15 @@ const {
   testConnection,
   sendVerificationCode,
   verifyEmailCode,
-  getActiveVerificationCodes
+  getActiveVerificationCodes,
+  sendPasswordResetMail,
+  verifyPasswordResetCode,
+  getActivePasswordResetCodes,
+  clearPasswordResetCode,
+  passwordResetCodes
 } = require('../services/mailService');
+
+const JWT_SECRET = process.env.JWT_SECRET || 'your-secret-key';
 
 // GELİŞTİRİLMİŞ GENEL MAİL ENDPOINT'İ
 router.post('/send', async (req, res) => {
@@ -777,6 +789,255 @@ router.post('/verify-email-code', async (req, res) => {
     });
   }
 });
+
+//-------------------------------------
+// ŞİFRE SIFIRLAMA ENDPOİNT'LERİ
+
+// Şifre sıfırlama kodu gönder
+router.post('/forgot-password', async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    // Email kontrolü
+    if (!email) {
+      return res.status(400).json({ error: 'E-posta adresi gerekli!' });
+    }
+
+    // Email format kontrolü
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      return res.status(400).json({ error: 'Geçerli bir e-posta adresi girin!' });
+    }
+
+    // Kullanıcı kontrolü
+    const user = await Users.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ error: 'Bu e-posta adresi ile kayıtlı kullanıcı bulunamadı!' });
+    }
+
+    // 30 saniyelik cooldown
+    const normalizedEmail = email.toLowerCase();
+
+    const { passwordResetCodes } = require('../services/mailService');
+
+    if (passwordResetCodes.has(normalizedEmail)) {
+      const existingCode = passwordResetCodes.get(normalizedEmail);
+      const timeSinceCreated = Date.now() - existingCode.createdAt;
+      const cooldownTime = 30 * 1000; // 30 saniye
+      
+      if (timeSinceCreated < cooldownTime) {
+        const remainingTime = Math.ceil((cooldownTime - timeSinceCreated) / 1000);
+        return res.status(429).json({ 
+          error: `Çok sık kod talebi! ${remainingTime} saniye bekleyip tekrar deneyin.`,
+          code: 'RATE_LIMITED',
+          retryAfter: remainingTime
+        });
+      } else {
+        passwordResetCodes.delete(normalizedEmail);
+      }
+    }
+
+    // 6 haneli kod üret
+    const resetCode = Math.floor(100000 + Math.random() * 900000).toString();
+
+    // Client bilgisi al
+    const clientInfo = {
+      ip: getClientIp(req),
+      userAgent: req.get('User-Agent')
+    };
+
+    // E-posta gönder - fullname kullan, fallback ile
+    await sendPasswordResetMail(
+      user.email, 
+      user.fullname || 'Zuppi Kullanıcısı', 
+      resetCode
+    );
+
+
+    res.status(200).json({ 
+      success: true,
+      message: 'Şifre sıfırlama kodu e-posta adresinize gönderildi!',
+      expiresIn: '2 dakika'
+    });
+
+  } catch (error) {
+    console.error('❌ Forgot password error:', error);
+    res.status(500).json({ 
+      error: 'E-posta gönderilirken bir hata oluştu. Lütfen tekrar deneyin.',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// Kodu doğrula
+router.post('/verify-reset-code', async (req, res) => {
+  try {
+    const { email, code } = req.body;
+
+    if (!email || !code) {
+      return res.status(400).json({ error: 'E-posta ve kod gerekli!' });
+    }
+
+    // 6 haneli kod kontrolü
+    if (code.length !== 6 || !/^\d{6}$/.test(code)) {
+      return res.status(400).json({ error: '6 haneli sayısal kod gerekli!' });
+    }
+
+    // Kullanıcı kontrolü
+    const user = await Users.findOne({ email: email.toLowerCase() });
+    if (!user) {
+      return res.status(404).json({ error: 'Kullanıcı bulunamadı!' });
+    }
+
+    // mailService ile kod doğrula
+    const result = await verifyPasswordResetCode(email.toLowerCase(), code);
+    console.log(result);
+
+    if (result.success) {
+      // Memory'den de kodu temizle
+      clearPasswordResetCode(user.email);
+      // Kod doğru - şifre değiştirme token'i üret
+      const resetToken = jwt.sign(
+        { userId: user._id, email: user.email, type: 'password_reset' },
+        JWT_SECRET,
+        { expiresIn: '5m' }
+      );
+
+      res.status(200).json({ 
+        success: true,
+        message: 'Kod doğrulandı!',
+        resetToken: resetToken
+      });
+    } else {
+      res.status(400).json({ 
+        success: false,
+        error: result.error,
+        code: result.code,
+        remainingAttempts: result.remainingAttempts
+      });
+    }
+
+  } catch (error) {
+    console.log('❌ Verify reset code error:', error);
+    res.status(500).json({ 
+      error: 'Sunucu hatası!',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// Yeni şifre belirle
+router.post('/reset-password', async (req, res) => {
+  try {
+    const { resetToken, newPassword } = req.body;
+
+    if (!resetToken || !newPassword) {
+      return res.status(400).json({ error: 'Token ve yeni şifre gerekli!' });
+    }
+
+    // Şifre güvenlik kontrolü
+    if (newPassword.length < 6) {
+      return res.status(400).json({ error: 'Şifre en az 6 karakter olmalıdır!' });
+    }
+
+    if (newPassword.length > 100) {
+      return res.status(400).json({ error: 'Şifre çok uzun!' });
+    }
+
+    // Token doğrula
+    let decoded;
+    try {
+      decoded = jwt.verify(resetToken, JWT_SECRET);
+      if (decoded.type !== 'password_reset') {
+        throw new Error('Invalid token type');
+      }
+    } catch (jwtError) {
+      return res.status(400).json({ error: 'Geçersiz veya süresi dolmuş token!' });
+    }
+
+    const user = await Users.findById(decoded.userId);
+    if (!user) {
+      return res.status(404).json({ error: 'Kullanıcı bulunamadı!' });
+    }
+
+    // Yeni şifreyi hashle
+    const hashedPassword = await bcrypt.hash(newPassword, 10);
+    user.password_hash = hashedPassword;
+        
+    await user.save();
+
+    // Memory'den de kodu temizle
+    clearPasswordResetCode(user.email);
+
+    res.status(200).json({ 
+      success: true,
+      message: 'Şifreniz başarıyla değiştirildi! Giriş yapabilirsiniz.' 
+    });
+
+  } catch (error) {
+    console.error('❌ Reset password error:', error);
+    res.status(500).json({ 
+      error: 'Sunucu hatası!',
+      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    });
+  }
+});
+
+// Aktif şifre sıfırlama kodlarını listele (DEBUG/ADMIN)
+router.get('/active-reset-codes', async (req, res) => {
+  try {
+    // Production'da bu route'u admin yetkisi ile koruyun!
+    const activeCodes = getActivePasswordResetCodes();
+    
+    res.json({
+      success: true,
+      activeCodesCount: activeCodes.length,
+      codes: process.env.NODE_ENV === 'development' ? activeCodes : activeCodes.map(code => ({
+        email: code.email,
+        createdAt: code.createdAt,
+        expiresAt: code.expiresAt,
+        remainingSeconds: code.remainingSeconds,
+        attempts: code.attempts,
+        verified: code.verified
+      }))
+    });
+    
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      error: 'Kod listesi alınamadı' 
+    });
+  }
+});
+
+// Şifre sıfırlama kodunu manuel temizle (DEBUG/ADMIN)
+router.delete('/clear-reset-code/:email', async (req, res) => {
+  try {
+    // Production'da bu route'u admin yetkisi ile koruyun!
+    const { email } = req.params;
+    
+    if (!email) {
+      return res.status(400).json({ error: 'Email gerekli!' });
+    }
+    
+    const deleted = clearPasswordResetCode(email.toLowerCase());
+    
+    res.json({
+      success: true,
+      message: deleted ? 'Kod temizlendi' : 'Kod bulunamadı',
+      deleted,
+      email: email.toLowerCase()
+    });
+    
+  } catch (error) {
+    res.status(500).json({ 
+      success: false,
+      error: 'Kod temizlenemedi' 
+    });
+  }
+});
+
+//-------------------------------------
 
 function getClientIp(req) {
   return req.headers['x-forwarded-for'] || 

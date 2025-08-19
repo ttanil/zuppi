@@ -19,6 +19,12 @@ setInterval(() => {
       verificationCodes.delete(email);
     }
   }
+
+  for (const [email, data] of passwordResetCodes.entries()) {
+    if (now > data.expiresAt) {
+      passwordResetCodes.delete(email);
+    }
+  }
 }, 5 * 60 * 1000); // 5 dakika
 
 // ZOHO.EU İÇİN SMTP TRANSPORTER
@@ -778,6 +784,248 @@ const getActiveVerificationCodes = () => {
 };
 //--------------------------------
 
+// PASSWORD RESET FUNCTIONALITY
+
+// Password reset codes storage
+const passwordResetCodes = new Map();
+
+// Şifre sıfırlama kodu gönder
+const sendPasswordResetMail = async (userEmail, userName, resetCode) => {
+  try {
+    const expiresAt = Date.now() + (2 * 60 * 1000); // 2 dakika
+    
+    // Kodu memory'de sakla
+    passwordResetCodes.set(userEmail, {
+      code: resetCode,
+      createdAt: Date.now(),
+      expiresAt,
+      attempts: 0,
+      maxAttempts: 5,
+      verified: false
+    });
+
+    const sendTime = new Date().toLocaleString('tr-TR', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      timeZone: 'Europe/Istanbul'
+    });
+
+    const html = `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; background: #f8f9fa;">
+        <div style="background: linear-gradient(135deg, #ef4444, #dc2626); padding: 30px; text-align: center;">
+          <h1 style="color: white; margin: 0; font-size: 28px;">🔐 Şifre Sıfırlama</h1>
+          <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0;">6 haneli güvenlik kodunuz</p>
+        </div>
+        
+        <div style="padding: 30px; background: white;">
+          <h2 style="color: #333; margin-top: 0;">Merhaba ${userName}! 👋</h2>
+          
+          <p style="color: #666; line-height: 1.6; margin-bottom: 25px;">
+            zuppi hesabınızda şifre sıfırlama için doğrulama kodu aşağıda yer almaktadır:
+          </p>
+          
+          <div style="background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 12px; padding: 30px; text-align: center; margin: 30px 0;">
+            <h3 style="color: white; margin: 0 0 15px 0; font-size: 18px;">🔑 Doğrulama Kodunuz</h3>
+            <div style="background: white; color: #333; font-size: 36px; font-weight: bold; padding: 20px; border-radius: 8px; letter-spacing: 8px; font-family: monospace;">
+              ${resetCode}
+            </div>
+            <p style="color: rgba(255,255,255,0.9); margin: 15px 0 0 0; font-size: 14px;">
+              Bu kodu şifre sıfırlama sayfasına giriniz
+            </p>
+          </div>
+          
+          <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 20px; margin: 25px 0;">
+            <div style="display: flex; align-items: center; margin-bottom: 10px;">
+              <span style="font-size: 20px; margin-right: 10px;">⏱️</span>
+              <h4 style="color: #856404; margin: 0; font-size: 16px;">Önemli Bilgiler</h4>
+            </div>
+            <ul style="color: #856404; margin: 10px 0 0 0; padding-left: 20px; font-size: 14px;">
+              <li>Bu kod <strong>2 dakika</strong> içinde geçersiz olacak</li>
+              <li>Maksimum <strong>5 deneme</strong> hakkınız var</li>
+              <li>Kodu kimseyle paylaşmayın</li>
+              <li>Gönderilme zamanı: <strong>${sendTime}</strong></li>
+            </ul>
+          </div>
+
+          <div style="background: #f8d7da; border: 1px solid #f5c6cb; border-radius: 8px; padding: 15px; margin: 25px 0;">
+            <h4 style="color: #721c24; margin-top: 0; font-size: 14px;">📋 Nasıl Kullanılır?</h4>
+            <ol style="color: #721c24; margin-bottom: 0; font-size: 13px; padding-left: 20px;">
+              <li>Giriş sayfasına gidin</li>
+              <li>"Şifremi Unuttum" linkine tıklayın</li>
+              <li>Yukarıdaki 6 haneli kodu girin</li>
+              <li>Yeni şifrenizi belirleyin</li>
+            </ol>
+          </div>
+          
+          <div style="background: #e8f5e8; border: 1px solid #d4edda; border-radius: 8px; padding: 15px; margin: 25px 0;">
+            <h4 style="color: #155724; margin-top: 0; font-size: 14px;">🔒 Güvenlik Uyarısı</h4>
+            <p style="color: #155724; margin-bottom: 0; font-size: 13px;">
+              Bu doğrulama kodunu sadece zuppi.live sitesinde kullanın. Başka hiçbir yerde girmeyin!
+            </p>
+          </div>
+        </div>
+        
+        <div style="background: #343a40; color: #fff; text-align: center; padding: 20px;">
+          <p style="margin: 0; font-size: 14px; opacity: 0.8;">
+            Bu e-posta otomatik olarak gönderilmiştir. Doğrudan yanıtlamayın.
+          </p>
+          <p style="margin: 5px 0 0 0; font-size: 12px; opacity: 0.6;">
+            Sorun yaşıyorsanız: <a href="mailto:${process.env.SMTP_USER}" style="color: #ffc107;">iletisim@zuppi.live</a>
+          </p>
+          <p style="margin: 10px 0 0 0; font-size: 12px; opacity: 0.6;">
+            © ${new Date().getFullYear()} ${process.env.APP_NAME || 'zuppi'} - Şifre Sıfırlama Sistemi
+          </p>
+        </div>
+      </div>
+    `;
+
+    const result = await sendMail({
+      to: userEmail,
+      subject: `🔐 ${process.env.APP_NAME || 'zuppi'} Şifre Sıfırlama Kodu: ${resetCode}`,
+      html,
+      text: `${process.env.APP_NAME || 'zuppi'} şifre sıfırlama kodunuz: ${resetCode}. Bu kod 2 dakika içinde geçersiz olacak.`,
+      from: `"zuppi Şifre İşlemleri"<iletisim@zuppi.live>`
+    });
+    
+    return {
+      success: true,
+      code: resetCode, // Debug için (production'da kaldır)
+      expiresAt,
+      result
+    };
+
+  } catch (error) {
+    console.error('❌ Send password reset mail error:', error);
+    throw error;
+  }
+};
+
+// Şifre sıfırlama kodunu doğrula
+const verifyPasswordResetCode = async (userEmail, inputCode) => {
+  try {
+    // Kod var mı kontrol et
+    const codeData = passwordResetCodes.get(userEmail);
+    if (!codeData) {
+      return {
+        success: false,
+        error: 'Şifre sıfırlama kodu bulunamadı veya süresi dolmuş',
+        code: 'CODE_NOT_FOUND'
+      };
+    }
+    
+    // Kod süresi dolmuş mu kontrol et
+    if (Date.now() > codeData.expiresAt) {
+      passwordResetCodes.delete(userEmail);
+      return {
+        success: false,
+        error: 'Şifre sıfırlama kodu süresi dolmuş (10 dakika)',
+        code: 'CODE_EXPIRED'
+      };
+    }
+    
+    // Kod zaten kullanılmış mı kontrol et
+    if (codeData.verified) {
+      return {
+        success: false,
+        error: 'Bu şifre sıfırlama kodu zaten kullanılmış',
+        code: 'CODE_ALREADY_USED'
+      };
+    }
+    
+    // Max deneme aşıldı mı kontrol et
+    if (codeData.attempts >= codeData.maxAttempts) {
+      passwordResetCodes.delete(userEmail);
+      return {
+        success: false,
+        error: 'Çok fazla hatalı deneme. Yeni kod talep edin.',
+        code: 'MAX_ATTEMPTS_EXCEEDED'
+      };
+    }
+    
+    // Kod doğru mu kontrol et
+    if (codeData.code !== inputCode.toString()) {
+      codeData.attempts++;
+      passwordResetCodes.set(userEmail, codeData);
+      
+      const remainingAttempts = codeData.maxAttempts - codeData.attempts;
+      
+      return {
+        success: false,
+        error: `Şifre sıfırlama kodu hatalı! Kalan deneme: ${remainingAttempts}`,
+        code: 'INVALID_CODE',
+        remainingAttempts
+      };
+    }
+    
+    // Kod doğru - işaretle
+    const verificationTime = new Date().toLocaleString('tr-TR', {
+      year: 'numeric',
+      month: 'long', 
+      day: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    
+    codeData.verified = true;
+    codeData.verificationTime = verificationTime;
+    passwordResetCodes.set(userEmail, codeData);
+        
+    // Başarılı response döndür
+    return {
+      success: true,
+      message: 'Şifre sıfırlama kodu doğrulandı!',
+      data: {
+        userEmail,
+        verificationTime,
+        originalSendTime: new Date(codeData.createdAt).toLocaleString('tr-TR')
+      }
+    };
+    
+  } catch (error) {
+    console.error('❌ verifyPasswordResetCode error:', error);
+    return {
+      success: false,
+      error: 'Kod doğrulama işlemi sırasında hata oluştu: ' + error.message,
+      code: 'VERIFICATION_ERROR'
+    };
+  }
+};
+
+// Aktif şifre sıfırlama kodlarını listele (DEBUG)
+const getActivePasswordResetCodes = () => {
+  const activeCodes = [];
+  const now = Date.now();
+  
+  for (const [email, data] of passwordResetCodes.entries()) {
+    if (now <= data.expiresAt) {
+      activeCodes.push({
+        email,
+        code: data.code, // Production'da kaldır
+        createdAt: new Date(data.createdAt).toLocaleTimeString(),
+        expiresAt: new Date(data.expiresAt).toLocaleTimeString(),
+        remainingSeconds: Math.round((data.expiresAt - now) / 1000),
+        attempts: data.attempts,
+        verified: data.verified
+      });
+    }
+  }
+  
+  return activeCodes;
+};
+
+// Şifre sıfırlama kodunu temizle
+const clearPasswordResetCode = (userEmail) => {
+  const deleted = passwordResetCodes.delete(userEmail);
+  return deleted;
+};
+
+//-----------------------------------
+
 
 
 // EXPORT'A EKLE
@@ -794,5 +1042,10 @@ module.exports = {
   createTransporter,
   sendVerificationCode,
   verifyEmailCode,
-  getActiveVerificationCodes
+  getActiveVerificationCodes,
+  sendPasswordResetMail,
+  verifyPasswordResetCode,
+  getActivePasswordResetCodes,
+  clearPasswordResetCode,
+  passwordResetCodes
 };

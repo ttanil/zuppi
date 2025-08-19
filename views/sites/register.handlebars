@@ -89,8 +89,10 @@
       <div class="relative">
         <label for="password" class="text-sm text-gray-200 font-semibold mb-1 block">Şifre</label>
         <input type="password" id="password" name="password" required minlength="6" maxlength="32"
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$"
+          title="Şifre en az 1 küçük harf, 1 büyük harf ve 1 rakam içermelidir"
           class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition pr-10"
-          placeholder="şifreniz" autocomplete="new-password">
+          placeholder="şifreniz (büyük/küçük harf ve rakam)" autocomplete="new-password">
         <!-- Göz butonu -->
         <button type="button" id="togglePassword"
           class="absolute right-3 top-9 transform -translate-y-1/2 text-gray-400 hover:text-yellow-400 transition focus:outline-none hidden">
@@ -111,6 +113,8 @@
       <div class="relative">
         <label for="password2" class="text-sm text-gray-200 font-semibold mb-1 block">Şifre Tekrar</label>
         <input type="password" id="password2" name="password2" required minlength="6" maxlength="32"
+          pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$"
+          title="Şifre en az 1 küçük harf, 1 büyük harf ve 1 rakam içermelidir"
           class="w-full bg-zinc-800 border border-zinc-700 focus:border-red-600 rounded-lg py-2 px-3 text-gray-100 placeholder-gray-400 focus:outline-none transition pr-10"
           placeholder="şifrenizi tekrar yazın" autocomplete="new-password">
         <!-- Göz butonu -->
@@ -606,6 +610,12 @@
         }
         if (password.length < 6 || password.length > 32) {
           feedback.textContent = 'Şifre 6-32 karakter arasında olmalıdır.';
+          feedback.className = 'error';
+          return;
+        }
+        const strongPasswordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d).+$/;
+        if (!strongPasswordRegex.test(password)) {
+          feedback.textContent = 'Şifreniz en az 1 küçük harf, 1 büyük harf ve 1 rakam içermelidir!';
           feedback.className = 'error';
           return;
         }
