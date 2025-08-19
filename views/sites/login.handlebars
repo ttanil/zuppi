@@ -205,7 +205,7 @@
 
 <!-- Şifre Sıfırlama Modal 2: Kod Doğrulama -->
 <div id="verifyResetCodeModal" class="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center hidden">
-  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8 w-[90%] max-w-md flex flex-col items-center gap-4 relative">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8  w-[90%] max-w-md flex flex-col items-center gap-4 relative">
     <button id="closeVerifyResetCodeModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg focus:outline-none">&times;</button>
     
     <div class="font-bold text-lg mb-2 flex flex-col items-center">
@@ -252,7 +252,7 @@
 
 <!-- Şifre Sıfırlama Modal 3: Yeni Şifre Belirleme -->
 <div id="newPasswordModal" class="fixed inset-0 z-50 bg-black bg-opacity-60 flex items-center justify-center hidden">
-  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8 w-[90%] max-w-md flex flex-col items-center gap-4 relative">
+  <div class="bg-zinc-900 text-white rounded-2xl shadow-2xl p-8  w-[90%] max-w-md flex flex-col items-center gap-4 relative">
     <button id="closeNewPasswordModal" class="absolute top-2 right-3 text-zinc-400 hover:text-red-400 text-lg focus:outline-none">&times;</button>
     
     <div class="font-bold text-lg mb-2 flex flex-col items-center">
@@ -1562,7 +1562,15 @@
     resetStep1() {  
       document.getElementById('resetEmailInput').value = '';  
       this.clearStep1Messages();  
-      this.setStep1Loading(false);  
+      this.setStep1Loading(false);
+      if (this.retryTimer) {
+        clearInterval(this.retryTimer);
+        this.retryTimer = null;
+        
+        // Buton'u normale döndür
+        document.getElementById('sendResetBtnText').textContent = 'Kod Gönder';
+        document.getElementById('sendResetCodeBtn').disabled = false;
+      }
     }  
 
     clearStep1Messages() {  
@@ -1645,7 +1653,27 @@
       } finally {  
         this.setStep1Loading(false);  
       }  
-    }  
+    }
+
+    startStep1RetryCountdown(seconds) {
+      const sendBtn = document.getElementById('sendResetCodeBtn');
+      const btnText = document.getElementById('sendResetBtnText');
+      
+      sendBtn.disabled = true;
+      
+      let timeLeft = seconds;
+      this.retryTimer = setInterval(() => {
+        btnText.textContent = `Tekrar dene (${timeLeft}s)`;
+        timeLeft--;
+        
+        if (timeLeft < 0) {
+          clearInterval(this.retryTimer);
+          this.retryTimer = null;
+          btnText.textContent = 'Kod Gönder';
+          sendBtn.disabled = false;
+        }
+      }, 1000);
+    }
 
 
     // 2 KOD DOĞRULAMA  
