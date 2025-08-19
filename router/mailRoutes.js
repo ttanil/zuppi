@@ -891,7 +891,7 @@ router.post('/verify-reset-code', async (req, res) => {
 
     // mailService ile kod doğrula
     const result = await verifyPasswordResetCode(email.toLowerCase(), code);
-    console.log(result);
+    //console.log(result);
 
     if (result.success) {
       // Memory'den de kodu temizle
