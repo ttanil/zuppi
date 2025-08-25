@@ -1101,9 +1101,16 @@ An experienced instructor specialized in various techniques and applications, wh
     const detailModal = document.getElementById('detailModal');  
     const closeDetailModalEl = document.getElementById('closeDetailModal');
 
+//------------------------------------------------------
     let currentSlide = 0;
     let maxSlides = 0;
     let cardsPerView = 3;
+
+    // Touch events için değişkenler
+    let startX = 0;
+    let startY = 0;
+    let isDragging = false;
+    let startTranslateX = 0;
 
     function initializeCarousel() {
         const carousel = document.getElementById('teacherGrid');
@@ -1145,7 +1152,120 @@ An experienced instructor specialized in various techniques and applications, wh
         if (prevBtn) prevBtn.onclick = () => previousSlide();
         if (nextBtn) nextBtn.onclick = () => nextSlide();
         
+        // Touch event'lerini ekle
+        addTouchEvents(carousel);
+        
         updateCarousel();
+    }
+
+    function addTouchEvents(carousel) {
+        if (!carousel) return;
+        
+        // Touch start
+        carousel.addEventListener('touchstart', handleTouchStart, { passive: false });
+        carousel.addEventListener('mousedown', handleTouchStart);
+        
+        // Touch move
+        carousel.addEventListener('touchmove', handleTouchMove, { passive: false });
+        carousel.addEventListener('mousemove', handleTouchMove);
+        
+        // Touch end
+        carousel.addEventListener('touchend', handleTouchEnd);
+        carousel.addEventListener('mouseup', handleTouchEnd);
+        carousel.addEventListener('mouseleave', handleTouchEnd);
+        
+        // Drag'i engelle
+        carousel.addEventListener('dragstart', (e) => e.preventDefault());
+    }
+
+    function handleTouchStart(e) {
+        const carousel = document.getElementById('teacherGrid');
+        if (!carousel || maxSlides === 0) return;
+        
+        isDragging = true;
+        
+        // Mouse veya touch koordinatlarını al
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        startX = clientX;
+        startY = clientY;
+        
+        // Mevcut transform değerini al
+        const transform = window.getComputedStyle(carousel).transform;
+        if (transform !== 'none') {
+            const matrix = transform.match(/matrix.*\((.+)\)/);
+            if (matrix) {
+                const values = matrix[1].split(', ');
+                startTranslateX = parseFloat(values[4]) || 0;
+            }
+        } else {
+            startTranslateX = 0;
+        }
+        
+        // Animasyonu durdur
+        carousel.style.transition = 'none';
+        
+        // Mouse için
+        if (!e.touches) {
+            e.preventDefault();
+        }
+    }
+
+    function handleTouchMove(e) {
+        const carousel = document.getElementById('teacherGrid');
+        if (!carousel || !isDragging || maxSlides === 0) return;
+        
+        // Mouse veya touch koordinatlarını al
+        const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+        const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+        
+        const deltaX = clientX - startX;
+        const deltaY = clientY - startY;
+        
+        // Dikey kaydırma kontrolü
+        if (Math.abs(deltaY) > Math.abs(deltaX)) {
+            // Dikey kaydırma daha fazlaysa, touch event'i iptal et
+            isDragging = false;
+            carousel.style.transition = '';
+            return;
+        }
+        
+        // Yatay kaydırma için sayfanın kaydırılmasını engelle
+        e.preventDefault();
+        
+        const newTranslateX = startTranslateX + deltaX;
+        carousel.style.transform = `translateX(${newTranslateX}px)`;
+    }
+
+    function handleTouchEnd(e) {
+        const carousel = document.getElementById('teacherGrid');
+        if (!carousel || !isDragging || maxSlides === 0) return;
+        
+        isDragging = false;
+        
+        // Animasyonu geri yükle
+        carousel.style.transition = 'transform 0.3s ease';
+        
+        // Mouse veya touch koordinatlarını al
+        const clientX = e.changedTouches ? e.changedTouches[0].clientX : e.clientX;
+        const deltaX = clientX - startX;
+        
+        // Minimum kaydırma mesafesi (50px)
+        const minSwipeDistance = 50;
+        
+        if (Math.abs(deltaX) > minSwipeDistance) {
+            if (deltaX > 0) {
+                // Sağa kaydırma - önceki slide
+                previousSlide();
+            } else {
+                // Sola kaydırma - sonraki slide
+                nextSlide();
+            }
+        } else {
+            // Yeteri kadar kaydırılmadıysa eski pozisyona dön
+            updateCarousel();
+        }
     }
 
     function updateCarousel() {
@@ -1167,6 +1287,8 @@ An experienced instructor specialized in various techniques and applications, wh
         // Her slide'da 1 kart genişliği + gap kadar kaydır
         const translateX = -(currentSlide * (cardWidth + gap));
         
+        // Animasyon ile güncelle
+        carousel.style.transition = 'transform 0.3s ease';
         carousel.style.transform = `translateX(${translateX}px)`;
         
         // Button states
@@ -1261,6 +1383,8 @@ An experienced instructor specialized in various techniques and applications, wh
             initializeCarousel();
         }, 100);
     });
+
+//-----------------------------------------------------
 
     // Eğitmen isimlerini render et
     function renderTeacherNames() {

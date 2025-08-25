@@ -8,7 +8,8 @@
   <link rel="stylesheet" href="css/index.css">
   <script src="https://cdn.tailwindcss.com"></script>
   <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
-  <style>
+  
+<style>
     body {overflow-x: hidden;}
     .lottie-animation{
         margin-left: -18px;
@@ -46,31 +47,108 @@
       from { transform: translateX(0); }
       to   { transform: translateX(-50%); }
     }
+
+    /* İkinci satır için ters yönlü animasyon */
+    @keyframes slideTrackReverse {
+      from { transform: translateX(-50%); }
+      to   { transform: translateX(0); }
+    }
+
     .carousel-outer {
       overflow: hidden;
       width: 120%;
       margin-top: 40px !important;
       /* Scrollbar gizlendi */
     }
+
     .carousel-track {
       display: flex;
       width: max-content;
       animation: slideTrack 24s linear infinite;
     }
+
+    /* Birinci satır carousel hover */
+    .carousel-track:hover {
+      animation-play-state: paused !important;
+    }
+
+    /* Her bir kartın hover durumu */
+    .carousel-track .flex-shrink-0:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      z-index: 10;
+      position: relative;
+    }
+
+    /* Kart hover'ında parent animasyonu durdur */
+    .carousel-track:has(.flex-shrink-0:hover) {
+      animation-play-state: paused !important;
+    }
+
     .second {
         margin-left: -64px !important;
     }
 
+    /* İkinci satır için ters animasyon */
+    .carousel-outer.second .carousel-track {
+      animation: slideTrackReverse 28s linear infinite;
+    }
+
+    /* İkinci satır hover */
+    .carousel-outer.second .carousel-track:hover {
+      animation-play-state: paused !important;
+    }
+
+    /* İkinci satır kart hover */
+    .carousel-outer.second .carousel-track:has(.flex-shrink-0:hover) {
+      animation-play-state: paused !important;
+    }
+
+    /* Kart geçiş efektleri */
+    .carousel-track .flex-shrink-0 {
+      transition: all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      cursor: pointer;
+    }
+
+    /* Video kartlarına özel hover efekti */
+    .video-card:hover {
+      transform: translateY(-12px) scale(1.02);
+      box-shadow: 0 25px 50px rgba(220, 38, 38, 0.2);
+    }
+
+    /* İndirim kartlarına özel hover efekti */
+    .carousel-track .flex-shrink-0:has(.bg-yellow-300):hover {
+      transform: translateY(-10px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(234, 179, 8, 0.3);
+    }
+
     @media (max-width: 768px) {
-        .carousel-outer { width: 100vw !important; max-width: 100vw !important; margin-left: 0 !important; }
-        .second { margin-left: 0 !important; }
+        .carousel-outer { 
+          width: 100vw !important; 
+          max-width: 100vw !important; 
+          margin-left: 0 !important; 
+        }
+        .second { 
+          margin-left: 0 !important; 
+        }
         .zuppi-logo{
           margin-top:5px !important;
         }
+
+        /* Mobilde hover efektlerini azalt */
+        .carousel-track .flex-shrink-0:hover {
+          transform: translateY(-4px);
+          box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
     }
+
     @media (min-width: 769px) {
-        .carousel-outer { width: 120%; }
-        .second { margin-left: -64px !important; }
+        .carousel-outer { 
+          width: 120%; 
+        }
+        .second { 
+          margin-left: -64px !important; 
+        }
     }
 
     @media (max-width: 640px) { 
@@ -89,8 +167,35 @@
       .flex-shrink-0 {
         transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
       }
+
+      /* Mobilde animasyon durdurma */
+      .carousel-track:hover,
+      .carousel-outer.second .carousel-track:hover {
+        animation-play-state: paused !important;
+      }
     }
-  </style>
+
+    /* Browser uyumluluğu için */
+    @supports not selector(:has(*)) {
+      /* :has() desteklemeyen browserlar için fallback */
+      .carousel-track .flex-shrink-0:hover ~ * {
+        animation-play-state: paused !important;
+      }
+    }
+
+    /* Smooth animasyon geçişleri */
+    .carousel-track {
+      will-change: transform;
+      backface-visibility: hidden;
+      transform-style: preserve-3d;
+    }
+
+    /* Performance optimizasyonu */
+    .carousel-track .flex-shrink-0 {
+      will-change: transform, box-shadow;
+      backface-visibility: hidden;
+    }
+</style>
 </head>
 <body class="bg-black text-white min-h-screen">
 
@@ -908,6 +1013,7 @@
 
       document.addEventListener("contextmenu", contextmenuListener);
     }
+    
     function closeVideoModal() {
       document.getElementById('videoModal').classList.add('hidden');
       const video = document.getElementById('mainVideo');
@@ -923,6 +1029,141 @@
         promo.play();
         }
     });
+
+    // ========== CAROUSEL HOVER CONTROL FUNCTIONS ==========
+    
+    function initCarouselHoverControls() {
+      const carouselTracks = document.querySelectorAll('.carousel-track');
+      
+      carouselTracks.forEach((track, trackIndex) => {
+        const cards = track.querySelectorAll('.flex-shrink-0');
+        
+        // Track hover events
+        track.addEventListener('mouseenter', function() {
+          pauseCarouselAnimation(track);
+        });
+        
+        track.addEventListener('mouseleave', function() {
+          resumeCarouselAnimation(track);
+        });
+        
+        // Individual card hover events
+        cards.forEach((card, cardIndex) => {
+          card.addEventListener('mouseenter', function() {
+            pauseCarouselAnimation(track);
+            addCardHoverEffect(card);
+          });
+          
+          card.addEventListener('mouseleave', function() {
+            removeCardHoverEffect(card);
+            // Animasyonu devam ettir (eğer mouse track üzerinde değilse)
+            setTimeout(() => {
+              if (!track.matches(':hover')) {
+                resumeCarouselAnimation(track);
+              }
+            }, 50);
+          });
+        });
+      });
+    }
+    
+    function pauseCarouselAnimation(track) {
+      track.style.animationPlayState = 'paused';
+      track.classList.add('paused');
+    }
+    
+    function resumeCarouselAnimation(track) {
+      track.style.animationPlayState = 'running';
+      track.classList.remove('paused');
+    }
+    
+    function addCardHoverEffect(card) {
+      card.style.transform = 'translateY(-12px) scale(1.02)';
+      card.style.zIndex = '20';
+      card.style.transition = 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+      
+      // Video kartları için özel efekt
+      if (card.classList.contains('video-card')) {
+        card.style.boxShadow = '0 25px 50px rgba(220, 38, 38, 0.3)';
+      }
+      // İndirim kartları için özel efekt
+      else if (card.querySelector('.bg-yellow-300')) {
+        card.style.boxShadow = '0 25px 50px rgba(234, 179, 8, 0.3)';
+      }
+      // Normal kartlar için efekt
+      else {
+        card.style.boxShadow = '0 20px 40px rgba(0, 0, 0, 0.3)';
+      }
+    }
+    
+    function removeCardHoverEffect(card) {
+      card.style.transform = '';
+      card.style.zIndex = '';
+      card.style.boxShadow = '';
+      card.style.transition = 'all 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+    }
+    
+    // Touch cihazlar için carousel kontrolü
+    function initTouchCarouselControls() {
+      const carouselTracks = document.querySelectorAll('.carousel-track');
+      let touchStartX = 0;
+      let touchStartY = 0;
+      let isDragging = false;
+      
+      carouselTracks.forEach(track => {
+        track.addEventListener('touchstart', function(e) {
+          touchStartX = e.touches[0].clientX;
+          touchStartY = e.touches[0].clientY;
+          isDragging = false;
+          pauseCarouselAnimation(track);
+        });
+        
+        track.addEventListener('touchmove', function(e) {
+          if (!isDragging) {
+            const deltaX = Math.abs(e.touches[0].clientX - touchStartX);
+            const deltaY = Math.abs(e.touches[0].clientY - touchStartY);
+            
+            // Eğer yatay hareket daha fazlaysa carousel kontrolü yap
+            if (deltaX > deltaY && deltaX > 10) {
+              isDragging = true;
+              e.preventDefault(); // Sayfa scroll'unu engelle
+            }
+          }
+        });
+        
+        track.addEventListener('touchend', function(e) {
+          setTimeout(() => {
+            resumeCarouselAnimation(track);
+          }, 500); // 500ms sonra animasyonu devam ettir
+        });
+      });
+    }
+    
+    // Intersection Observer ile performans optimizasyonu
+    function initCarouselPerformanceOptimization() {
+      const carouselOuters = document.querySelectorAll('.carousel-outer');
+      
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          const track = entry.target.querySelector('.carousel-track');
+          if (track) {
+            if (entry.isIntersecting) {
+              // Görünür durumda - animasyonu çalıştır
+              track.style.animationPlayState = 'running';
+            } else {
+              // Görünür değil - animasyonu durdur (performans için)
+              track.style.animationPlayState = 'paused';
+            }
+          }
+        });
+      }, {
+        threshold: 0.1 // %10 görünür olduğunda tetikle
+      });
+      
+      carouselOuters.forEach(carousel => {
+        observer.observe(carousel);
+      });
+    }
 
     document.addEventListener('DOMContentLoaded', function() {
       /*
@@ -962,6 +1203,11 @@
             autoplay: true,
             path: 'img/membership.json'
         });
+
+        // ========== CAROUSEL CONTROLS INITIALIZATION ==========
+        initCarouselHoverControls();
+        initTouchCarouselControls();
+        initCarouselPerformanceOptimization();
 
 // ---------------görüntü kayması -----------------
         const container = document.getElementById('mobile-cards');
@@ -1068,6 +1314,7 @@
             });
           }
         });
+        
         // Modal kapatma event'leri
         const closeBtn = document.getElementById('closeVideoModalBtn');
         const modal = document.getElementById('videoModal');
@@ -1095,11 +1342,21 @@
             }
         });
 
-
-    });
-
-        
-    
+        // Sayfa görünürlük değişikliklerinde carousel kontrolü
+        document.addEventListener('visibilitychange', function() {
+            const tracks = document.querySelectorAll('.carousel-track');
+            tracks.forEach(track => {
+                if (document.hidden) {
+                    pauseCarouselAnimation(track);
+                } else {
+                    // Sadece mouse üzerinde değilse devam ettir
+                    if (!track.matches(':hover')) {
+                        resumeCarouselAnimation(track);
+                    }
+                }
+            });
+        });
+    });        
 </script>
 </body>
 </html>
