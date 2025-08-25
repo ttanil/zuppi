@@ -8,124 +8,279 @@
     <link rel="stylesheet" href="css/index.css">
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Work+Sans:wght@400;700&display=swap" rel="stylesheet">
-    <style>
-        body { overflow-x: hidden; }
+    <style>     
+        body {
+            overflow-x: hidden;
+            background: 
+                radial-gradient(110px circle at 1% 0%, 
+                    #f2f2d3 0%, 
+                    #ebe5bb 30%, 
+                    rgba(237, 230, 175, 0.5) 60%, 
+                    transparent 100%
+                ),
+                radial-gradient(260px circle at 70% 50%, 
+                    rgba(98, 98, 98, 0.2) 0%, 
+                    rgb(98, 98, 98, 0.2) 30%, 
+                    rgba(98, 98, 98, 0.2) 60%, 
+                    transparent 100%
+                ),
+                linear-gradient(135deg, 
+                    #000000 0%, 
+                    #1e1e1e 50%, 
+                    #2d2d2d 80%, 
+                    #424040 100%
+                );
+            min-height: 100vh;
+        }
+
         .lottie-animation {
             margin-left: -18px;
             margin-right: -18px;
         }
-        
+
         .inline-block {
             margin-left: -21px;
         }
-        
+
         .zuppi-logo {
             margin-top: 6px !important;
         }
-        
-        .chip {
-            padding: 0.375rem 0.75rem;
-            border-radius: 9999px;
-            font-size: 0.75rem;
-            line-height: 1rem;
-            border: 1px solid #3f3f46;
-            background: #18181b;
-            color: #e5e7eb;
-            white-space: nowrap;
-            transition: border-color .2s ease;
+
+        .teacher-name-chip {
+            padding: 8px 18px;
+            background: rgba(24, 24, 27, 0.9);
+            border: 1px solid rgba(63, 63, 70, 0.5);
+            border-radius: 25px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #a1a1aa;
             cursor: pointer;
-        }
-        
-        .chip:hover {
-            border-color: #52525b;
-        }
-        
-        .chip-active {
-            border-color: #dc2626;
-            color: #fecaca;
-            background: rgba(24, 24, 27, 0.7);
-        }
-        
-        .teacher-card:hover .teacher-cover {
-            transform: scale(1.03);
-        }
-        
-        .teacher-card {
-            transition: all 0.3s ease;
-        }
-        
-        .teacher-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-        }
-        
-        @media (max-width: 640px) {
-            .chip {
-                padding: 0.25rem 0.5rem;
-                font-size: 0.7rem;
-            }
-        }
-        
-        .chip:hover {
-            border-color: #52525b;
-        }
-        
-        .chip-active {
-            border-color: #dc2626;
-            color: #fecaca;
-            background: rgba(24, 24, 27, 0.7);
-        }
-        
-        .teacher-card:hover .teacher-cover {
-            transform: scale(1.03);
-        }
-        
-        .teacher-card {
-            transition: all 0.3s ease;
-        }
-        
-        .teacher-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+            transition: all 0.25s ease;
+            backdrop-filter: blur(10px);
         }
 
-        /* Scrollbar gizleme */
+        .teacher-name-chip:hover {
+            background: rgba(39, 39, 42, 0.95);
+            border-color: rgba(255, 255, 255);
+            color: #f4f4f5;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(220, 38, 38, 0.15);
+        }
+
+        /* Carousel Styles */
+        .carousel-container {
+            position: relative;
+            max-width: 1200px;
+            margin: 0 auto;
+            overflow: hidden;
+            padding: 0 60px;
+        }
+
+        .carousel-wrapper {
+            display: flex;
+            transition: transform 0.5s ease-in-out;
+            gap: 24px;
+        }
+
+        .teacher-card {
+            flex: 0 0 calc(33.333% - 16px);
+            min-width: 320px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            background: #ffffff !important;
+            border: 1px solid #e2e8f0 !important;
+            color: #1a202c !important;
+            border-radius: 24px;
+            overflow: hidden;
+        }
+
+        .teacher-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            background: #ffffff !important;
+            border-color: #cbd5e0 !important;
+        }
+
+        /* Navigation Buttons */
+        .nav-btn {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 10;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-btn:hover {
+            background: rgba(255, 255, 255, 1);
+            transform: translateY(-50%) scale(1.1);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .nav-btn-prev {
+            left: 10px;
+        }
+
+        .nav-btn-next {
+            right: 10px;
+        }
+
+        /* Carousel Dots */
+        .carousel-dots {
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+            margin-top: 30px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .dot.active {
+            background: rgba(220, 38, 38, 0.8);
+            transform: scale(1.2);
+        }
+
+        .teacher-card:hover .teacher-cover {
+            transform: scale(1.05);
+        }
+
+        /* Card içindeki metin renklerini ayarlayın */
+        .teacher-card h3 {
+            color: #1a202c !important; /* Koyu gri */
+        }
+
+        .teacher-card p {
+            color: #4a5568 !important; /* Orta gri */
+        }
+
+        .teacher-card .text-gray-300,
+        .teacher-card .text-gray-400,
+        .teacher-card .text-gray-500 {
+            color: #718096 !important; /* Uyumlu gri */
+        }
+
+        .teacher-card .text-white {
+            color: #1a202c !important; /* Beyaz yerine koyu */
+        }
+
         .scrollbar-hide {
             -ms-overflow-style: none;
             scrollbar-width: none;
         }
+
         .scrollbar-hide::-webkit-scrollbar {
             display: none;
         }
-        /* Mobil chips için alt alta sıralama */
-        #expertiseChipsMobile .chip {
-            display: block;
-            width: 100%;
-            text-align: center;
-            margin-bottom: 0.5rem;
+
+        /* Ana profil modal */
+        #teacherModal {
+            backdrop-filter: blur(8px);
+            transition: all 0.3s ease;
         }
 
-        /* Veya flex-wrap kullanırsanız */
-        #expertiseChipsMobile.flex-wrap .chip {
-            flex-shrink: 0;
-        }
-        /* Mobil chips aktif durumu */
-        #expertiseChipsMobile .chip-active {
-            border-color: #dc2626 !important;
-            color: #fecaca !important;
-            background: rgba(220, 38, 38, 0.1) !important;
+        #teacherModal > div {
+            transition: all 0.3s ease;
+            animation: modalSlideIn 0.3s ease;
         }
 
-        /* Mobil chips hover durumu */
-        #expertiseChipsMobile .chip:hover {
-            border-color: #52525b;
+        /* Detay CV modal */
+        #detailModal {
+            backdrop-filter: blur(8px);
         }
 
-        #expertiseChipsMobile .chip-active:hover {
-            border-color: #dc2626 !important;
+        #detailModal > div {
+            animation: modalFadeIn 0.3s ease;
         }
-        
-        /* Mobil modal iyileştirmeleri */
+
+        /* Modal animasyonları */
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        @keyframes modalFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Modal close butonları */
+        #closeTeacherModal,
+        #closeDetailModal {
+            transition: all 0.2s ease;
+        }
+
+        #closeTeacherModal:hover,
+        #closeDetailModal:hover {
+            transform: rotate(90deg);
+            background-color: rgba(0, 0, 0, 0.8) !important;
+        }
+
+        @media (max-width: 640px) {
+            .teacher-card button {
+                font-size: 0.75rem;
+                padding: 0.375rem 0.75rem;
+            }
+            
+            .teacher-card:hover {
+                transform: translateY(-4px);
+                box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+            }
+            .teacher-name-chip {
+                padding: 6px 12px;
+                font-size: 0.75rem;
+                border-radius: 20px;
+                margin: 2px;
+            }
+            
+            .teacher-name-chip:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 2px 12px rgba(220, 38, 38, 0.2);
+            }
+            
+            /* Touch device için hover yerine active */
+            .teacher-name-chip:active {
+                background: rgba(39, 39, 42, 0.95);
+                border-color: rgba(220, 38, 38, 0.6);
+                color: #f4f4f5;
+                transform: scale(0.98);
+            }
+        }
+
+        /* Tablet responsive */
         @media (max-width: 768px) {
             #detailModal > div {
                 max-width: calc(100vw - 16px) !important;
@@ -133,129 +288,201 @@
                 max-height: calc(100vh - 16px) !important;
             }
             
-            /* CV İçeriği mobilde daha küçük font */
             #detailCV pre {
                 font-size: 0.875rem;
                 line-height: 1.4;
             }
-        }
-        
-        /* Mobil için buton boyutları */
-        @media (max-width: 640px) {
-            .teacher-card button {
-                font-size: 0.75rem;
-                padding: 0.375rem 0.75rem;
+            .teacher-card {
+                flex: 0 0 calc(100% - 0px);
+                min-width: 250px;
             }
             
+            .carousel-container {
+                padding: 0 40px;
+            }
+            
+            .nav-btn {
+                width: 40px;
+                height: 40px;
+            }
+        }
+
+        /* Buton hover efektleri */
+        button {
+            transition: all 0.2s ease;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Link hover efektleri */
+        a {
+            transition: color 0.2s ease;
+        }
+
+        .gradient-border {
+            background: linear-gradient(45deg, #dc2626, #7c3aed);
+            padding: 1px;
+            border-radius: inherit;
+        }
+
+        .gradient-border > * {
+            background: #18181b;
+            border-radius: inherit;
+        }
+
+        .loading {
+            opacity: 0.6;
+            pointer-events: none;
+            position: relative;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 20px;
+            height: 20px;
+            margin: -10px 0 0 -10px;
+            border: 2px solid #dc2626;
+            border-radius: 50%;
+            border-top-color: transparent;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        #detailModal {
+            scrollbar-width: thin;
+            scrollbar-color: #3f3f46 #18181b;
+        }
+
+        #detailModal::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        #detailModal::-webkit-scrollbar-track {
+            background: #18181b;
+        }
+
+        #detailModal::-webkit-scrollbar-thumb {
+            background: #3f3f46;
+            border-radius: 3px;
+        }
+
+        #detailModal::-webkit-scrollbar-thumb:hover {
+            background: #52525b;
+        }
+
+        *:focus-visible {
+            outline: 2px solid #dc2626;
+            outline-offset: 2px;
+        }
+
+        /* Screen reader only */
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            white-space: nowrap;
+            border: 0;
+        }
+
+        @media print {
+            .teacher-card {
+                box-shadow: none !important;
+                transform: none !important;
+            }
+            
+            #teacherModal,
+            #detailModal {
+                display: none !important;
+            }
         }
     </style>
 </head>
 
 <body class="bg-black text-white min-h-screen">
     <!-- NAVBAR -->
-  <nav class="w-full bg-zinc-900 border-b border-zinc-800 px-2 sm:px-6 py-3 flex flex-nowrap items-center justify-between gap-y-2">
-    <!-- LOGO + Slogan -->
-    <div class="flex items-center gap-3 min-w-[125px]">
-        {{#ifEquals role "user"}}
-        <a href="/home" class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none cursor-pointer">
-            <img src="/img/1kopya.png" alt="Zuppi Logo"
-                class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-1" style="margin-bottom:2px">
-            <span
-                class="mr-1 -ml-6 sm:-ml-6 -mt-1"
-                style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">
-                uppi
-            </span>
-            <span id="logo-lottie" class="w-12 h-10 lottie-animation"></span>
-        </a>
-        {{else}}
-        <a href="/" class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none cursor-pointer">
-            <img src="/img/1kopya.png" alt="Zuppi Logo"
-                class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-1" style="margin-bottom:2px">
-            <span
-                class="mr-1 -ml-6 sm:-ml-6 -mt-1"
-                style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">
-                uppi
-            </span>
-            <span id="logo-lottie" class="w-12 h-10 lottie-animation"></span>
-        </a>
-        {{/ifEquals}}
-
-      <span class="ml-2 text-[10px] sm:text-xs text-gray-400 tracking-widest hidden sm:block select-none">EN İYİLERİN PLATFORMU</span>
-    </div>
-
-    <!-- Menü ve Auth -->
-    <div class="flex flex-nowrap gap-1 sm:gap-3 items-center order-3">
-        <!-- Masaüstü menü (mobilde gizli) -->
-        <div class="hidden md:flex gap-1 sm:gap-3 items-center">
-            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Abonelik Paketleri</a>  
-            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Videolar</a>  
-            <a href="/shop" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Alışveriş</a>  
-            <a href="#" class="text-xs sm:text-sm font-medium hover:text-red-500 transition ml-1">Canlı Yayın</a>  
-            <a href="/teacher" class="text-xs sm:text-sm font-medium hover:text-red-500 transition text-red-500 ml-1">Eğitmenler</a>  
+    <nav class="w-full bg-zinc-900 border-b border-zinc-800 px-2 sm:px-6 py-3 flex flex-nowrap items-center justify-between gap-y-2">
+        <!-- LOGO + Slogan -->
+        <div class="flex items-center gap-3 min-w-[125px]">
             {{#ifEquals role "user"}}
-            <a href="/user" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Hesabım</a>
+            <a href="/home" class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none cursor-pointer">
+                <img src="/img/1kopya.png" alt="Zuppi Logo"
+                    class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-1" style="margin-bottom:2px">
+                <span
+                    class="mr-1 -ml-6 sm:-ml-6 -mt-1"
+                    style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">
+                    uppi
+                </span>
+                <span id="logo-lottie" class="w-12 h-10 lottie-animation"></span>
+            </a>
             {{else}}
-            <a href="/login" class="text-xs sm:text-sm font-semibold hover:text-red-500 transition ml-2">Giriş Yap</a>
+            <a href="/" class="font-extrabold text-white text-xl sm:text-2xl flex items-center select-none cursor-pointer">
+                <img src="/img/1kopya.png" alt="Zuppi Logo"
+                    class="zuppi-logo h-12 sm:h-12 w-auto select-none mt-2 -ml-2 sm:-ml-0 mr-1" style="margin-bottom:2px">
+                <span
+                    class="mr-1 -ml-6 sm:-ml-6 -mt-1"
+                    style="font-family:'Helvetica Neue',sans-serif; font-size:2rem; letter-spacing:0.08em;">
+                    uppi
+                </span>
+                <span id="logo-lottie" class="w-12 h-10 lottie-animation"></span>
+            </a>
             {{/ifEquals}}
 
-            {{#ifEquals role "user"}}
-            <a href="/" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Çıkış</a>
-            {{else}}
-            <a href="/register" class="text-xs sm:text-sm font-semibold bg-red-600 px-3 sm:px-4 py-1.5 rounded-full hover:bg-red-700 transition ml-1">Kayıt Ol</a>  
-            {{/ifEquals}}
+            <span class="ml-2 text-[10px] sm:text-xs text-gray-400 tracking-widest hidden sm:block select-none">EN İYİLERİN PLATFORMU</span>
         </div>
-    </div>
-  </nav>
-    <div class="bg-gradient-to-r from-purple-900 to-red-900 p-3 text-center"> <a href="#" class="font-bold animate-pulse"> 🔴 CANLI YAYIN: Bugün 20:00'da "Tırnak Sırları" eğitimi. Katılmak için tıklayın! </a> </div>
-    <!-- BAŞLIK -->
+    </nav>
+    
     <div class="w-full text-center">
         <h1 class="text-lg sm:text-2xl md:text-3xl font-bold mt-6 sm:mt-7 mb-5 tracking-wide text-white"> Nail Art Dünyasının En İyi Eğitmenleri </h1>
-        <p class="text-gray-300 text-sm sm:text-base mb-6"> Profesyonel eğitmenlerle tanış, uzmanlıklarına göre filtrele ve en uygun eğitimi keşfet. </p>
-        <!-- Mobil Filtrele Butonu -->
-        <button id="openFilters" class="sm:hidden mx-auto mb-4 px-4 py-2 rounded-full bg-zinc-800 text-gray-200 text-sm border border-zinc-700 hover:border-zinc-600 transition flex items-center gap-2">
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" d="M12 3c0 0 0 0 0 0m0 0c0 0 0 0 0 0M3 12h18"></path>
-            </svg>
-            Filtrele
-        </button>
+        <p class="text-gray-300 text-sm sm:text-base mb-6"> Profesyonel eğitmenlerle tanış, kariyerinde yeni kapılar aç. </p>
     </div>
-    <!-- FİLTRE VE ARAMA ALANI -->
-    <div class="max-w-6xl mx-auto px-3 sm:px-6 mb-8 hidden sm:block" id="filtersDesktop">
-        <div class="flex flex-col sm:flex-row gap-3 mb-4">
-            <div class="flex-1">
-                <div class="relative">
-                    <input id="teacherSearch" type="text" placeholder="Eğitmen ara (isim, uzmanlık...)" class="w-full bg-zinc-800 rounded-full py-2.5 pl-4 pr-10 text-sm md:text-base text-gray-200 placeholder-gray-400 border border-zinc-700 focus:outline-none focus:border-red-700 transition"
-                    />
-                    <svg class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="7"></circle>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"></path>
-                    </svg>
-                </div>
-            </div>
-            <div class="flex gap-2">
-                <select id="sortSelect" class="bg-zinc-800 border border-zinc-700 text-gray-200 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-red-700">
-                    <option value="popularity">Sırala: Popüler</option>
-                    <option value="rating">Sırala: En Yüksek Puan</option>
-                    <option value="courses">Sırala: En Çok Ders</option>
-                    <option value="new">Sırala: En Yeni</option>
-                </select>
-                <button id="resetFilters" class="px-3 py-2 rounded-lg border border-zinc-700 bg-zinc-800 text-gray-200 text-sm hover:border-zinc-600 transition">Sıfırla</button>
 
-            </div>
+    <!-- Eğitmen İsimleri -->
+    <div class="mb-10 text-center">
+        <div id="teacherNames" class="flex flex-wrap justify-center items-center gap-2 sm:gap-3">
+            <!-- JS ile doldurulacak -->
         </div>
-        <!-- UzmanlıkChips -->
-        <div class="overflow-x-auto">
-            <div id="expertiseChips" class="flex gap-2 min-w-max pb-2">
+    </div>
+    
+    <!-- EĞİTMEN CAROUSEL -->
+    <div class="pb-20 pt-8">
+        <div class="carousel-container">
+            <!-- Navigation Buttons -->
+            <button id="prevBtn" class="nav-btn nav-btn-prev">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"></path>
+                </svg>
+            </button>
+            
+            <button id="nextBtn" class="nav-btn nav-btn-next">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"></path>
+                </svg>
+            </button>
+            
+            <!-- Carousel Wrapper -->
+            <div id="teacherGrid" class="carousel-wrapper">
                 <!-- JS ile doldurulacak -->
             </div>
         </div>
-    </div>
-    <!-- EĞİTMEN GRID -->
-    <div class="max-w-6xl mx-auto px-3 sm:px-6 pb-20">
-        <div id="teacherGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+        
+        <!-- Carousel Dots -->
+        <div id="carouselDots" class="carousel-dots">
             <!-- JS ile doldurulacak -->
         </div>
-        <div id="noResults" class="hidden text-center text-gray-400 text-sm sm:text-base py-10"> Aradığın kriterlere uygun eğitmen bulunamadı. </div>
     </div>
     <!-- PROFİL MODAL -->
     <div id="teacherModal" class="fixed inset-0 z-50 hidden items-center justify-center bg-black/70 backdrop-blur-sm" role="dialog" aria-modal="true">
@@ -537,487 +764,652 @@
     </a>
     {{/ifEquals}}
 
-</nav> 
-
-<!-- Mobil Filtre Paneli -->
-<div id="mobileFilterPanel" class="fixed inset-0 z-50 hidden">
-    <!-- Arka plan -->
-    <div id="mobileFilterBackdrop" class="absolute inset-0 bg-black/60 opacity-0 transition-opacity duration-300"></div>
-    
-    <!-- Panel -->
-    <aside id="mobileFilterSheet" class="absolute right-0 top-0 h-full w-[85%] max-w-sm bg-zinc-900 border-l border-zinc-800 translate-x-full transition-transform duration-300 flex flex-col">
-        <div class="p-4 border-b border-zinc-800 flex items-center justify-between">
-            <h3 class="text-lg font-bold">Filtrele</h3>
-            <button id="closeFilters" aria-label="Kapat" class="text-2xl text-gray-300 hover:text-white">&times;</button>
-        </div>
-
-        <div class="p-4 space-y-4 overflow-y-auto flex-1">
-            <!-- Arama -->
-            <div>
-                <label for="teacherSearchMobile" class="block text-xs text-gray-400 mb-1">Ara</label>
-                <div class="relative">
-                    <input id="teacherSearchMobile" type="text" placeholder="Eğitmen ara (isim, uzmanlık...)" class="w-full bg-zinc-800 rounded-full py-2.5 pl-4 pr-10 text-sm text-gray-200 placeholder-gray-400 border border-zinc-700 focus:outline-none focus:border-red-700 transition" />
-                    <svg class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
-                        <circle cx="11" cy="11" r="7"></circle>
-                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35"></path>
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Sıralama + Sıfırla -->
-            <div class="flex items-center gap-2">
-                <select id="sortSelectMobile" class="flex-1 bg-zinc-800 border border-zinc-700 text-gray-200 text-sm rounded-lg px-3 py-2 focus:outline-none focus:border-red-700">
-                    <option value="popularity">Sırala: Popüler</option>
-                    <option value="rating">Sırala: En Yüksek Puan</option>
-                    <option value="courses">Sırala: En Çok Ders</option>
-                    <option value="new">Sırala: En Yeni</option>
-                </select>
-                <button id="resetFiltersMobile" class="px-3 py-2 rounded-lg border border-zinc-700 bg-zinc-800 text-gray-200 text-sm hover:border-zinc-600 transition">Sıfırla</button>
-            </div>
-
-            <!-- Uzmanlık Chips -->
-            <div>
-                <div class="text-xs text-gray-400 mb-2">Uzmanlıklar</div>
-                <div id="expertiseChipsMobile" class="flex flex-wrap gap-2 pb-2">
-                <div class="overflow-x-auto scrollbar-hide -mx-1 px-1">
-                    <div id="expertiseChipsMobile" class="flex gap-2 min-w-max pb-2"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Alt aksiyon -->
-        <div class="p-4 border-t border-zinc-800">
-            <button id="applyFiltersMobile" class="w-full bg-red-600 hover:bg-red-700 text-white font-semibold rounded-lg py-2.5 transition">Uygula</button>
-        </div>
-    </aside>
-</div>
+</nav>
 
 <script> 
     // Örnek veri 
-    const TEACHERS = [ 
-        { 
-            id: 'miray', 
-            name: 'Miray Meral Kayıkçı', 
-            avatar: 'img/tirnak.png', 
-            cover: 'https://cdn.zuppi.live/miray.jpg',
-            expertise: [
-                'Protez Tırnak', 
-                'Manikür', 
-                'Salon Teknikleri'
-            ], 
-            bio: "Ru Nail eğitmeni ve Disney çizim kitabı yazarı.", 
-            rating: 4.9, 
-            courses: 14, 
-            featured: true, 
-            profileUrl: '#', 
-            highlights: [ 
-                { 
-                    title: 'Protez Tırnakta İleri Teknikler', 
-                    thumb: 'img/instg6.jpg' 
-                }, 
-                { 
-                    title: 'Hızlı Salon Manikürü', 
-                    thumb: 'img/instg7.jpg' 
-                } 
-            ],
-            cv: `Miray Meral Kayıkcı – Master Trainer & Nail Art Specialist
+    const TEACHERS = [  
+    {  
+        id: 'miray',  
+        name: 'Miray Meral Kayıkçı',  
+        avatar: 'img/prfl1.jpg',  
+        cover: 'https://cdn.zuppi.live/miray.jpg',  
+        expertise: [  
+            'Protez Tırnak',  
+            'Manikür',  
+            'Salon Teknikleri'  
+        ],  
+        bio: "Ru Nail eğitmeni ve Disney çizim kitabı yazarı.",  
+        rating: 4.9,  
+        courses: 14,  
+        featured: true,  
+        profileUrl: '#',  
+        highlights: [  
+            {  
+                title: 'Protez Tırnakta İleri Teknikler',  
+                thumb: 'img/instg6.jpg'  
+            },  
+            {  
+                title: 'Hızlı Salon Manikürü',  
+                thumb: 'img/instg7.jpg'  
+            }  
+        ],  
+        videos: [  
+            {  
+                title: 'Protez Tırnak Temel Teknikleri',  
+                thumbnail: 'img/prfl1.jpg',  
+                duration: '15:30',  
+                views: '2.3K'  
+            },  
+            {  
+                title: 'Salon Manikürü Uygulaması',  
+                thumbnail: 'img/instg7.jpg',  
+                duration: '22:45',  
+                views: '1.8K'  
+            },  
+            {  
+                title: 'Disney Nail Art Tasarımı',  
+                thumbnail: 'https://cdn.zuppi.live/miray.jpg',  
+                duration: '18:20',  
+                views: '3.1K'  
+            }  
+        ],  
+        cv: `Miray Meral Kayıkcı – Master Trainer & Nail Art Specialist  
 
-2010 yılında güzellik sektörüne adım attım. 2011'de Moskova'da ilk master eğitimimi tamamlayarak mezun oldum ve aynı yıl manikür ve tırnak sanatı alanında profesyonel kariyerime başladım.
+2010 yılında güzellik sektörüne adım attım. 2011'de Moskova'da ilk master eğitimimi tamamlayarak mezun oldum ve aynı yıl manikür ve tırnak sanatı alanında profesyonel kariyerime başladım.  
 
-2013 yılında eğitmenlik kariyerime Gold Tırnak Center, Etiler'de başladım. 2015'te Sevgi Önel Akademi'de Master Trainer olarak görev aldım ve bu süreçte kendi salonumu da aktif olarak işlettim.
+2013 yılında eğitmenlik kariyerime Gold Tırnak Center, Etiler'de başladım. 2015'te Sevgi Önel Akademi'de Master Trainer olarak görev aldım ve bu süreçte kendi salonumu da aktif olarak işlettim.  
 
-2020'de Akademi Royal Eğitim Kurumları'nın tüm şubelerinde kadrolu Master Trainer olarak çalıştım. Aynı zamanda Selin Beauty Center bünyesindeki tırnak teknisyenlerinin işe alım ve eğitim süreçlerinden sorumlu oldum.
+2020'de Akademi Royal Eğitim Kurumları'nın tüm şubelerinde kadrolu Master Trainer olarak çalıştım. Aynı zamanda Selin Beauty Center bünyesindeki tırnak teknisyenlerinin işe alım ve eğitim süreçlerinden sorumlu oldum.  
 
-2019 yılından bu yana Ru Nail Türkiye'nin baş eğitmeniyim.
-2024'te telif ve patent hakları bana ait olan, Disney karakterlerini içeren bir çizim kitabı yayımladım.
-2022'den itibaren Dubai'de, mesleğimi freelance olarak sürdürmekteyim.
+2019 yılından bu yana Ru Nail Türkiye'nin baş eğitmeniyim.  
+2024'te telif ve patent hakları bana ait olan, Disney karakterlerini içeren bir çizim kitabı yayımladım.  
+2022'den itibaren Dubai'de, mesleğimi freelance olarak sürdürmekteyim.  
 
-💅 Uzmanlık Alanlarım:
-• Manikür & Tırnak Sanatı
-• Nail Art Tasarım ve 3D Uygulamalar
-• Eğitmenlik & Workshop Organizasyonu
-• Eğitim Programı Hazırlama & Teknisyen Yetiştirme`,
-            cvEn:`I started my journey in the beauty industry in 2010. In 2011, I completed my first master program in Moscow and graduated, beginning my professional career in manicure and nail art in the same year.
+💅 Uzmanlık Alanlarım:  
+• Manikür & Tırnak Sanatı  
+• Nail Art Tasarım ve 3D Uygulamalar  
+• Eğitmenlik & Workshop Organizasyonu  
+• Eğitim Programı Hazırlama & Teknisyen Yetiştirme`,  
+        cvEn: `I started my journey in the beauty industry in 2010. In 2011, I completed my first master program in Moscow and graduated, beginning my professional career in manicure and nail art in the same year.  
 
-In 2013, I started my career as an educator at Gold Tırnak Center, Etiler. In 2015, I continued as a Master Trainer at Sevgi Önel Academy while also running my own salon.
+In 2013, I started my career as an educator at Gold Tırnak Center, Etiler. In 2015, I continued as a Master Trainer at Sevgi Önel Academy while also running my own salon.  
 
-In 2020, I worked as a full-time Master Trainer at all branches of Akademi Royal Training Institutions. I was also responsible for the recruitment and training of nail technicians at Selin Beauty Center.
+In 2020, I worked as a full-time Master Trainer at all branches of Akademi Royal Training Institutions. I was also responsible for the recruitment and training of nail technicians at Selin Beauty Center.  
 
-Since 2019, I have been the Head Educator for Ru Nail Türkiye.
-In 2024, I published a nail art drawing book featuring Disney characters, with all copyright and patent rights belonging to me.
-Since 2022, I have been continuing my profession as a freelance artist in Dubai.
+Since 2019, I have been the Head Educator for Ru Nail Türkiye.  
+In 2024, I published a nail art drawing book featuring Disney characters, with all copyright and patent rights belonging to me.  
+Since 2022, I have been continuing my profession as a freelance artist in Dubai.  
 
-💅 Areas of Expertise:
-	•	Manicure & Nail Art
-	•	Nail Art Design & 3D Applications
-	•	Teaching & Workshop Organization
-	•	Training Program Development & Technician Training`
-        },
-        { 
-            id: 'diodora', 
-            name: 'Diodora', 
-            avatar: 'img/instg7.jpg', 
-            cover: 'https://cdn.zuppi.live/diodora.jpg', 
-            expertise: [
-                'Sanatsal Tasarım', 
-                'Boya Teknikleri'
-            ], 
-            bio: 'Yaratıcılığı merkeze alan bir yaklaşım. Renk ve kompozisyon üzerine yoğunlaşan atölyeler.', 
-            rating: 4.8, 
-            courses: 9, 
-            featured: false, 
-            profileUrl: '#',
-            highlights: [ 
-                { 
-                    title: 'Sanatsal Nail Art Başlangıç', 
-                    thumb: 'img/instg5.jpg' 
-                }, 
-                { 
-                    title: 'Kompozisyon ve Renk', 
-                    thumb: 'img/instg6.jpg' 
-                } 
-            ],
-            cv: `Diodora - Sanatsal Tasarım Uzmanı
+💅 Areas of Expertise:  
+	•	Manicure & Nail Art  
+	•	Nail Art Design & 3D Applications  
+	•	Teaching & Workshop Organization  
+	•	Training Program Development & Technician Training`  
+    },  
+    {  
+        id: 'diodora',  
+        name: 'Diodora',  
+        avatar: 'img/prfl2.jpg',  
+        cover: 'https://cdn.zuppi.live/diodora.jpg',  
+        expertise: [  
+            'Sanatsal Tasarım',  
+            'Boya Teknikleri'  
+        ],  
+        bio: 'Yaratıcılığı merkeze alan bir yaklaşım. Renk ve kompozisyon üzerine yoğunlaşan atölyeler.',  
+        rating: 4.8,  
+        courses: 9,  
+        featured: false,  
+        profileUrl: '#',  
+        highlights: [  
+            {  
+                title: 'Sanatsal Nail Art Başlangıç',  
+                thumb: 'img/instg5.jpg'  
+            },  
+            {  
+                title: 'Kompozisyon ve Renk',  
+                thumb: 'img/instg6.jpg'  
+            }  
+        ],  
+        videos: [  
+            {  
+                title: 'Renk Teorisi Temelleri',  
+                thumbnail: 'img/instg5.jpg',  
+                duration: '12:15',  
+                views: '1.9K'  
+            },  
+            {  
+                title: 'Sanatsal Kompozisyon',  
+                thumbnail: 'img/instg6.jpg',  
+                duration: '20:30',  
+                views: '2.1K'  
+            },  
+            {  
+                title: 'Boya Teknikleri Masterclass',  
+                thumbnail: 'https://cdn.zuppi.live/diodora.jpg',  
+                duration: '25:45',  
+                views: '2.8K'  
+            }  
+        ],  
+        cv: `Diodora - Sanatsal Tasarım Uzmanı  
 
-Güzel sanatlar eğitimi almış, nail art alanında yaratıcı çözümler üreten bir eğitmen. Renk teorisi ve kompozisyon konularında derinlemesine bilgiye sahip.
+Güzel sanatlar eğitimi almış, nail art alanında yaratıcı çözümler üreten bir eğitmen. Renk teorisi ve kompozisyon konularında derinlemesine bilgiye sahip.  
 
-🎨 Uzmanlık Alanlarım:
-• Sanatsal Nail Art Tasarım
-• Renk Teorisi ve Kompozisyon
-• 2D ve 3D Sanatsal Uygulamalar
-• Yaratıcı Atölye Yönetimi`,
-            cvEn: `Diodora - Detail Manicure Specialist
+🎨 Uzmanlık Alanlarım:  
+• Sanatsal Nail Art Tasarım  
+• Renk Teorisi ve Kompozisyon  
+• 2D ve 3D Sanatsal Uygulamalar  
+• Yaratıcı Atölye Yönetimi`,  
+        cvEn: `Diodora - Artistic Design Specialist  
 
-An instructor specialized in detail manicure and nail care techniques with 10+ years of industry experience.
+An instructor with fine arts education who creates creative solutions in nail art. Has deep knowledge in color theory and composition.  
 
-💅 Areas of Expertise:
-• Detail Manicure Techniques
-• Nail Care Protocols
-• Hygiene and Sterilization
-• Professional Salon Management`
-        }, 
-        { 
-            id: 'arzu', 
-            name: 'Luidmila', 
-            avatar: 'img/instg6.jpg', 
-            cover: 'https://cdn.zuppi.live/LUIDMILA.jpg', 
-            expertise: [
-                'Detail Pedicure', 
-                'Bakım'
-            ], 
-            bio: 'Detail pedicure teknikleri ve bakım protokollerinde 10+ yıl tecrübe.', 
-            rating: 4.7, 
-            courses: 11, 
-            featured: false, 
-            profileUrl: '#', 
-            highlights: [ 
-                { 
-                    title: 'Detail Pedicure Masterclass', 
-                    thumb: 'img/instg6.jpg' 
-                }, 
-                { 
-                    title: 'Bakım ve Hijyen', 
-                    thumb: 'img/instg7.jpg' 
-                } 
-            ],
-            cv: `Luidmila - Detail Pedicure Uzmanı
+🎨 Areas of Expertise:  
+• Artistic Nail Art Design  
+• Color Theory and Composition  
+• 2D and 3D Artistic Applications  
+• Creative Workshop Management`  
+    },  
+    {  
+        id: 'arzu',  
+        name: 'Luidmila',  
+        avatar: 'img/prfl3.jpg',  
+        cover: 'https://cdn.zuppi.live/LUIDMILA.jpg',  
+        expertise: [  
+            'Detail Pedicure',  
+            'Bakım'  
+        ],  
+        bio: 'Detail pedicure teknikleri ve bakım protokollerinde 10+ yıl tecrübe.',  
+        rating: 4.7,  
+        courses: 11,  
+        featured: false,  
+        profileUrl: '#',  
+        highlights: [  
+            {  
+                title: 'Detail Pedicure Masterclass',  
+                thumb: 'img/instg6.jpg'  
+            },  
+            {  
+                title: 'Bakım ve Hijyen',  
+                thumb: 'img/instg7.jpg'  
+            }  
+        ],  
+        videos: [  
+            {  
+                title: 'Detail Pedicure Adım Adım',  
+                thumbnail: 'img/instg6.jpg',  
+                duration: '28:10',  
+                views: '1.5K'  
+            },  
+            {  
+                title: 'Hijyen ve Sterilizasyon',  
+                thumbnail: 'img/instg7.jpg',  
+                duration: '16:20',  
+                views: '1.2K'  
+            },  
+            {  
+                title: 'Profesyonel Bakım Protokolleri',  
+                thumbnail: 'https://cdn.zuppi.live/LUIDMILA.jpg',  
+                duration: '21:35',  
+                views: '2.0K'  
+            }  
+        ],  
+        cv: `Luidmila - Detail Pedicure Uzmanı  
 
-10+ yıl sektör deneyimi ile detail pedicure ve tırnak bakım teknikleri konusunda uzmanlaşmış eğitmen.
+10+ yıl sektör deneyimi ile detail pedicure ve tırnak bakım teknikleri konusunda uzmanlaşmış eğitmen.  
 
-💅 Uzmanlık Alanlarım:
-• Detail Pedicure Teknikleri
-• Tırnak Bakım Protokolleri
-• Hijyen ve Sterilizasyon
-• Profesyonel Salon İşletmeciliği`,
-            cvEn: `Luidmila - Detail Pedicure Specialist
+💅 Uzmanlık Alanlarım:  
+• Detail Pedicure Teknikleri  
+• Tırnak Bakım Protokolleri  
+• Hijyen ve Sterilizasyon  
+• Profesyonel Salon İşletmeciliği`,  
+        cvEn: `Luidmila - Detail Pedicure Specialist  
 
-An instructor specialized in detail pedicure and nail care techniques with 10+ years of industry experience.
+An instructor specialized in detail pedicure and nail care techniques with 10+ years of industry experience.  
 
-💅 Areas of Expertise:
-• Detail Pedicure Techniques
-• Nail Care Protocols
-• Hygiene and Sterilization
-• Professional Salon Management`
-        }, 
-        { 
-            id: 'sibel', 
-            name: 'Sibel Keskin', 
-            avatar: 'img/instg7.jpg', 
-            cover: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=600&q=80', 
-            expertise: ['Farklı Teknikler', 'Uygulama Pratiği'
+💅 Areas of Expertise:  
+• Detail Pedicure Techniques  
+• Nail Care Protocols  
+• Hygiene and Sterilization  
+• Professional Salon Management`  
+    },  
+    {  
+        id: 'sibel',  
+        name: 'Sibel Keskin',  
+        avatar: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=600&q=80',  
+        cover: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=600&q=80',  
+        expertise: ['Farklı Teknikler', 'Uygulama Pratiği'],  
+        bio: 'Çok yönlü tekniklerle sonuç odaklı eğitimler. Başlangıçtan ileri seviyeye.',  
+        rating: 4.9,  
+        courses: 12,  
+        featured: true,  
+        profileUrl: '#',  
+        highlights: [  
+            {  
+                title: 'Farklı Teknikler 101',  
+                thumb: 'img/instg5.jpg'  
+            },  
+            {  
+                title: 'Pratik Odaklı Eğitim',  
+                thumb: 'img/instg6.jpg'  
+            }  
+        ],  
+        videos: [  
+            {  
+                title: 'Çoklu Teknik Uygulamaları',  
+                thumbnail: 'img/instg5.jpg',  
+                duration: '19:45',  
+                views: '2.7K'  
+            },  
+            {  
+                title: 'Pratik Eğitim Yöntemleri',  
+                thumbnail: 'img/instg6.jpg',  
+                duration: '24:15',  
+                views: '3.2K'  
+            },  
+            {  
+                title: 'İleri Seviye Teknikler',  
+                thumbnail: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=600&q=80',  
+                duration: '31:50',  
+                views: '4.1K'  
+            }  
+        ],  
+        cv: `Sibel Keskin - Çok Disiplinli Nail Art Uzmanı  
 
-            ], 
-            bio: 'Çok yönlü tekniklerle sonuç odaklı eğitimler. Başlangıçtan ileri seviyeye.', 
-            rating: 4.9, 
-            courses: 12, 
-            featured: true, 
-            profileUrl: '#', 
-            highlights: 
-            [ 
-                { 
-                    title: 'Farklı Teknikler 101', 
-                    thumb: 'img/instg5.jpg'
-                }, 
-                { 
-                    title: 'Pratik Odaklı Eğitim', 
-                    thumb: 'img/instg6.jpg'
-                } 
-            ],
-            cv: `Sibel Keskin - Çok Disiplinli Nail Art Uzmanı
+Farklı teknik ve uygulamalarda uzmanlaşmış, pratik odaklı eğitim metodolojisi geliştirmiş deneyimli eğitmen.  
 
-Farklı teknik ve uygulamalarda uzmanlaşmış, pratik odaklı eğitim metodolojisi geliştirmiş deneyimli eğitmen.
+💅 Uzmanlık Alanlarım:  
+• Çoklu Teknik Uygulamaları  
+• Pratik Odaklı Eğitim Metodları  
+• Başlangıç - İleri Seviye Programları  
+• Hızlı Öğrenme Teknikleri`,  
+        cvEn: `Sibel Keskin - Multi-Disciplinary Nail Art Specialist  
 
-💅 Uzmanlık Alanlarım:
-• Çoklu Teknik Uygulamaları
-• Pratik Odaklı Eğitim Metodları
-• Başlangıç - İleri Seviye Programları
-• Hızlı Öğrenme Teknikleri`,
-            cvEn: `Sibel Keskin - Multi-Disciplinary Nail Art Specialist
+An experienced instructor specialized in various techniques and applications, who has developed practice-oriented training methodology.  
 
-An experienced instructor specialized in various techniques and applications, who has developed practice-oriented training methodology.
-
-💅 Areas of Expertise:
-• Multi-Technical Applications
-• Practice-Oriented Training Methods
-• Beginner to Advanced Level Programs
+💅 Areas of Expertise:  
+• Multi-Technical Applications  
+• Practice-Oriented Training Methods  
+• Beginner to Advanced Level Programs  
 • Fast Learning Techniques`
-        } 
-    ]; 
+    },
+    {  
+        id: 'sibel',  
+        name: 'Sibel Keskin',  
+        avatar: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=600&q=80',  
+        cover: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=600&q=80',  
+        expertise: ['Farklı Teknikler', 'Uygulama Pratiği'],  
+        bio: 'Çok yönlü tekniklerle sonuç odaklı eğitimler. Başlangıçtan ileri seviyeye.',  
+        rating: 4.9,  
+        courses: 12,  
+        featured: true,  
+        profileUrl: '#',  
+        highlights: [  
+            {  
+                title: 'Farklı Teknikler 101',  
+                thumb: 'img/instg5.jpg'  
+            },  
+            {  
+                title: 'Pratik Odaklı Eğitim',  
+                thumb: 'img/instg6.jpg'  
+            }  
+        ],  
+        videos: [  
+            {  
+                title: 'Çoklu Teknik Uygulamaları',  
+                thumbnail: 'img/instg5.jpg',  
+                duration: '19:45',  
+                views: '2.7K'  
+            },  
+            {  
+                title: 'Pratik Eğitim Yöntemleri',  
+                thumbnail: 'img/instg6.jpg',  
+                duration: '24:15',  
+                views: '3.2K'  
+            },  
+            {  
+                title: 'İleri Seviye Teknikler',  
+                thumbnail: 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?auto=format&fit=crop&w=600&q=80',  
+                duration: '31:50',  
+                views: '4.1K'  
+            }  
+        ],  
+        cv: `Sibel Keskin - Çok Disiplinli Nail Art Uzmanı  
+
+Farklı teknik ve uygulamalarda uzmanlaşmış, pratik odaklı eğitim metodolojisi geliştirmiş deneyimli eğitmen.  
+
+💅 Uzmanlık Alanlarım:  
+• Çoklu Teknik Uygulamaları  
+• Pratik Odaklı Eğitim Metodları  
+• Başlangıç - İleri Seviye Programları  
+• Hızlı Öğrenme Teknikleri`,  
+        cvEn: `Sibel Keskin - Multi-Disciplinary Nail Art Specialist  
+
+An experienced instructor specialized in various techniques and applications, who has developed practice-oriented training methodology.  
+
+💅 Areas of Expertise:  
+• Multi-Technical Applications  
+• Practice-Oriented Training Methods  
+• Beginner to Advanced Level Programs  
+• Fast Learning Techniques`  
+    }  
+];  
     // DOM Elementleri  
     const teacherGrid = document.getElementById('teacherGrid');  
     const teacherModal = document.getElementById('teacherModal');  
     const closeTeacherModal = document.getElementById('closeTeacherModal');  
     const detailModal = document.getElementById('detailModal');  
-    const closeDetailModalEl = document.getElementById('closeDetailModal');  
-    const teacherSearch = document.getElementById('teacherSearch');  
-    const teacherSearchTop = document.getElementById('teacherSearchTop');  
-    const sortSelect = document.getElementById('sortSelect');  
-    const resetFilters = document.getElementById('resetFilters');  
-    const expertiseChips = document.getElementById('expertiseChips');  
-    const noResults = document.getElementById('noResults');  
-    // Mobile filter panel
-    const mobileFilterPanel = document.getElementById('mobileFilterPanel');
-    const mobileFilterBackdrop = document.getElementById('mobileFilterBackdrop');
-    const mobileFilterSheet = document.getElementById('mobileFilterSheet');
-    const openFiltersBtn = document.getElementById('openFilters');
-    const closeFiltersBtn = document.getElementById('closeFilters');
-    const applyFiltersMobile = document.getElementById('applyFiltersMobile');
+    const closeDetailModalEl = document.getElementById('closeDetailModal');
 
-    const teacherSearchMobile = document.getElementById('teacherSearchMobile');
-    const sortSelectMobile = document.getElementById('sortSelectMobile');
-    const resetFiltersMobile = document.getElementById('resetFiltersMobile');
-    const expertiseChipsMobile = document.getElementById('expertiseChipsMobile');
+    let currentSlide = 0;
+    let maxSlides = 0;
+    let cardsPerView = 3;
 
-
-    //------- filtre --------------------------------
-    // Panel aç-kapat
-    function openMobileFilters() {
-        mobileFilterPanel.classList.remove('hidden');
-        requestAnimationFrame(() => {
-            mobileFilterBackdrop.classList.remove('opacity-0');
-            mobileFilterSheet.classList.remove('translate-x-full');
-        });
-        // Değerleri senkronize et
-        syncDesktopToMobile();
-    }
-
-    function closeMobileFilters() {
-        mobileFilterBackdrop.classList.add('opacity-0');
-        mobileFilterSheet.classList.add('translate-x-full');
-        setTimeout(() => mobileFilterPanel.classList.add('hidden'), 300);
-    }
-
-    // Değer senkronizasyonu
-    function syncDesktopToMobile() {
-        if (teacherSearch && teacherSearchMobile) {
-            teacherSearchMobile.value = teacherSearch.value;
-            sortSelectMobile.value = sortSelect.value;
-            expertiseChipsMobile.innerHTML = expertiseChips.innerHTML;
-        }
-    }
-
-    function syncMobileToDesktop() {
-        if (teacherSearch && teacherSearchMobile) {
-            teacherSearch.value = teacherSearchMobile.value;
-            sortSelect.value = sortSelectMobile.value;
-            expertiseChips.innerHTML = expertiseChipsMobile.innerHTML;
-        }
-    }
-
-    // Event listeners
-    openFiltersBtn?.addEventListener('click', openMobileFilters);
-    closeFiltersBtn?.addEventListener('click', closeMobileFilters);
-    mobileFilterBackdrop?.addEventListener('click', closeMobileFilters);
-
-    applyFiltersMobile?.addEventListener('click', () => {
-        syncMobileToDesktop();
-        update(); // Bu satır eksikti
-        closeMobileFilters();
-    });
-
-    resetFiltersMobile?.addEventListener('click', (e) => {
-        e.preventDefault();
-        teacherSearchMobile.value = '';
-        sortSelectMobile.value = 'popularity';
-        [...expertiseChipsMobile.querySelectorAll('.chip-active')].forEach(c => c.classList.remove('chip-active'));
+    function initializeCarousel() {
+        const carousel = document.getElementById('teacherGrid');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.getElementById('carouselDots');
         
-        // Desktop ile senkronize et
-        teacherSearch.value = '';
-        sortSelect.value = 'popularity';
-        activeExpertise.clear();
-        renderChips();
-        update();
-    });
-    // Mobil expertise chips için tıklama eventi
-    expertiseChipsMobile?.addEventListener('click', (e) => {
-        if (e.target.classList.contains('chip')) {
-            const chipText = e.target.textContent.trim();
-            
-            // Eğer "Tümü" chip'ine tıklanmışsa
-            if (e.target.dataset.chip === '__all' || chipText === 'Tümü') {
-                // Tüm aktif chip'leri temizle (mobilde)
-                [...expertiseChipsMobile.querySelectorAll('.chip-active')].forEach(c => c.classList.remove('chip-active'));
-                e.target.classList.add('chip-active');
+        if (!carousel || carousel.children.length === 0) return;
+        
+        // Slide sayısını hesapla
+        const totalCards = carousel.children.length;
+        cardsPerView = window.innerWidth <= 768 ? 1 : window.innerWidth <= 1024 ? 2 : 3;
+        
+        // Eğer toplam kart sayısı görünen kart sayısından azsa kaydırma yapma
+        if (totalCards <= cardsPerView) {
+            maxSlides = 0;
+            currentSlide = 0;
+        } else {
+            // Her seferinde 1 kart kaydır
+            maxSlides = totalCards - cardsPerView;
+        }
                 
-                // Desktop'ta da temizle ve güncelle
-                activeExpertise.clear();
-                renderChips();
-            } else {
-                // Normal chip tıklanmışsa
-                e.target.classList.toggle('chip-active');
-                
-                // "Tümü" chip'inden aktif sınıfını kaldır (mobilde)
-                const allChipMobile = expertiseChipsMobile.querySelector('[data-chip="__all"]') || 
-                                    [...expertiseChipsMobile.querySelectorAll('.chip')].find(c => c.textContent.trim() === 'Tümü');
-                if (allChipMobile) {
-                    allChipMobile.classList.remove('chip-active');
-                }
-                
-                // Desktop ile senkronize et
-                const desktopChip = [...expertiseChips.querySelectorAll('.chip')]
-                    .find(chip => chip.textContent.trim() === chipText);
-                if (desktopChip) {
-                    desktopChip.classList.toggle('chip-active');
-                    
-                    // Desktop'ta activeExpertise set'ini güncelle
-                    const key = desktopChip.dataset.chip;
-                    if (activeExpertise.has(key)) {
-                        activeExpertise.delete(key);
-                    } else {
-                        activeExpertise.add(key);
-                    }
-                    
-                    // Desktop chip'lerini yeniden render et
-                    renderChips();
-                }
+        // Current slide'ı sınırla
+        currentSlide = Math.min(currentSlide, maxSlides);
+        
+        // Dots oluştur (sadece kaydırma gerekiyorsa)
+        dots.innerHTML = '';
+        if (maxSlides > 0) {
+            // Dot sayısı = kaydırılabilir pozisyon sayısı + 1
+            for (let i = 0; i <= maxSlides; i++) {
+                const dot = document.createElement('div');
+                dot.className = `dot ${i === currentSlide ? 'active' : ''}`;
+                dot.onclick = () => goToSlide(i);
+                dots.appendChild(dot);
             }
         }
-    });
-    // Mobile search ve sort için event listener ekleyin
-    teacherSearchMobile?.addEventListener('input', () => {
-        teacherSearch.value = teacherSearchMobile.value;
-        update();
-    });
+        
+        // Event listeners
+        if (prevBtn) prevBtn.onclick = () => previousSlide();
+        if (nextBtn) nextBtn.onclick = () => nextSlide();
+        
+        updateCarousel();
+    }
 
-    sortSelectMobile?.addEventListener('change', () => {
-        sortSelect.value = sortSelectMobile.value;
-        update();
-    });
+    function updateCarousel() {
+        const carousel = document.getElementById('teacherGrid');
+        const prevBtn = document.getElementById('prevBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const dots = document.querySelectorAll('.dot');
+        
+        if (!carousel || carousel.children.length === 0) return;
+        
+        // Slide pozisyonu hesapla - her kart genişliği kadar kaydır
+        const firstCard = carousel.children[0];
+        if (!firstCard) return;
+        
+        const cardWidth = firstCard.offsetWidth;
+        const computedStyle = window.getComputedStyle(carousel);
+        const gap = parseInt(computedStyle.gap) || 32; // Gap güncellendi
+        
+        // Her slide'da 1 kart genişliği + gap kadar kaydır
+        const translateX = -(currentSlide * (cardWidth + gap));
+        
+        carousel.style.transform = `translateX(${translateX}px)`;
+        
+        // Button states
+        if (prevBtn) {
+            prevBtn.disabled = currentSlide === 0;
+            prevBtn.style.opacity = currentSlide === 0 ? '0.5' : '1';
+            prevBtn.style.pointerEvents = currentSlide === 0 ? 'none' : 'auto';
+        }
+        if (nextBtn) {
+            nextBtn.disabled = currentSlide >= maxSlides;
+            nextBtn.style.opacity = currentSlide >= maxSlides ? '0.5' : '1';
+            nextBtn.style.pointerEvents = currentSlide >= maxSlides ? 'none' : 'auto';
+        }
+        
+        // Update dots
+        dots.forEach((dot, index) => {
+            dot.classList.toggle('active', index === currentSlide);
+        });
+    }
 
-    //----------------------------------
+    function nextSlide() {
+        if (currentSlide < maxSlides) {
+            currentSlide++;
+            updateCarousel();
+        }
+    }
 
-    // Uzmanlık listesi (unique)  
-    const EXPERTISE = [...new Set(TEACHERS.flatMap(t => t.expertise))];  
-    let activeExpertise = new Set(); // çoklu filtre  
+    function previousSlide() {
+        if (currentSlide > 0) {
+            currentSlide--;
+            updateCarousel();
+        }
+    }
 
-    // Chipleri çiz  
-    function renderChips() {  
-        expertiseChips.innerHTML = `  
-            <button class="chip ${activeExpertise.size === 0 ? 'chip-active' : ''}" data-chip="__all">  
-            Tümü  
-            </button>  
-            ${EXPERTISE.map(x => `  
-            <button class="chip ${activeExpertise.has(x) ? 'chip-active' : ''}" data-chip="${x}">  
-                ${x}  
-            </button>  
-            `).join('')}  
-        `;  
+    function goToSlide(index) {
+        if (index >= 0 && index <= maxSlides) {
+            currentSlide = index;
+            updateCarousel();
+        }
+    }
 
-        expertiseChips.querySelectorAll('button').forEach(btn => {  
-            btn.addEventListener('click', () => {  
-                const key = btn.dataset.chip;  
+    // Belirli bir eğitmenin kartına git
+    function goToTeacher(teacherId) {
+        const carousel = document.getElementById('teacherGrid');
+        if (!carousel) return;
+        
+        // Eğitmenin kartını bul
+        const teacherCards = Array.from(carousel.children);
+        const teacherIndex = teacherCards.findIndex(card => {
+            return card.dataset.teacherId === teacherId;
+        });
+        
+        if (teacherIndex === -1) return;
+        
+        // Hangi slide'da olması gerektiğini hesapla
+        let targetSlide = 0;
+        
+        if (teacherIndex >= cardsPerView) {
+            // Eğer eğitmen görünen alanın dışındaysa
+            targetSlide = Math.min(teacherIndex - Math.floor(cardsPerView / 2), maxSlides);
+            
+            // Eğer son kartsa, mümkün olduğunca sağa kaydır
+            if (teacherIndex >= TEACHERS.length - cardsPerView) {
+                targetSlide = maxSlides;
+            }
+        }
+        
+        // Slide'ı güncelle
+        goToSlide(targetSlide);
+        
+        // Kartı vurgula (kısa animasyon)
+        setTimeout(() => {
+            const targetCard = teacherCards[teacherIndex];
+            if (targetCard) {
+                targetCard.style.transform = 'translateY(-12px) scale(1.05)';
+                targetCard.style.boxShadow = '0 30px 60px rgba(220, 38, 38, 0.3)';
+                targetCard.style.border = '2px solid rgba(220, 38, 38, 0.5)';
                 
-                if (key === '__all') {  
-                    activeExpertise.clear();  
-                } else {  
-                    if (activeExpertise.has(key)) {  
-                        activeExpertise.delete(key);  
-                    } else {  
-                        activeExpertise.add(key);  
-                    }  
-                }  
-                
-                renderChips();  
-                update();  
-            });  
-        });  
-    }  
+                // Animasyonu geri al
+                setTimeout(() => {
+                    targetCard.style.transform = '';
+                    targetCard.style.boxShadow = '';
+                    targetCard.style.border = '';
+                }, 1000);
+            }
+        }, 500);
+    }
 
+    // Resize event listener
+    window.addEventListener('resize', () => {
+        setTimeout(() => {
+            initializeCarousel();
+        }, 100);
+    });
+
+    // Eğitmen isimlerini render et
+    function renderTeacherNames() {
+        const teacherNames = document.getElementById('teacherNames');
+        const names = TEACHERS.map((teacher, index) => {
+            return `
+                <span class="teacher-name-chip" data-teacher="${teacher.id}">
+                    ${teacher.name}
+                </span>
+            `;
+        }).join('');
+        
+        teacherNames.innerHTML = names;
+        
+        // İsme tıklayınca carousel'de o eğitmenin kartına git
+        teacherNames.querySelectorAll('span[data-teacher]').forEach(nameSpan => {
+            nameSpan.addEventListener('click', () => {
+                const teacherId = nameSpan.dataset.teacher;
+                
+                // Önce carousel'de kartına git
+                goToTeacher(teacherId);
+                
+                // 1 saniye sonra detay modalını aç (isteğe bağlı)
+                setTimeout(() => {
+                    const teacher = TEACHERS.find(t => t.id === teacherId);
+                    if (teacher) {
+                        // openDetailModal(teacher); // Bu satırı uncomment ederseniz modal da açılır
+                    }
+                }, 1200);
+            });
+        });
+    }
     // Kart şablonu  
     function teacherCard(t) {  
-        const badges = t.expertise.slice(0, 3).map(x => `  
-            <span class="text-[10px] sm:text-xs px-1.5 sm:px-2 py-1 rounded-full bg-zinc-800 border border-zinc-700 text-gray-300">${x}</span>  
+        const badges = t.expertise.slice(0, 2).map(x => `  
+            <span class="text-xs px-3 py-1 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-300">#${x.toLowerCase().replace(' ', '')}</span>  
         `).join(' ');  
 
-        return `  
-            <article class="teacher-card bg-zinc-900/80 border border-zinc-800 rounded-2xl overflow-hidden shadow hover:shadow-lg">  
-            <div class="relative overflow-hidden">  
-                <img src="${t.cover}" alt="${t.name}" class="teacher-cover w-full h-40 sm:h-44 md:h-48 object-cover transition-transform duration-300" />  
-                ${t.featured ? `<span class="absolute top-2 sm:top-3 left-2 sm:left-3 bg-red-600 text-white text-[9px] sm:text-xs font-semibold px-2 py-1 rounded-full">Öne Çıkan</span>` : ''}  
-                <img src="${t.avatar}" alt="${t.name}" class="w-12 h-12 sm:w-14 sm:h-14 rounded-full border-2 border-zinc-900 absolute -bottom-6 sm:-bottom-7 left-3 sm:left-4 object-cover" />  
+        const videoLinks = t.videos || [];  
+
+        const videoCards = videoLinks.map((video, index) => `  
+            <div class="relative group cursor-pointer rounded-lg overflow-hidden bg-gray-800 hover:bg-gray-700 transition-all duration-300">  
+                <div class="relative">  
+                    <img src="${video.thumbnail}" alt="${video.title}" class="w-full h-20 object-cover group-hover:scale-105 transition-transform duration-300" />  
+                    <div class="absolute inset-0 flex items-center justify-center bg-black/40 group-hover:bg-black/30 transition-colors">  
+                        <div class="w-8 h-8 bg-red-600 rounded-full flex items-center justify-center text-white shadow-lg group-hover:scale-110 transition-transform">  
+                            <svg class="w-3 h-3 ml-0.5" viewBox="0 0 24 24" fill="currentColor">  
+                                <path d="M8 5v14l11-7z"/>  
+                            </svg>  
+                        </div>  
+                    </div>  
+                    <div class="absolute bottom-1 right-1 text-xs px-1.5 py-0.5 rounded" style="background-color: rgba(0,0,0,0.8) !important; color: white !important;">  
+                        ${video.duration}  
+                    </div>  
+                </div>  
             </div>  
-            <div class="pt-8 sm:pt-9 px-3 sm:px-4 pb-3 sm:pb-4">  
+        `).join('');  
+
+        return `  
+            <article class="teacher-card bg-white border border-gray-200 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300" data-teacher-id="${t.id}">  
+            <div class="p-6 bg-white"> 
+                <div class="flex items-center justify-between mb-4">  
+                    <div class="flex items-center gap-4">  
+                        <div class="relative">  
+                            <img src="${t.avatar}" alt="${t.name}" class="w-16 h-16 rounded-full border-3 border-gradient-to-r from-pink-400 to-purple-400 object-cover shadow-md" />  
+                            ${t.featured ? `<div class="absolute -top-1 -right-1 w-5 h-5 bg-red-500 rounded-full flex items-center justify-center shadow-sm">  
+                                <span class="text-sm text-white">✓</span>  
+                            </div>` : ''}  
+                        </div>  
+                        <div>  
+                            <h3 class="text-lg font-semibold text-gray-900 mb-1">${t.name}</h3>  
+                            <p class="text-sm text-gray-700">Nail Art Expert</p>  
+                        </div>  
+                    </div>  
+                    <button class="text-gray-600 hover:text-gray-800 transition-colors">  
+                        <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">  
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zM13 12a1 1 0 11-2 0 1 1 0 012 0zM20 12a1 1 0 11-2 0 1 1 0 012 0z"/>  
+                        </svg>  
+                    </button>  
+                </div>  
+            </div>  
+            
+            <div class="relative">  
+                <img src="${t.cover}" alt="${t.name}" class="teacher-cover w-full h-80 object-cover" />  
+                <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent p-6">  
+                    <div class="flex items-center justify-between text-white">  
+                        <div class="flex items-center gap-6">  
+                            <button class="hover:scale-110 transition-transform p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30">  
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">  
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/>  
+                                </svg>  
+                            </button>  
+                            <button class="hover:scale-110 transition-transform p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30" data-open="${t.id}">  
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">  
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/>  
+                                </svg>  
+                            </button>  
+                            <button class="hover:scale-110 transition-transform p-2 rounded-full bg-white/20 backdrop-blur-sm hover:bg-white/30">  
+                                <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">  
+                                    <path stroke-linecap="round" stroke-linejoin="round" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.367 2.684 3 3 0 00-5.367-2.684z"/>  
+                                </svg>  
+                            </button>  
+                        </div>  
+                        <div class="flex items-center gap-2 bg-yellow-500/90 px-3 py-1.5 rounded-full backdrop-blur-sm">  
+                            <svg class="w-4 h-4 text-yellow-100" viewBox="0 0 24 24" fill="currentColor">  
+                            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>  
+                            </svg>  
+                            <span class="text-sm font-semibold text-yellow-100">${t.rating.toFixed(1)}</span>  
+                        </div>  
+                    </div>  
+                </div>  
+            </div>  
+            
+            <div class="p-6 bg-white">  
+                <p class="text-gray-800 text-base mb-4 leading-relaxed">${t.bio}</p>  
+                
+                <div class="mb-4">  
+                    <h4 class="text-gray-900 text-sm font-semibold mb-3">Popüler Videolar</h4>  
+                    <div class="grid grid-cols-3 gap-2">  
+                        ${videoCards}  
+                    </div>  
+                    <div class="mt-3">  
+                        <button class="w-full py-2.5 rounded-lg text-black hover:text-gray-900 text-xs font-medium transition-all duration-200 flex items-center justify-center gap-2 hover:bg-gray-100/50" data-all-videos="${t.id}">  
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">  
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/>  
+                            </svg>  
+                            <span>Tüm Videolar (${t.courses}+ video)</span>  
+                            <svg class="w-3 h-3" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">  
+                                <path stroke-linecap="round" stroke-linejoin="round" d="M9 5l7 7-7 7"/>  
+                            </svg>  
+                        </button>  
+                    </div>  
+                </div>  
+                
+                <div class="flex flex-wrap gap-3 mb-5">${badges}</div>  
                 <div class="flex items-center justify-between">  
-                <h3 class="text-base sm:text-lg font-bold truncate pr-2">${t.name}</h3>  
-                <div class="flex items-center gap-1 text-yellow-400 flex-shrink-0">  
-                    <svg class="w-3 h-3 sm:w-4 sm:h-4" viewBox="0 0 24 24" fill="currentColor">  
-                    <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z"/>  
-                    </svg>  
-                    <span class="text-xs sm:text-sm text-gray-200">${t.rating.toFixed(1)}</span>  
-                </div>  
-                </div>  
-                <p class="text-gray-300 text-xs sm:text-sm mt-1 line-clamp-2">${t.bio}</p>  
-                <div class="flex flex-wrap gap-1 sm:gap-1.5 mt-2 sm:mt-3">${badges}</div>  
-                <div class="flex items-center justify-between mt-3 sm:mt-4 text-xs text-gray-400">  
-                <div class="flex items-center gap-1">  
-                    <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-400" viewBox="0 0 24 24" fill="currentColor">  
-                    <path d="M3 5h18v2H3zm0 6h12v2H3zm0 6h18v2H3z"/>  
-                    </svg>  
-                    <span class="text-xs">${t.courses} ders</span>  
-                </div>  
-                <div class="flex gap-1 sm:gap-2">  
-                    <button class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg bg-red-600 hover:bg-red-700 text-white font-semibold text-xs sm:text-sm" data-detail="${t.id}">  
+                    <span class="text-sm text-gray-700 font-medium">${t.courses} ders • 2.5k öğrenci</span>  
+                    <button class="px-6 py-2.5 rounded-full bg-red-600 hover:bg-red-700 text-white font-semibold text-sm transition-all duration-200 shadow-lg hover:shadow-xl transform hover:scale-105" data-detail="${t.id}">  
                     Detay  
-                    </button>  
-                    <button class="px-2 sm:px-3 py-1 sm:py-1.5 rounded-lg border border-zinc-700 hover:border-zinc-600 text-gray-200 font-semibold text-xs sm:text-sm" data-open="${t.id}">  
-                    Profil  
-                    </button>  
-                </div>  
+                    </button>   
                 </div>  
             </div>  
             </article>  
         `;  
     }
 
+
     // Listeyi çiz  
     function renderTeachers(list) {  
-        if (!list.length) {  
-            teacherGrid.innerHTML = '';  
-            noResults.classList.remove('hidden');  
-            return;  
-        }  
-        
-        noResults.classList.add('hidden');  
         teacherGrid.innerHTML = list.map(teacherCard).join('');  
 
         // Profili Gör butonları (eski modal)  
@@ -1035,78 +1427,52 @@ An experienced instructor specialized in various techniques and applications, wh
                 if (t) openDetailModal(t);  
             });  
         });  
+
+        // Tüm Videolar butonları  
+        teacherGrid.querySelectorAll('button[data-all-videos]').forEach(btn => {  
+            btn.addEventListener('click', () => {  
+                const teacherId = btn.dataset.allVideos;  
+                alert(`${teacherId} eğitmeninin tüm videoları yakında!`);  
+            });  
+        });  
     }  
 
-    // Filtreleme + sıralama  
-    function filterTeachers() {  
-        const q = (teacherSearch.value || '').trim().toLowerCase();  
-        let arr = TEACHERS.filter(t => {  
-            const inText =   
-            t.name.toLowerCase().includes(q) ||  
-            t.bio.toLowerCase().includes(q) ||  
-            t.expertise.join(' ').toLowerCase().includes(q);  
-
-            const expertiseOk =   
-            activeExpertise.size === 0 ||  
-            t.expertise.some(x => activeExpertise.has(x));  
-
-            return inText && expertiseOk;  
-        });  
-
-        const s = sortSelect.value;  
-        if (s === 'popularity') {  
-            arr.sort((a, b) => Number(b.featured) - Number(a.featured));  
-        } else if (s === 'rating') {  
-            arr.sort((a, b) => b.rating - a.rating);  
-        } else if (s === 'courses') {
-            arr.sort((a, b) => b.courses - a.courses);
-        } else if (s === 'new') {
-            // Örnek olması için isim sırası
-            arr.sort((a, b) => a.name.localeCompare(b.name));
-        }
-
-        return arr;
-    }
-
-    function update() {
-        renderTeachers(filterTeachers());
-    }
-
-    // Profil Modal (eski modal)
-    function openModal(t) {
-        document.getElementById('modalCover').src = t.cover;
-        document.getElementById('modalAvatar').src = t.avatar;
-        document.getElementById('modalName').textContent = t.name;
-        document.getElementById('modalExpertise').textContent = t.expertise.join(' • ');
-        document.getElementById('modalBio').textContent = t.bio;
-        document.getElementById('modalRating').textContent = t.rating.toFixed(1);
-        document.getElementById('modalCourses').textContent = `${t.courses} ders`;
-        document.getElementById('modalBadge').classList.toggle('hidden', !t.featured);
+    // Profil Modal (eski modal)  
+    function openModal(t) {  
+        document.getElementById('modalCover').src = t.cover;  
+        document.getElementById('modalAvatar').src = t.avatar;  
+        document.getElementById('modalName').textContent = t.name;  
+        document.getElementById('modalExpertise').textContent = t.expertise.join(' • ');  
+        document.getElementById('modalBio').textContent = t.bio;  
+        document.getElementById('modalRating').textContent = t.rating.toFixed(1);  
+        document.getElementById('modalCourses').textContent = `${t.courses} ders`;  
+        document.getElementById('modalBadge').classList.toggle('hidden', !t.featured);  
         
-        // Detay butonuna teacher objesini kaydet
-        const modalProfileLink = document.getElementById('modalProfileLink');
-        modalProfileLink.onclick = function(e) {
-            e.preventDefault();
-            closeModal();
-            setTimeout(() => openDetailModal(t), 60);
-        };
+        // Detay butonuna teacher objesini kaydet  
+        const modalProfileLink = document.getElementById('modalProfileLink');  
+        modalProfileLink.onclick = function(e) {  
+            e.preventDefault();  
+            closeModal();  
+            setTimeout(() => openDetailModal(t), 60);  
+        };  
 
-        const list = document.getElementById('modalCoursesList');
-        list.innerHTML = t.highlights.map(h => `
-            <div class="relative rounded-lg overflow-hidden">
-            <img src="${h.thumb}" alt="${h.title}" class="w-full h-24 object-cover">
-            <div class="absolute inset-x-0 bottom-0 bg-black/50 text-[11px] sm:text-xs px-2 py-1">${h.title}</div>
-            </div>
-        `).join('');
+        const list = document.getElementById('modalCoursesList');  
+        list.innerHTML = t.highlights.map(h => `  
+            <div class="relative rounded-lg overflow-hidden">  
+            <img src="${h.thumb}" alt="${h.title}" class="w-full h-24 object-cover">  
+            <div class="absolute inset-x-0 bottom-0 bg-black/50 text-[11px] sm:text-xs px-2 py-1">${h.title}</div>  
+            </div>  
+        `).join('');  
 
-        teacherModal.classList.remove('hidden');
-        teacherModal.classList.add('flex');
+        teacherModal.classList.remove('hidden');  
+        teacherModal.classList.add('flex');  
+    }  
+
+    function closeModal() {  
+        teacherModal.classList.add('hidden');  
+        teacherModal.classList.remove('flex');  
     }
 
-    function closeModal() {
-        teacherModal.classList.add('hidden');
-        teacherModal.classList.remove('flex');
-    }
 
     // Detay Modal (CV Modal)
     function openDetailModal(t) {
@@ -1179,6 +1545,7 @@ An experienced instructor specialized in various techniques and applications, wh
         // Başlangıçta TR dilini ayarla
         switchLanguage('tr', t);
     }
+
     // Dil değişkenleri ve çeviriler
     let currentLanguage = 'tr';
 
@@ -1249,42 +1616,11 @@ An experienced instructor specialized in various techniques and applications, wh
         detailModal.classList.remove('flex');
     }
 
-    // Event Listeners
-    teacherSearch.addEventListener('input', update);
-
-    if (teacherSearchTop) {
-        teacherSearchTop.addEventListener('input', (e) => {
-            teacherSearch.value = e.target.value;
-            update();
-        });
-    }
-
-    sortSelect.addEventListener('change', update);
-
-    resetFilters.addEventListener('click', () => {
-        teacherSearch.value = '';
-        if (teacherSearchTop) {
-            teacherSearchTop.value = '';
-        }
-        // Mobil alanları da temizle
-        if (teacherSearchMobile) {
-            teacherSearchMobile.value = '';
-        }
-        if (sortSelectMobile) {
-            sortSelectMobile.value = 'popularity';
-        }
-        activeExpertise.clear();
-        sortSelect.value = 'popularity';
-        renderChips();
-        update();
-    });
-
     // Klavye: ESC ile modalleri kapat
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') {
             closeModal();
             closeDetailModal();
-            closeMobileFilters();
         }
     });
 
@@ -1295,6 +1631,11 @@ An experienced instructor specialized in various techniques and applications, wh
         });
     }
 
+    if (detailModal) {
+        detailModal.addEventListener('click', (e) => {
+            if (e.target === detailModal) closeDetailModal();
+        });
+    }
 
     // Kapat butonları
     if (closeTeacherModal) {
@@ -1312,9 +1653,12 @@ An experienced instructor specialized in various techniques and applications, wh
         });
     }
 
-    // Başlangıç çizimleri
-    renderChips();
-    update();
+    renderTeacherNames();
+    renderTeachers(TEACHERS);
+
+    document.addEventListener('DOMContentLoaded', () => {
+        initializeCarousel();  
+    });
 
 </script>
 </body>
